@@ -1,13 +1,13 @@
-import React from 'react';
-import { HashRouter, Route } from 'react-router-dom';
-import Intro from './pages/Intro';
+import React, { useState } from 'react'
+import { HashRouter, Route, Switch } from 'react-router-dom'
+import { SelectStagePage } from './pages/SelectStagePage'
 
 const App: React.FC = () => {
   return (
     <HashRouter>
-      <Route path="/" component={Intro} />
+      <SelectStagePage />
     </HashRouter>
-  );
-};
+  )
+}
 
-export default App;
+export default App
