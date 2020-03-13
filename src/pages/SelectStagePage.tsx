@@ -1,13 +1,11 @@
 import React, { FC, useCallback, useContext, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { IssueCardCommand, IssueCardView } from '../components/IssueCardView'
 import s from './SelectStagePage.module.scss'
-import { useMap } from 'react-use'
 import {
   CardEventContext,
   CardEventProvider,
 } from '../contexts/CardEventContext'
-
-const selectedIds: number[] = []
 
 interface IssueCard {
   id: number
@@ -30,58 +28,120 @@ const issueCards: IssueCard[] = [
   { id: 8, title: '코로나 19 바이러스 공포 8', description: desc },
   { id: 9, title: '코로나 19 바이러스 공포 9', description: desc },
   { id: 10, title: '코로나 19 바이러스 공포 10', description: desc },
-  { id: 11, title: '코로나 19 바이러스 공포 11', description: desc },
-  { id: 12, title: '코로나 19 바이러스 공포 12', description: desc },
-  { id: 13, title: '코로나 19 바이러스 공포 13', description: desc },
-  { id: 14, title: '코로나 19 바이러스 공포 14', description: desc },
-  { id: 15, title: '코로나 19 바이러스 공포 15', description: desc },
-  { id: 16, title: '코로나 19 바이러스 공포 16', description: desc },
-  { id: 17, title: '코로나 19 바이러스 공포 17', description: desc },
-  { id: 18, title: '코로나 19 바이러스 공포 18', description: desc },
-  { id: 19, title: '코로나 19 바이러스 공포 19', description: desc },
-  { id: 20, title: '코로나 19 바이러스 공포 20', description: desc },
+  // { id: 11, title: '코로나 19 바이러스 공포 11', description: desc },
+  // { id: 12, title: '코로나 19 바이러스 공포 12', description: desc },
+  // { id: 13, title: '코로나 19 바이러스 공포 13', description: desc },
+  // { id: 14, title: '코로나 19 바이러스 공포 14', description: desc },
+  // { id: 15, title: '코로나 19 바이러스 공포 15', description: desc },
+  // { id: 16, title: '코로나 19 바이러스 공포 16', description: desc },
+  // { id: 17, title: '코로나 19 바이러스 공포 17', description: desc },
+  // { id: 18, title: '코로나 19 바이러스 공포 18', description: desc },
+  // { id: 19, title: '코로나 19 바이러스 공포 19', description: desc },
+  // { id: 20, title: '코로나 19 바이러스 공포 20', description: desc },
 ]
+
+const ConfirmModal: FC<{ ids: number[]; onRemove: (id: number) => void }> = ({
+  ids,
+  onRemove,
+}) => {
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        backgroundColor: 'rgba(153, 153, 153, 0.7)',
+        padding: 20,
+        overflowY: 'scroll',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'white',
+          display: 'flex',
+          flexDirection: 'column',
+          width: 300,
+          margin: '0 auto',
+        }}
+      >
+        <div className={s.confirmModalTitle}>내가 고른 재료</div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className={s.confirmModalList}>
+            {ids.map(id => (
+              <div key={id} className={s.confirmModalItem}>
+                <div style={{ textAlign: 'center', flexGrow: 1 }}>{id}</div>
+
+                <div className={s.confirmModalItemLabel}>코로나 19</div>
+                <div
+                  className={s.confirmModalRemove}
+                  onClick={() => onRemove(id)}
+                >
+                  x
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={s.confirmModalButton} onClick={() => alert('준비중^^')}>
+          확인
+        </div>
+      </div>
+    </div>,
+    document.querySelector('#modal')!,
+  )
+}
 
 const IssueSelectorView: FC = () => {
   // card stack
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [slideAnimationPlaying, setSlideAnimationPlaying] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
   const cardEventManager = useContext(CardEventContext)
-  const currentCard = issueCards[currentCardIndex]
+
   const oldCard: IssueCard = issueCards[currentCardIndex - 1]
   const onConclude = useCallback(
     (selected: boolean) => {
       setCurrentCardIndex(currentCardIndex + 1)
       setSlideAnimationPlaying(true)
       if (selected) {
-        selectedIds.push(currentCard.id)
+        setSelectedIds([...selectedIds, issueCards[currentCardIndex].id])
       }
     },
-    [currentCardIndex, currentCard],
+    [currentCardIndex, selectedIds],
   )
   const onConclusionAnimationEnd = useCallback(() => {
     setSlideAnimationPlaying(false)
   }, [])
+  const allSelected = currentCardIndex >= issueCards.length
   return (
     <div>
-      {/*<div>*/}
-      {/*  {selectedIds.map(id => (*/}
-      {/*    <span>({id})</span>*/}
-      {/*  ))}*/}
-      {/*</div>*/}
+      {allSelected && (
+        <ConfirmModal
+          ids={selectedIds}
+          onRemove={id =>
+            setSelectedIds(selectedIds.filter(item => item !== id))
+          }
+        />
+      )}
+
       <div className={s.upperAreaGuide}>
         이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
       <div style={{ position: 'relative', height: 388 }}>
-        <IssueCardView
-          key={currentCard.id}
-          title={currentCard.title}
-          description={currentCard.description}
-          onSelect={() => onConclude(true)}
-          onSelectAnimationEnd={onConclusionAnimationEnd}
-          onDiscard={() => onConclude(false)}
-          onDiscardAnimationEnd={onConclusionAnimationEnd}
-        />
+        {!allSelected && (
+          <IssueCardView
+            key={issueCards[currentCardIndex].id}
+            title={issueCards[currentCardIndex].title}
+            description={issueCards[currentCardIndex].description}
+            onSelect={() => onConclude(true)}
+            onSelectAnimationEnd={onConclusionAnimationEnd}
+            onDiscard={() => onConclude(false)}
+            onDiscardAnimationEnd={onConclusionAnimationEnd}
+          />
+        )}
         {slideAnimationPlaying && (
           <IssueCardView
             key={oldCard.id}

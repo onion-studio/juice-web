@@ -32,3 +32,75 @@
   user-select: none;
   cursor: pointer;
 }
+
+.confirmModalTitle {
+  font-family: 'Spoqa Han Sans';
+  font-size: 20px;
+  font-weight: 300;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.6;
+  letter-spacing: -0.8px;
+  text-align: center;
+  color: #6a6a6a;
+
+  padding: 28px 0;
+}
+
+.confirmModalList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.confirmModalItem {
+  position: relative;
+  width: 70px;
+  height: 74px;
+  box-sizing: border-box;
+  border: solid 1px #979797;
+  margin: 13px 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.confirmModalItemLabel {
+  font-family: 'Spoqa Han Sans';
+  font-size: 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2.33;
+  letter-spacing: -0.45px;
+  text-align: center;
+  color: #6a6a6a;
+}
+
+.confirmModalButton {
+  margin-top: 20px;
+  background-color: #999999;
+  padding: 12px;
+
+  font-family: 'Spoqa Han Sans';
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.75;
+  letter-spacing: -0.6px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.confirmModalRemove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #979797;
+  cursor: pointer;
+  text-align: center;
+  color: white;
+}
