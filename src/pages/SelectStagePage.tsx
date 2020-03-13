@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useContext, useRef, useState } from 'react'
+import React, { FC, useCallback, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { IssueCardCommand, IssueCardView } from '../components/IssueCardView'
+import { IssueCardView } from '../components/IssueCardView'
 import s from './SelectStagePage.module.scss'
 import {
   CardEventContext,

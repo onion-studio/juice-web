@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { HashRouter, Route, Switch } from 'react-router-dom'
+import React from 'react'
+import { HashRouter } from 'react-router-dom'
 import { SelectStagePage } from './pages/SelectStagePage'
 
 const App: React.FC = () => {

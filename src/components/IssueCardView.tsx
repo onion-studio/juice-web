@@ -157,7 +157,15 @@ const useSlideAnimation: (
           return
       }
     },
-    [offset, setOffset, animationState, setAnimationState],
+    [
+      offset,
+      setOffset,
+      animationState,
+      setAnimationState,
+      threshold,
+      triggerLeftSlide,
+      triggerRightSlide,
+    ],
   )
 
   return [animationState, offset, onEvent, triggerLeftSlide, triggerRightSlide]
@@ -211,7 +219,7 @@ export const IssueCardView: FC<Props> = ({
         triggerRightSlide()
       }
     })
-  }, [])
+  }, [cardEventManager, triggerRightSlide])
 
   useEffect(() => {
     return cardEventManager.onDiscard(() => {
@@ -219,7 +227,7 @@ export const IssueCardView: FC<Props> = ({
         triggerLeftSlide()
       }
     })
-  }, [])
+  }, [cardEventManager, triggerLeftSlide])
 
   const rotation = offset / 10
   const cardStyle: CSSProperties =
