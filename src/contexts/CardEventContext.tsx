@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { EventTarget } from 'event-target-shim'
 
 class CardEventManager extends EventTarget {
   select() {
