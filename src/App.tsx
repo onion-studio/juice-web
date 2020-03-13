@@ -7,7 +7,7 @@ const App: React.FC = () => {
     <HashRouter>
       <div
         style={{
-          width: 400,
+          maxWidth: 400,
           minHeight: 700,
           margin: '0 auto',
           backgroundColor: 'white',
