@@ -5,8 +5,10 @@ import React, {
   useRef,
   useEffect,
   CSSProperties,
+  useContext,
 } from 'react'
 import s from './IssueCardView.module.scss'
+import { CardEventContext } from '../contexts/CardEventContext'
 
 enum SlideAnimationState {
   start = 'start',
@@ -174,7 +176,6 @@ export interface Props {
   onSelectAnimationEnd: () => void
   onDiscard: () => void
   onDiscardAnimationEnd: () => void
-  command?: IssueCardCommand
 }
 
 export const IssueCardView: FC<Props> = ({
@@ -184,7 +185,6 @@ export const IssueCardView: FC<Props> = ({
   onSelectAnimationEnd,
   onDiscard,
   onDiscardAnimationEnd,
-  command,
 }) => {
   const [
     animationState,
@@ -200,22 +200,25 @@ export const IssueCardView: FC<Props> = ({
     onDiscardAnimationEnd,
   )
   const [detailVisible, setDetailVisible] = useState(false)
-  const commandIssuedRef = useRef(false)
+  const cardEventManager = useContext(CardEventContext)
+  const animationStateRef = useRef(animationState)
+  animationStateRef.current = animationState
 
   useEffect(() => {
-    if (command && !commandIssuedRef.current) {
-      console.log(command)
-      switch (command) {
-        case IssueCardCommand.leftSlide:
-          triggerLeftSlide()
-          break
-        case IssueCardCommand.rightSlide:
-          triggerRightSlide()
-          break
+    return cardEventManager.onSelect(() => {
+      if (animationStateRef.current === SlideAnimationState.idle) {
+        triggerRightSlide()
       }
-      commandIssuedRef.current = true
-    }
-  }, [command])
+    })
+  }, [])
+
+  useEffect(() => {
+    return cardEventManager.onDiscard(() => {
+      if (animationStateRef.current === SlideAnimationState.idle) {
+        triggerLeftSlide()
+      }
+    })
+  }, [])
 
   const rotation = offset / 10
   const cardStyle: CSSProperties =
