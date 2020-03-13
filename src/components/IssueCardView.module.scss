@@ -20,9 +20,56 @@
   cursor: pointer;
   position: relative;
   transform-origin: 50% 120%;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
+}
+
+.cardCollapsed {
+  padding-top: 152px;
+}
+
+.cardExpanded {
+  padding-top: 102px;
+}
+
+.cardTitle {
+  font-family: 'Spoqa Han Sans';
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.75;
+  letter-spacing: -0.6px;
+  text-align: center;
+  color: #6a6a6a;
+  font-weight: bold;
+}
+
+.cardDescription {
+  font-family: 'Spoqa Han Sans';
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.71;
+  letter-spacing: -0.5px;
+  color: #6a6a6a;
+
+  padding: 30px 20px 0;
+}
+
+.cardTags {
+  font-family: 'Spoqa Han Sans';
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.75;
+  letter-spacing: -0.6px;
+  text-align: center;
+  color: #6a6a6a;
 }
 
 .detailButton {

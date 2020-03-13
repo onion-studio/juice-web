@@ -7,6 +7,7 @@ import React, {
   CSSProperties,
   useContext,
 } from 'react'
+import c from 'classnames'
 import s from './IssueCardView.module.scss'
 import { CardEventContext } from '../contexts/CardEventContext'
 
@@ -291,10 +292,17 @@ export const IssueCardView: FC<Props> = ({
         onEvent({ type: 'cardReleased' })
       }}
     >
-      <div className={s.card} style={cardStyle}>
-        <div>{title}</div>
+      <div
+        className={c(s.card, detailVisible ? s.cardExpanded : s.cardCollapsed)}
+        style={cardStyle}
+      >
+        <div className={s.cardTitle}>{title}</div>
+        {detailVisible || (
+          <div className={s.cardTags}>#질병 #감염병 #출입국관리</div>
+        )}
+
         {detailVisible ? (
-          <div>{description}</div>
+          <div className={s.cardDescription}>{description}</div>
         ) : (
           <>
             <div style={{ flexGrow: 1 }} />

@@ -15,27 +15,31 @@ interface IssueCard {
   description: string
 }
 
+const desc =
+  '지금 중국이랑 한국, 비상이 걸렸어요.\n' +
+  '중국 ‘우한 폐렴’의 확진 환자가 우리나라에서도 나왔거든요. 이게 코로나 바이러스의 일종인데, 치료제는 없고 전염성은 강해서 자칫하면 집단으로 감염될 수 있어요.'
+
 const issueCards: IssueCard[] = [
-  { id: 1, title: '코로나 19 바이러스 공포 1', description: '...' },
-  { id: 2, title: '코로나 19 바이러스 공포 2', description: '...' },
-  { id: 3, title: '코로나 19 바이러스 공포 3', description: '...' },
-  { id: 4, title: '코로나 19 바이러스 공포 4', description: '...' },
-  { id: 5, title: '코로나 19 바이러스 공포 5', description: '...' },
-  { id: 6, title: '코로나 19 바이러스 공포 6', description: '...' },
-  { id: 7, title: '코로나 19 바이러스 공포 7', description: '...' },
-  { id: 8, title: '코로나 19 바이러스 공포 8', description: '...' },
-  { id: 9, title: '코로나 19 바이러스 공포 9', description: '...' },
-  { id: 10, title: '코로나 19 바이러스 공포 10', description: '...' },
-  { id: 11, title: '코로나 19 바이러스 공포 11', description: '...' },
-  { id: 12, title: '코로나 19 바이러스 공포 12', description: '...' },
-  { id: 13, title: '코로나 19 바이러스 공포 13', description: '...' },
-  { id: 14, title: '코로나 19 바이러스 공포 14', description: '...' },
-  { id: 15, title: '코로나 19 바이러스 공포 15', description: '...' },
-  { id: 16, title: '코로나 19 바이러스 공포 16', description: '...' },
-  { id: 17, title: '코로나 19 바이러스 공포 17', description: '...' },
-  { id: 18, title: '코로나 19 바이러스 공포 18', description: '...' },
-  { id: 19, title: '코로나 19 바이러스 공포 19', description: '...' },
-  { id: 20, title: '코로나 19 바이러스 공포 20', description: '...' },
+  { id: 1, title: '코로나 19 바이러스 공포 1', description: desc },
+  { id: 2, title: '코로나 19 바이러스 공포 2', description: desc },
+  { id: 3, title: '코로나 19 바이러스 공포 3', description: desc },
+  { id: 4, title: '코로나 19 바이러스 공포 4', description: desc },
+  { id: 5, title: '코로나 19 바이러스 공포 5', description: desc },
+  { id: 6, title: '코로나 19 바이러스 공포 6', description: desc },
+  { id: 7, title: '코로나 19 바이러스 공포 7', description: desc },
+  { id: 8, title: '코로나 19 바이러스 공포 8', description: desc },
+  { id: 9, title: '코로나 19 바이러스 공포 9', description: desc },
+  { id: 10, title: '코로나 19 바이러스 공포 10', description: desc },
+  { id: 11, title: '코로나 19 바이러스 공포 11', description: desc },
+  { id: 12, title: '코로나 19 바이러스 공포 12', description: desc },
+  { id: 13, title: '코로나 19 바이러스 공포 13', description: desc },
+  { id: 14, title: '코로나 19 바이러스 공포 14', description: desc },
+  { id: 15, title: '코로나 19 바이러스 공포 15', description: desc },
+  { id: 16, title: '코로나 19 바이러스 공포 16', description: desc },
+  { id: 17, title: '코로나 19 바이러스 공포 17', description: desc },
+  { id: 18, title: '코로나 19 바이러스 공포 18', description: desc },
+  { id: 19, title: '코로나 19 바이러스 공포 19', description: desc },
+  { id: 20, title: '코로나 19 바이러스 공포 20', description: desc },
 ]
 
 const IssueSelectorView: FC = () => {
@@ -60,10 +64,13 @@ const IssueSelectorView: FC = () => {
   }, [])
   return (
     <div>
-      <div>
-        {selectedIds.map(id => (
-          <span>({id})</span>
-        ))}
+      {/*<div>*/}
+      {/*  {selectedIds.map(id => (*/}
+      {/*    <span>({id})</span>*/}
+      {/*  ))}*/}
+      {/*</div>*/}
+      <div className={s.upperAreaGuide}>
+        이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
       <div style={{ position: 'relative', height: 388 }}>
         <IssueCardView
