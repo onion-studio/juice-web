@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IssueCardView } from '../components/IssueCardView'
-import s from './SelectStagePage.module.scss'
+import s from './IssueSelectingPage.module.scss'
 import {
   CardEventContext,
   CardEventProvider,
@@ -176,7 +176,7 @@ const IssueSelectorView: FC = () => {
   )
 }
 
-export const SelectStagePage: FC = () => {
+export const IssueSelectingPage: FC = () => {
   return (
     <CardEventProvider>
       <IssueSelectorView />

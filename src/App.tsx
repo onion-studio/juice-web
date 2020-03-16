@@ -1,6 +1,6 @@
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
-import { SelectStagePage } from './pages/SelectStagePage'
+import { IssueSelectingPage } from './pages/IssueSelectingPage'
 
 const App: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const App: React.FC = () => {
           backgroundColor: 'white',
         }}
       >
-        <SelectStagePage />
+        <IssueSelectingPage />
       </div>
     </HashRouter>
   )
