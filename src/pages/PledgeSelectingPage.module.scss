@@ -4,6 +4,11 @@
   display: flex;
   flex-wrap: nowrap;
   overflow-x: scroll;
+
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .issueNavigationBar_item {
