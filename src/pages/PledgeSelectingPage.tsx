@@ -7,12 +7,35 @@ const IssueNavigationItem: FC = () => {
   return <div className={s.issueNavigationBar_item}>1</div>
 }
 
+const indicies = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+]
+
 const IssueNavigationBar: FC = () => {
   return (
     <div className={s.issueNavigationBar}>
       <div className={s.issueNavigationBar_spacer} />
       <div className={s.issueNavigationBar_spacer} />
-      {new Array(20).fill(null).map((_, i) => {
+      {indicies.map((_, i) => {
         return <IssueNavigationItem key={i} />
       })}
       <div className={s.issueNavigationBar_spacer} />
@@ -64,7 +87,7 @@ const PledgeCardList: FC = () => {
   const [, { has, toggle }] = useSet<number>()
   return (
     <div className={s.pledgeCardList}>
-      {new Array(10).fill(null).map((_, i) => (
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((_, i) => (
         <PledgeCard key={i} selected={has(i)} onSelect={() => toggle(i)} />
       ))}
     </div>
