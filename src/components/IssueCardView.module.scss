@@ -1,3 +1,5 @@
+@import '../common';
+
 .container {
   width: 100%;
   position: absolute;
@@ -6,36 +8,47 @@
 
   display: flex;
   justify-content: center;
-  padding: 36px 0 32px;
+  padding: 30px 0 44px;
   user-select: none;
 
   overflow: hidden;
 }
 
 .card {
-  background-color: white;
-  outline: 1px solid #979797;
+  //background-color: white;
   width: 300px;
-  height: 320px;
-  cursor: pointer;
-  position: relative;
+  height: 300px;
   transform-origin: 50% 120%;
-  box-sizing: border-box;
+
+  position: relative;
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+
+  cursor: pointer;
+
+  // zeplin
+  border: solid 2px $color-ink;
+  background-color: $color-butter;
+}
+
+.card_inner {
+  flex: 1;
+  border: solid 0.7px $color-ink;
 
   display: flex;
   flex-direction: column;
 }
 
-.cardCollapsed {
+.card_inner__collapsed {
   padding-top: 152px;
 }
 
-.cardExpanded {
+.card_inner__expanded {
   padding-top: 102px;
 }
 
 .cardTitle {
-  font-family: 'Spoqa Han Sans';
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -48,7 +61,6 @@
 }
 
 .cardDescription {
-  font-family: 'Spoqa Han Sans';
   font-size: 14px;
   font-weight: normal;
   font-stretch: normal;
@@ -61,7 +73,6 @@
 }
 
 .cardTags {
-  font-family: 'Spoqa Han Sans';
   font-size: 16px;
   font-weight: normal;
   font-stretch: normal;
@@ -73,7 +84,19 @@
 }
 
 .detailButton {
-  background-color: #d8d8d8;
+  height: 52px;
+  line-height: 52px;
+
+  // zeplin - container
+  background-color: $color-fruit;
+
+  // zeplin - text
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  //line-height: 1.71;
+  letter-spacing: -0.47px;
   text-align: center;
-  padding: 20px;
+  color: $color-butter;
 }

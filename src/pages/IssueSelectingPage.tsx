@@ -156,12 +156,12 @@ const IssueSelectorView: FC = () => {
       </div>
       <div className={s.selectButtonContainer}>
         <div
-          className={s.selectButton}
+          className={s.discardButton}
           onClick={() => {
             cardEventManager.discard()
           }}
         >
-          싫어요
+          <div className={s.selectButton_label}>싫어요</div>
         </div>
         <div
           className={s.selectButton}
@@ -169,7 +169,7 @@ const IssueSelectorView: FC = () => {
             cardEventManager.select()
           }}
         >
-          담을래요
+          <div className={s.selectButton_label}>담을래요</div>
         </div>
       </div>
     </div>

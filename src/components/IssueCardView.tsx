@@ -300,32 +300,36 @@ export const IssueCardView: FC<Props> = ({
         onEvent({ type: 'cardReleased' })
       }}
     >
-      <div
-        className={c(s.card, detailVisible ? s.cardExpanded : s.cardCollapsed)}
-        style={cardStyle}
-      >
-        <div className={s.cardTitle}>{title}</div>
-        {detailVisible || (
-          <div className={s.cardTags}>#질병 #감염병 #출입국관리</div>
-        )}
+      <div className={s.card} style={cardStyle}>
+        <div
+          className={c(
+            s.card_inner,
+            detailVisible ? s.card_inner__expanded : s.card_inner__collapsed,
+          )}
+        >
+          <div className={s.cardTitle}>{title}</div>
+          {detailVisible || (
+            <div className={s.cardTags}>#질병 #감염병 #출입국관리</div>
+          )}
 
-        {detailVisible ? (
-          <div className={s.cardDescription}>{description}</div>
-        ) : (
-          <>
-            <div style={{ flexGrow: 1 }} />
-            <div
-              className={s.detailButton}
-              onClick={() => {
-                if (Math.abs(offset) < 2) {
-                  setDetailVisible(true)
-                }
-              }}
-            >
-              자세한 내용 궁금!
-            </div>
-          </>
-        )}
+          {detailVisible ? (
+            <div className={s.cardDescription}>{description}</div>
+          ) : (
+            <>
+              <div style={{ flexGrow: 1 }} />
+              <div
+                className={s.detailButton}
+                onClick={() => {
+                  if (Math.abs(offset) < 2) {
+                    setDetailVisible(true)
+                  }
+                }}
+              >
+                자세히 보기
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

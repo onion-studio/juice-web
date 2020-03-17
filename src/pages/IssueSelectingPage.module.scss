@@ -1,15 +1,16 @@
+@import '../common';
+
 .upperAreaGuide {
   padding-top: 76px;
 
-  font-family: 'Spoqa Han Sans';
   font-size: 20px;
-  font-weight: 300;
+  font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.6;
   letter-spacing: -0.8px;
   text-align: center;
-  color: #6a6a6a;
+  color: $color-ink;
 }
 
 .selectButtonContainer {
@@ -21,9 +22,6 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: solid 1px #979797;
-  background-color: #d8d8d8;
-  line-height: 80px;
   text-align: center;
   &:not(:first-child) {
     margin-left: 24px;
@@ -31,6 +29,30 @@
 
   user-select: none;
   cursor: pointer;
+
+  // zeplin - button
+  box-shadow: 0 4px 8px 0 $color-selected-shadow;
+  border: solid 1px $color-ink;
+  background-color: $color-fruit;
+}
+
+.selectButton_label {
+  // FIXME
+  margin-top: 37px;
+
+  // zeplin - text
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: -0.53px;
+  text-align: center;
+  color: $color-ink;
+}
+
+.discardButton {
+  @extend .selectButton;
+  background-color: $color-gray;
 }
 
 .confirmModalTitle {

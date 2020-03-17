@@ -1,0 +1,52 @@
+@import '../common';
+
+.container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 52px;
+  line-height: 52px;
+  background-color: $color-gray;
+  border-bottom: solid 1px $color-ink;
+  user-select: none;
+
+  // zeplin - text
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: -0.47px;
+  text-align: center;
+  color: $color-ink;
+}
+
+.backButton {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+}
+
+.actionButton {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+}
+
+.title {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: $color-fruit;
+}
