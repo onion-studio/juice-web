@@ -1,0 +1,103 @@
+@import '../common';
+
+.issueNavigationBar {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+
+.issueNavigationBar_item {
+  width: 103px;
+  flex: 0 0 80px;
+  height: 110px;
+  background-color: red;
+}
+
+.issueNavigationBar_spacer {
+  @extend .issueNavigationBar_item;
+  background-color: white;
+}
+
+.header {
+  display: flex;
+  height: 52px;
+  background-color: #d6cdb4;
+  line-height: 52px;
+}
+
+.header_back {
+  width: 50px;
+}
+
+.header_content {
+  flex: 1;
+  //line-height: 52px;
+}
+
+.header_forward {
+  //line-height: 52px;
+}
+
+.pledgeCardList {
+  padding: 20px 30px 0;
+}
+
+.pledgeCard {
+  position: relative;
+  background-color: skyblue;
+  margin-bottom: 12px;
+  padding: 0 20px;
+
+  &:hover {
+    outline: 1px solid red;
+  }
+}
+
+.pledgeCard_title {
+  font-family: 'Spoqa Han Sans';
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.71;
+  letter-spacing: -0.47px;
+  padding: 16px 0;
+  //color: var(--Ink);
+}
+
+.pledgeCard_description {
+  border-top: 1px solid black;
+  padding-top: 10px;
+  padding-bottom: 16px;
+  padding-right: 40px;
+  word-break: keep-all;
+
+  // zeplin
+  font-family: 'Spoqa Han Sans';
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: -0.4px;
+  color: $color-ink;
+}
+
+.pledgeCard_foldButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  outline: 1px solid green;
+  &:hover {
+    outline: 1px solid red;
+    cursor: pointer;
+  }
+}
+
+.pledgeCard_check {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  pointer-events: none;
+}

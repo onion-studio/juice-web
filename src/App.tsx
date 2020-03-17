@@ -1,6 +1,7 @@
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
-import { IssueSelectingPage } from './pages/IssueSelectingPage'
+import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
+// import { IssueSelectingPage } from './pages/IssueSelectingPage'
 
 const App: React.FC = () => {
   return (
@@ -10,10 +11,9 @@ const App: React.FC = () => {
           maxWidth: 400,
           minHeight: 700,
           margin: '0 auto',
-          backgroundColor: 'white',
         }}
       >
-        <IssueSelectingPage />
+        <PledgeSelectingPage />
       </div>
     </HashRouter>
   )
