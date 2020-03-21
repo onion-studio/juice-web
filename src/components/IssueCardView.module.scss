@@ -118,26 +118,32 @@
 }
 
 .stamp {
+  // outer dimension
   position: absolute;
+  top: 16px;
+
+  // inner dimension
   width: 80px;
   height: 80px;
-  border-radius: 50%;
-  top: 16px;
-  opacity: 0;
-  transition: transform 0.2s, opacity 0.2s;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
 
-  // zeplin
+  // shape
+  border-radius: 50%;
+  opacity: 0;
+
+  // font
   font-size: 14px;
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.4;
   letter-spacing: -0.53px;
+
+  // animation
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 .selectStamp {

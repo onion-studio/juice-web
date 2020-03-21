@@ -19,13 +19,28 @@
 }
 
 .selectButton {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  text-align: center;
   &:not(:first-child) {
     margin-left: 24px;
   }
+
+  // inner dimension
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  // shape
+  border-radius: 50%;
+
+  // font
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: -0.53px;
 
   user-select: none;
   cursor: pointer;
@@ -36,27 +51,12 @@
   background-color: $color-fruit;
 }
 
-.selectButton_label {
-  // FIXME
-  margin-top: 37px;
-
-  // zeplin - text
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: -0.53px;
-  text-align: center;
-  color: $color-ink;
-}
-
 .discardButton {
   @extend .selectButton;
   background-color: $color-gray;
 }
 
 .confirmModalTitle {
-  font-family: 'Spoqa Han Sans';
   font-size: 20px;
   font-weight: 300;
   font-stretch: normal;

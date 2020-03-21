@@ -8,6 +8,8 @@ import {
 } from '../contexts/CardEventContext'
 import { TopNavBar } from '../components/TopNavBar'
 import { useList, useSet } from 'react-use'
+import { ReactComponent as IconXBlack } from '../components/svg/ico-x-black.svg'
+import { ReactComponent as IconPickBlack } from '../components/svg/ico-pick-black.svg'
 
 interface IssueCard {
   id: number
@@ -136,7 +138,7 @@ const IssueSelectorView: FC = () => {
       <div className={s.upperAreaGuide}>
         이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
-      <div style={{ position: 'relative', height: 388 }}>
+      <div style={{ position: 'relative', height: 372 }}>
         {issueCards.map((c, i) => (
           <IssueCardView
             total={issueCards.length}
@@ -159,7 +161,11 @@ const IssueSelectorView: FC = () => {
             cardEventManager.discard()
           }}
         >
-          <div className={s.selectButton_label}>싫어요</div>
+          <div>
+            <IconXBlack />
+          </div>
+
+          <div>싫어요</div>
         </div>
         <div
           className={s.selectButton}
@@ -167,7 +173,11 @@ const IssueSelectorView: FC = () => {
             cardEventManager.select()
           }}
         >
-          <div className={s.selectButton_label}>담을래요</div>
+          <div>
+            <IconPickBlack />
+          </div>
+
+          <div>담을래요</div>
         </div>
       </div>
     </div>
