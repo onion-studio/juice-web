@@ -379,13 +379,21 @@ export const IssueCardView: FC<Props> = ({
               >
                 <ArrowBack />
               </div>
-              <div className={s.cardTitle}>{title}</div>
+              <div className={s.cardTitle_wrap}>
+                <div className={s.cardTitle}>{title}</div>
+              </div>
+
               <div className={s.cardDescription}>{description}</div>
             </>
           ) : (
             <>
-              <div className={s.cardTitle}>{title}</div>
-              <div className={s.cardTags}>#질병 #감염병 #출입국관리</div>
+              <div className={s.cardTitle_wrap}>
+                <div className={s.cardTitle}>{title}</div>
+              </div>
+
+              <div className={s.cardTags}>
+                #질병&nbsp;&nbsp;&nbsp;#감염병&nbsp;&nbsp;&nbsp;#출입국관리
+              </div>
               <div style={{ flexGrow: 1 }} />
               <div
                 className={s.detailButton}
