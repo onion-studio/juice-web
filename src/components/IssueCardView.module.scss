@@ -101,3 +101,58 @@
   text-align: center;
   color: $color-butter;
 }
+
+.stamp {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  top: 16px;
+  opacity: 0;
+  transition: transform 0.2s, opacity 0.2s;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  // zeplin
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: -0.53px;
+}
+
+.selectStamp {
+  @extend .stamp;
+  border: 3px solid $color-fruit;
+  color: $color-fruit;
+
+  left: 16px;
+  transform: translateY(-20px) rotate(-30deg);
+}
+
+.stamp__visible {
+  opacity: 1;
+}
+
+.selectStamp__visible {
+  @extend .stamp__visible;
+  transform: rotate(-30deg);
+}
+
+.discardStamp {
+  @extend .stamp;
+  border: 3px solid $color-gray;
+  color: $color-gray;
+
+  right: 16px;
+  transform: translateY(-20px) rotate(30deg);
+}
+
+.discardStamp__visible {
+  @extend .stamp__visible;
+  transform: rotate(30deg);
+}

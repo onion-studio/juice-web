@@ -10,6 +10,8 @@ import React, {
 import c from 'classnames'
 import s from './IssueCardView.module.scss'
 import { CardEventContext } from '../contexts/CardEventContext'
+import { ReactComponent as IconPickRed } from './svg/ico-pick-red.svg'
+import { ReactComponent as IconPickGray } from './svg/ico-pick-gray.svg'
 
 enum SlideAnimationState {
   start = 'start',
@@ -199,6 +201,7 @@ export const IssueCardView: FC<Props> = ({
   onDiscardAnimationEnd,
   distance,
 }) => {
+  const threshold = 40
   const [
     animationState,
     offset,
@@ -206,7 +209,7 @@ export const IssueCardView: FC<Props> = ({
     triggerLeftSlide,
     triggerRightSlide,
   ] = useSlideAnimation(
-    40,
+    threshold,
     onSelect,
     onSelectAnimationEnd,
     onDiscard,
@@ -319,6 +322,27 @@ export const IssueCardView: FC<Props> = ({
       }}
     >
       <div className={s.card} style={cardStyle}>
+        <div
+          className={c(s.selectStamp, {
+            [s.selectStamp__visible]: offset > threshold,
+          })}
+        >
+          <div>
+            <IconPickRed />
+          </div>
+          <div>담을래요</div>
+        </div>
+        <div
+          className={c(s.discardStamp, {
+            [s.discardStamp__visible]: offset < -threshold,
+          })}
+        >
+          <div>
+            <IconPickGray />
+          </div>
+          <div>싫어요</div>
+        </div>
+
         <div
           className={c(
             s.card_inner,
