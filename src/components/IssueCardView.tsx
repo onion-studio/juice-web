@@ -297,6 +297,13 @@ export const IssueCardView: FC<Props> = ({
           opacity: 0,
         }
       : {}
+
+  const hovering =
+    animationState === SlideAnimationState.grabbed ||
+    animationState === SlideAnimationState.recovering ||
+    animationState === SlideAnimationState.leftSlide ||
+    animationState === SlideAnimationState.rightSlide
+
   return (
     <div
       style={{
@@ -325,7 +332,10 @@ export const IssueCardView: FC<Props> = ({
         onEvent({ type: 'cardReleased' })
       }}
     >
-      <div className={s.card} style={cardStyle}>
+      <div
+        className={c(s.card, { [s.card__hovering]: hovering })}
+        style={cardStyle}
+      >
         <div className={s.topLabel}>
           <div className={s.topLabel_content}>
             {cardNumber} / {total}
