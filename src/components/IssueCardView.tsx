@@ -11,7 +11,8 @@ import c from 'classnames'
 import s from './IssueCardView.module.scss'
 import { CardEventContext } from '../contexts/CardEventContext'
 import { ReactComponent as IconPickRed } from './svg/ico-pick-red.svg'
-import { ReactComponent as IconPickGray } from './svg/ico-pick-gray.svg'
+import { ReactComponent as IconXGray } from './svg/ico-x-gray.svg'
+import { ReactComponent as ArrowBack } from './svg/arr-back.svg'
 
 enum SlideAnimationState {
   start = 'start',
@@ -357,7 +358,7 @@ export const IssueCardView: FC<Props> = ({
           })}
         >
           <div>
-            <IconPickGray />
+            <IconXGray />
           </div>
           <div>싫어요</div>
         </div>
@@ -368,15 +369,23 @@ export const IssueCardView: FC<Props> = ({
             detailVisible ? s.card_inner__expanded : s.card_inner__collapsed,
           )}
         >
-          <div className={s.cardTitle}>{title}</div>
-          {detailVisible || (
-            <div className={s.cardTags}>#질병 #감염병 #출입국관리</div>
-          )}
-
           {detailVisible ? (
-            <div className={s.cardDescription}>{description}</div>
+            <>
+              <div
+                className={s.card_hideDetail}
+                onClick={() => {
+                  setDetailVisible(false)
+                }}
+              >
+                <ArrowBack />
+              </div>
+              <div className={s.cardTitle}>{title}</div>
+              <div className={s.cardDescription}>{description}</div>
+            </>
           ) : (
             <>
+              <div className={s.cardTitle}>{title}</div>
+              <div className={s.cardTags}>#질병 #감염병 #출입국관리</div>
               <div style={{ flexGrow: 1 }} />
               <div
                 className={s.detailButton}
