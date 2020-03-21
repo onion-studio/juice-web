@@ -2,7 +2,6 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 // import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
 import { IssueSelectingPage } from './pages/IssueSelectingPage'
-import { TopNavBar } from './components/TopNavBar'
 
 const App: React.FC = () => {
   return (
@@ -16,7 +15,6 @@ const App: React.FC = () => {
           backgroundColor: '#fff6da',
         }}
       >
-        <TopNavBar title="제목" progress={0.3} />
         <IssueSelectingPage />
       </div>
     </HashRouter>

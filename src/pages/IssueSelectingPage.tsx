@@ -6,6 +6,7 @@ import {
   CardEventContext,
   CardEventProvider,
 } from '../contexts/CardEventContext'
+import { TopNavBar } from '../components/TopNavBar'
 
 interface IssueCard {
   id: number
@@ -116,8 +117,11 @@ const IssueSelectorView: FC = () => {
     setSlideAnimationPlaying(false)
   }, [])
   const allSelected = currentCardIndex >= issueCards.length
+  const progress = currentCardIndex / issueCards.length
+
   return (
     <div>
+      <TopNavBar title="관심 주제 고르기" progress={progress} />
       {allSelected && (
         <ConfirmModal
           ids={selectedIds}
@@ -126,7 +130,6 @@ const IssueSelectorView: FC = () => {
           }
         />
       )}
-
       <div className={s.upperAreaGuide}>
         이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
