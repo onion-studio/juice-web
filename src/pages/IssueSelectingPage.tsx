@@ -7,7 +7,7 @@ import {
   CardEventProvider,
 } from '../contexts/CardEventContext'
 import { TopNavBar } from '../components/TopNavBar'
-import { useList, useSet } from 'react-use'
+import { useSet } from 'react-use'
 import { ReactComponent as IconXBlack } from '../components/svg/ico-x-black.svg'
 import { ReactComponent as IconPickBlack } from '../components/svg/ico-pick-black.svg'
 
@@ -129,12 +129,6 @@ const IssueSelectorView: FC = () => {
   return (
     <div>
       <TopNavBar title="관심 주제 고르기" progress={progress} />
-      {allSelected && (
-        <ConfirmModal
-          ids={Array.from(selectedIds)}
-          onRemove={id => removeSelectedId(id)}
-        />
-      )}
       <div className={s.upperAreaGuide}>
         이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
