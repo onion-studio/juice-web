@@ -12,7 +12,7 @@ export const TopNavBar: FC<{
   return createPortal(
     <div className={s.container}>
       <div className={s.progressBar} style={{ width: `${progress * 100}%` }} />
-      <div className={s.backButton}>뒤로</div>
+      <div className={s.backButton}>TODO</div>
       <div className={s.title}>{title}</div>
       {action && (
         <div id="navAction" className={s.actionButton}>

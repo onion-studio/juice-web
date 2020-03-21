@@ -7,6 +7,7 @@ import {
   CardEventProvider,
 } from '../contexts/CardEventContext'
 import { TopNavBar } from '../components/TopNavBar'
+import { useList, useSet } from 'react-use'
 
 interface IssueCard {
   id: number
@@ -98,24 +99,28 @@ const ConfirmModal: FC<{ ids: number[]; onRemove: (id: number) => void }> = ({
 const IssueSelectorView: FC = () => {
   // card stack
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
-  const [slideAnimationPlaying, setSlideAnimationPlaying] = useState(false)
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [
+    selectedIds,
+    { add: addSelectedId, remove: removeSelectedId },
+  ] = useSet<number>()
+  const [discardedIds, { add: addDiscardedId }] = useSet<number>()
   const cardEventManager = useContext(CardEventContext)
 
-  const oldCard: IssueCard = issueCards[currentCardIndex - 1]
   const onConclude = useCallback(
     (selected: boolean) => {
-      setCurrentCardIndex(currentCardIndex + 1)
-      setSlideAnimationPlaying(true)
       if (selected) {
-        setSelectedIds([...selectedIds, issueCards[currentCardIndex].id])
+        addSelectedId(issueCards[currentCardIndex].id)
+      } else {
+        addDiscardedId(issueCards[currentCardIndex].id)
       }
     },
     [currentCardIndex, selectedIds],
   )
   const onConclusionAnimationEnd = useCallback(() => {
-    setSlideAnimationPlaying(false)
-  }, [])
+    setCurrentCardIndex(currentCardIndex + 1)
+  }, [currentCardIndex])
+
+  // const conclusionCount = selectedIds.size + discardedIds.size
   const allSelected = currentCardIndex >= issueCards.length
   const progress = currentCardIndex / issueCards.length
 
@@ -124,38 +129,26 @@ const IssueSelectorView: FC = () => {
       <TopNavBar title="관심 주제 고르기" progress={progress} />
       {allSelected && (
         <ConfirmModal
-          ids={selectedIds}
-          onRemove={id =>
-            setSelectedIds(selectedIds.filter(item => item !== id))
-          }
+          ids={Array.from(selectedIds)}
+          onRemove={id => removeSelectedId(id)}
         />
       )}
       <div className={s.upperAreaGuide}>
         이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
       <div style={{ position: 'relative', height: 388 }}>
-        {!allSelected && (
+        {issueCards.map((c, i) => (
           <IssueCardView
-            key={issueCards[currentCardIndex].id}
-            title={issueCards[currentCardIndex].title}
-            description={issueCards[currentCardIndex].description}
+            distance={Math.max(0, i - currentCardIndex)}
+            interactive={issueCards[currentCardIndex]?.id === c.id}
+            title={c.title}
+            description={c.description}
             onSelect={() => onConclude(true)}
             onSelectAnimationEnd={onConclusionAnimationEnd}
             onDiscard={() => onConclude(false)}
             onDiscardAnimationEnd={onConclusionAnimationEnd}
           />
-        )}
-        {slideAnimationPlaying && (
-          <IssueCardView
-            key={oldCard.id}
-            title={oldCard.title}
-            description={oldCard.description}
-            onSelect={() => onConclude(true)}
-            onSelectAnimationEnd={onConclusionAnimationEnd}
-            onDiscard={() => onConclude(false)}
-            onDiscardAnimationEnd={onConclusionAnimationEnd}
-          />
-        )}
+        ))}
       </div>
       <div className={s.selectButtonContainer}>
         <div

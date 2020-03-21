@@ -179,6 +179,8 @@ export enum IssueCardCommand {
 export interface Props {
   // iconImg: string
   // tags: string[]
+  distance: number
+  interactive: boolean
   title: string
   description: string
   onSelect: () => void
@@ -188,12 +190,14 @@ export interface Props {
 }
 
 export const IssueCardView: FC<Props> = ({
+  interactive,
   title,
   description,
   onSelect,
   onSelectAnimationEnd,
   onDiscard,
   onDiscardAnimationEnd,
+  distance,
 }) => {
   const [
     animationState,
@@ -211,11 +215,16 @@ export const IssueCardView: FC<Props> = ({
   const [detailVisible, setDetailVisible] = useState(false)
   const cardEventManager = useContext(CardEventContext)
   const animationStateRef = useRef(animationState)
+  const interactiveRef = useRef(interactive)
   animationStateRef.current = animationState
+  interactiveRef.current = interactive
 
   useEffect(() => {
     return cardEventManager.onSelect(() => {
-      if (animationStateRef.current === SlideAnimationState.idle) {
+      if (
+        interactiveRef.current &&
+        animationStateRef.current === SlideAnimationState.idle
+      ) {
         triggerRightSlide()
       }
     })
@@ -223,7 +232,10 @@ export const IssueCardView: FC<Props> = ({
 
   useEffect(() => {
     return cardEventManager.onDiscard(() => {
-      if (animationStateRef.current === SlideAnimationState.idle) {
+      if (
+        interactiveRef.current &&
+        animationStateRef.current === SlideAnimationState.idle
+      ) {
         triggerLeftSlide()
       }
     })
@@ -236,12 +248,12 @@ export const IssueCardView: FC<Props> = ({
           transition: `transform ${dAppearing}, opacity ${dAppearing}`,
           opacity: 0,
         }
-      : animationState === SlideAnimationState.appearing
-      ? {
-          transition: `transform ${dAppearing}, opacity ${dAppearing}`,
-          opacity: 1,
-        }
-      : animationState === SlideAnimationState.idle
+      : // : animationState === SlideAnimationState.appearing
+      // ? {
+      //     transition: `transform ${dAppearing}, opacity ${dAppearing}`,
+      //     opacity: 1,
+      //   }
+      animationState === SlideAnimationState.idle
       ? {
           transition: `transform ${dLeftSide}, opacity ${dLeftSide} .2s`,
         }
@@ -280,6 +292,12 @@ export const IssueCardView: FC<Props> = ({
       : {}
   return (
     <div
+      style={{
+        zIndex: 100 - distance,
+        pointerEvents: interactive ? 'auto' : 'none',
+        transform: `translateX(-50%) scale(${(100 - distance) /
+          100}) translateY(${distance * 4}px)`,
+      }}
       className={s.container}
       onTouchStart={e => {
         onEvent({ type: 'cardGrabbed', x: e.touches[0].clientX })
