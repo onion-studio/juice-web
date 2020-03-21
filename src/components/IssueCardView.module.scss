@@ -156,3 +156,63 @@
   @extend .stamp__visible;
   transform: rotate(30deg);
 }
+
+.topLabel {
+  width: 86px;
+  height: 22px;
+
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &::before {
+    display: block;
+    position: absolute;
+    content: '';
+    width: 8px;
+    height: 8px;
+
+    top: 6px;
+    left: -3px;
+
+    border: 1px solid $color-ink;
+    border-radius: 50%;
+    background-color: $color-butter;
+  }
+  &::after {
+    display: block;
+    position: absolute;
+    content: '';
+    width: 8px;
+    height: 8px;
+
+    top: 6px;
+    right: -3px;
+
+    border: 1px solid $color-ink;
+    border-radius: 50%;
+    background-color: $color-butter;
+  }
+}
+
+.topLabel_content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  border: 1px solid $color-ink;
+  border-radius: 50%;
+  background-color: $color-butter;
+  line-height: 18px;
+
+  // zeplin
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  //line-height: 1.71;
+  letter-spacing: -0.47px;
+  text-align: center;
+  color: $color-ink;
+}

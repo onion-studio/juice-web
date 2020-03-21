@@ -139,6 +139,8 @@ const IssueSelectorView: FC = () => {
       <div style={{ position: 'relative', height: 388 }}>
         {issueCards.map((c, i) => (
           <IssueCardView
+            total={issueCards.length}
+            cardNumber={i + 1}
             distance={Math.max(0, i - currentCardIndex)}
             interactive={issueCards[currentCardIndex]?.id === c.id}
             title={c.title}

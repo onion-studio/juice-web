@@ -181,6 +181,8 @@ export enum IssueCardCommand {
 export interface Props {
   // iconImg: string
   // tags: string[]
+  cardNumber: number
+  total: number
   distance: number
   interactive: boolean
   title: string
@@ -192,6 +194,8 @@ export interface Props {
 }
 
 export const IssueCardView: FC<Props> = ({
+  cardNumber,
+  total,
   interactive,
   title,
   description,
@@ -322,6 +326,11 @@ export const IssueCardView: FC<Props> = ({
       }}
     >
       <div className={s.card} style={cardStyle}>
+        <div className={s.topLabel}>
+          <div className={s.topLabel_content}>
+            {cardNumber} / {total}
+          </div>
+        </div>
         <div
           className={c(s.selectStamp, {
             [s.selectStamp__visible]: offset > threshold,
