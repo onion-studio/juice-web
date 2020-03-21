@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import s from './TopNavBar.module.scss'
+import { Lace } from './Lace'
 
 const topNavSlot = document.querySelector('#top-nav')!
 
@@ -19,6 +20,9 @@ export const TopNavBar: FC<{
           {action}
         </div>
       )}
+      <div className={s.lace}>
+        <Lace />
+      </div>
     </div>,
     topNavSlot,
   )

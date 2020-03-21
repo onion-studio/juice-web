@@ -299,7 +299,7 @@ export const IssueCardView: FC<Props> = ({
         zIndex: 100 - distance,
         pointerEvents: interactive ? 'auto' : 'none',
         transform: `translateX(-50%) scale(${(100 - distance) /
-          100}) translateY(${distance * 4}px)`,
+          100}) translateY(${distance * 3}px)`,
       }}
       className={s.container}
       onTouchStart={e => {
