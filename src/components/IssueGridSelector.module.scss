@@ -5,6 +5,7 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
 .item {
   position: relative;
   margin: 0 8px 20px;
@@ -13,14 +14,23 @@
 .item_box {
   width: 89px;
   height: 88px;
-  box-shadow: 0 4px 8px 0 $color-selected-shadow;
-  border: solid 1px $color-ink;
+  border: solid 1px $color-disabled;
   background-color: $color-butter;
+}
+
+.item_box__selected {
+  border: solid 1px $color-ink;
+  box-shadow: 0 4px 8px 0 $color-selected-shadow;
 }
 
 .item_label {
   @include tp-small-bold;
+  color: $color-disabled;
   text-align: center;
+}
+
+.item_label__selected {
+  color: $color-ink;
 }
 
 .item_pickIcon {
