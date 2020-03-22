@@ -59,33 +59,16 @@
 }
 
 .pledgeCard_title {
-  font-family: 'Spoqa Han Sans';
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.71;
-  letter-spacing: -0.47px;
-  padding: 16px 0;
-  //color: var(--Ink);
+  @include tp-normal-bold;
 }
 
 .pledgeCard_description {
+  @include tp-small;
   border-top: 1px solid black;
   padding-top: 10px;
   padding-bottom: 16px;
   padding-right: 40px;
   word-break: keep-all;
-
-  // zeplin
-  font-family: 'Spoqa Han Sans';
-  font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.67;
-  letter-spacing: -0.4px;
-  color: $color-ink;
 }
 
 .pledgeCard_foldButton {

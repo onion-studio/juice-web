@@ -1,6 +1,7 @@
 @import '../common';
 
 .container {
+  @include tp-normal-bold;
   position: absolute;
   top: 0;
   right: 0;
@@ -10,15 +11,6 @@
   background-color: $color-gray;
   border-bottom: solid 1px $color-ink;
   user-select: none;
-
-  // zeplin - text
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: -0.47px;
-  text-align: center;
-  color: $color-ink;
 }
 
 .backButton {

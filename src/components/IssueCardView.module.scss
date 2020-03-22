@@ -59,18 +59,10 @@
 }
 
 .cardTitle {
+  @include tp-normal-bold;
+
   position: relative;
   border-bottom: 2px solid $color-ink;
-
-  // zeplin
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.71;
-  letter-spacing: -0.47px;
-  text-align: center;
-  color: $color-ink;
 
   &::after {
     display: block;
@@ -84,30 +76,16 @@
 }
 
 .cardDescription {
+  @include tp-normal;
   padding: 30px 20px 0;
-
-  // zeplin
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.71;
-  letter-spacing: -0.47px;
-  color: $color-ink;
 }
 
 .cardTags {
+  @include tp-normal;
   margin-top: 12px;
 
-  // zeplin
-  font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.71;
-  letter-spacing: -0.47px;
-  text-align: center;
   color: $color-ink;
+  text-align: center;
 }
 
 .card_hideDetail {
@@ -122,24 +100,16 @@
 }
 
 .detailButton {
+  @include tp-normal-bold;
   height: 52px;
   line-height: 52px;
-
-  // zeplin - container
-  background-color: $color-fruit;
-
-  // zeplin - text
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  //line-height: 1.71;
-  letter-spacing: -0.47px;
-  text-align: center;
   color: $color-butter;
+  text-align: center;
+  background-color: $color-fruit;
 }
 
 .stamp {
+  @include tp-stamp;
   // outer dimension
   position: absolute;
   top: 16px;
@@ -155,14 +125,6 @@
   // shape
   border-radius: 50%;
   opacity: 0;
-
-  // font
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.4;
-  letter-spacing: -0.53px;
 
   // animation
   transition: transform 0.2s, opacity 0.2s;
@@ -240,6 +202,7 @@
 }
 
 .topLabel_content {
+  @include tp-normal-bold;
   position: relative;
   z-index: 10;
   width: 100%;
@@ -248,14 +211,5 @@
   border-radius: 50%;
   background-color: $color-butter;
   line-height: 18px;
-
-  // zeplin
-  font-size: 14px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  //line-height: 1.71;
-  letter-spacing: -0.47px;
   text-align: center;
-  color: $color-ink;
 }

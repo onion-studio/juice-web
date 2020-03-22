@@ -3,3 +3,51 @@ $color-gray: #d6cdb4;
 $color-butter: #fff6da;
 $color-ink: #000000;
 $color-selected-shadow: rgba(156, 93, 10, 0.3);
+
+@mixin tp-big {
+  font-size: 20px;
+  font-weight: 300;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.6;
+  letter-spacing: -0.8px;
+  color: $color-ink;
+}
+
+@mixin tp-big-bold {
+  @include tp-big;
+  font-weight: bold;
+}
+
+@mixin tp-normal {
+  font-size: 14px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.71;
+  letter-spacing: -0.47px;
+  color: $color-ink;
+}
+
+@mixin tp-normal-bold {
+  @include tp-normal;
+  font-weight: bold;
+}
+
+@mixin tp-stamp {
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: -0.53px;
+}
+
+@mixin tp-small {
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: -0.4px;
+  color: $color-ink;
+}
