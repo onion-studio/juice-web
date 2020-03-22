@@ -1,0 +1,30 @@
+@import '../common';
+
+.list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.item {
+  position: relative;
+  margin: 0 8px 20px;
+}
+
+.item_box {
+  width: 89px;
+  height: 88px;
+  box-shadow: 0 4px 8px 0 $color-selected-shadow;
+  border: solid 1px $color-ink;
+  background-color: $color-butter;
+}
+
+.item_label {
+  @include tp-small-bold;
+  text-align: center;
+}
+
+.item_pickIcon {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+}

@@ -1,0 +1,20 @@
+@import '../common';
+
+.main {
+  padding-top: 86px;
+}
+
+.heading {
+  @include tp-big-bold;
+  text-align: center;
+}
+
+.subheading {
+  @include tp-normal;
+  text-align: center;
+}
+
+.nextButton {
+  padding-right: 30px;
+  color: $color-butter;
+}

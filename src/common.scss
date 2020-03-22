@@ -51,3 +51,10 @@ $color-selected-shadow: rgba(156, 93, 10, 0.3);
   letter-spacing: -0.4px;
   color: $color-ink;
 }
+
+@mixin tp-small-bold {
+  @include tp-small;
+  font-weight: bold;
+  line-height: 2.33;
+  letter-spacing: -0.45px;
+}
