@@ -4,6 +4,7 @@ import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { IssueSelectingPage } from './pages/IssueSelectingPage'
 import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 import { IssueSelectorProvider } from './contexts/IssueSelectorContext'
+import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
 
 const issues = [
   { id: 1, title: '주거 여건', description: '' },
@@ -59,6 +60,7 @@ const App: React.FC = () => {
               </IssueSelectorProvider>
             )}
           />
+          <Route path="/demo/pledge" render={() => <PledgeSelectingPage />} />
           <Redirect to="/demo/issues" />
         </Switch>
       </HashRouter>

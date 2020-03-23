@@ -1,11 +1,14 @@
-import React, { FC } from 'react'
+import React, { FC, MouseEvent, TouchEvent } from 'react'
 import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 
 const IssueNavigationItem: FC = () => {
-  return <div className={s.issueNavigationBar_item}>1</div>
+  return <div className={s.issueList_item}>1</div>
 }
+
+// https://gist.github.com/gre/1650294
+const easeOutCubic = (t: number) => --t * t * t + 1
 
 const indicies = [
   0,
@@ -30,18 +33,219 @@ const indicies = [
   19,
 ]
 
-const IssueNavigationBar: FC = () => {
-  return (
-    <div className={s.issueNavigationBar}>
-      <div className={s.issueNavigationBar_spacer} />
-      <div className={s.issueNavigationBar_spacer} />
-      {indicies.map((_, i) => {
-        return <IssueNavigationItem key={i} />
-      })}
-      <div className={s.issueNavigationBar_spacer} />
-      <div className={s.issueNavigationBar_spacer} />
-    </div>
-  )
+enum CarouselState {
+  start = 'start',
+  idle = 'idle',
+  grabbed = 'grabbed',
+  animating = 'animating',
+}
+
+const itemWidth = 80
+
+class IssueNavigationBar extends React.Component {
+  // region Property
+  carouselRef = React.createRef<HTMLDivElement>()
+  _carouselState = CarouselState.idle
+  carouselRect!: DOMRect
+  initialMousePos!: number
+  initialScrollPos!: number
+  animationStartTime!: number
+  animationStartScrollPos!: number
+  animationDestScrollPos!: number
+  state = {
+    width: -1,
+  }
+  // endregion
+
+  // region Lifecycle
+  componentDidMount() {
+    // FIXME: 바뀔 수 있음
+    this.carouselRect = this.carouselRef.current!.getBoundingClientRect()
+    this.setState({ width: this.carouselRect.width }, () => {
+      this.setScroll(this.calcScrollPosOf(0))
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <div className={s.issueList} ref={this.carouselRef}>
+          <div className={s.issueList_spacer} />
+          {indicies.map((_, i) => {
+            return <IssueNavigationItem key={i} />
+          })}
+          <div className={s.issueList_spacer} />
+        </div>
+        <div
+          className={s.window}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+          onMouseUp={this.handleMouseUp}
+          onTouchStart={this.handleTouchStart}
+          onTouchMove={this.handleTouchMove}
+          onTouchEnd={this.handleTouchEnd}
+          onClick={this.handleClick}
+        />
+      </div>
+    )
+  }
+  // endregion
+
+  // region Helper
+  getScroll(): number {
+    return this.carouselRef.current!.scrollLeft
+  }
+
+  setScroll(scrollLeft: number) {
+    this.carouselRef.current!.scrollLeft = scrollLeft
+  }
+
+  assertCarouselState(...s: CarouselState[]) {
+    return s.includes(this._carouselState)
+  }
+
+  /// index -> scroll position
+  calcScrollPosOf(index: number): number {
+    const base = (this.state.width + itemWidth) / 2
+    return base + index * itemWidth
+  }
+
+  /// offsetX -> index
+  calcIndexOf(offsetX: number): number {
+    // offsetX 되는걸까? clientX로 해야하면 데스크탑이...
+    return 0
+  }
+
+  calcDestIndex(): number {
+    const scroll = this.getScroll()
+    const width = this.state.width
+    let scopeLeft = width / 2
+    let scopeRight = scopeLeft + itemWidth
+    let index = 0
+    while (scopeRight <= scroll) {
+      scopeRight += itemWidth
+      index += 1
+    }
+    return Math.min(index, indicies.length - 1)
+  }
+
+  // endregion
+
+  // region State Machine
+  carouselStateTransition(s: CarouselState) {
+    console.log(`transition: ${this._carouselState} -> ${s}`)
+    this._carouselState = s
+  }
+
+  toGrabbed = (clientX: number) => {
+    if (
+      !this.assertCarouselState(CarouselState.idle, CarouselState.animating)
+    ) {
+      return
+    }
+    this.initialMousePos = clientX
+    this.initialScrollPos = this.carouselRef.current!.scrollLeft
+    this.carouselStateTransition(CarouselState.grabbed)
+  }
+
+  whileGrabbed = (clientX: number) => {
+    if (!this.assertCarouselState(CarouselState.grabbed)) {
+      return
+    }
+    this.carouselRef.current!.scrollLeft =
+      this.initialScrollPos - clientX + this.initialMousePos
+  }
+
+  toAnimating = () => {
+    if (!this.assertCarouselState(CarouselState.grabbed)) {
+      return
+    }
+    const destIndex = this.calcDestIndex()
+
+    this.animationStartTime = Date.now()
+    this.animationStartScrollPos = this.getScroll()
+    this.animationDestScrollPos = this.calcScrollPosOf(destIndex)
+    this.carouselStateTransition(CarouselState.animating)
+    this.whileAnimating()
+  }
+
+  whileAnimating = () => {
+    const duration = 300
+    const elapsed = Date.now() - this.animationStartTime
+    const progress = easeOutCubic(elapsed / duration)
+    const currentScrollPos =
+      this.animationStartScrollPos +
+      (this.animationDestScrollPos - this.animationStartScrollPos) * progress
+    this.setScroll(currentScrollPos)
+
+    if (
+      elapsed < duration &&
+      this.assertCarouselState(CarouselState.animating)
+    ) {
+      requestAnimationFrame(this.whileAnimating)
+    } else {
+      this.carouselStateTransition(CarouselState.idle)
+    }
+  }
+  // endregion
+
+  // region DOM Event Handler
+  handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    this.toGrabbed(e.clientX)
+  }
+
+  handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    this.whileGrabbed(e.clientX)
+  }
+
+  handleMouseUp = () => {
+    this.toAnimating()
+  }
+
+  handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    this.toGrabbed(e.touches[0].clientX)
+  }
+
+  handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    this.whileGrabbed(e.touches[0].clientX)
+  }
+
+  handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    this.toAnimating()
+  }
+
+  handleClick = () => {
+    console.log('click')
+  }
+  // endregion
+
+  // ********* 마우스 바깥으로 나갔을 때에 대한 처리
+  // ********* animating -> grabbed 갈 때 애니메이션 취소
+  // ***** 스크롤 되지 않게 preventDefault
+
+  // 시작: start -> animating -> idle
+  // 드래그: idle | animating -> grabbed -> animating -> idle
+  // 클릭: idle | animating -> animating -> idle
+
+  // select 이벤트란:
+  // n 번째 엘리먼트가 마킹이 되면서
+  // 하단 목록이 바뀐다.
+
+  // **NOTE** 중앙에 위치하는 애니메이션은 select 이벤트와 별개
+
+  // select 이벤트 발생 조건:
+  // 1. 아이템 클릭하면 발생
+  // 2. 스와이프하면서 '중앙' 영역에 50% 넘게 들어오면 발생
+
+  // animating 상태:
+  // n 번째 엘리먼트가 중앙에 위치하도록 스크롤 포지션을 0.3s 동안 이동시킴
+
+  // animating 상태에 빠지는 조건:
+  // - 현재 선택되지 않은 아이템 클릭
+  // - grabbed 상태에서 touchUp/mouseUp
+
+  // 좌우 끝 스프링
+  // 관성 X
 }
 
 const Header: FC = () => {

@@ -1,6 +1,7 @@
 @import '../common';
 
-.issueNavigationBar {
+.issueList {
+  position: relative;
   display: flex;
   flex-wrap: nowrap;
   overflow-x: scroll;
@@ -11,16 +12,26 @@
   }
 }
 
-.issueNavigationBar_item {
+.issueList_item {
   width: 103px;
   flex: 0 0 80px;
   height: 110px;
   background-color: red;
 }
 
-.issueNavigationBar_spacer {
-  @extend .issueNavigationBar_item;
+.issueList_spacer {
+  @extend .issueList_item;
+  flex: 0 0 100%;
   background-color: white;
+}
+
+.window {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .header {
