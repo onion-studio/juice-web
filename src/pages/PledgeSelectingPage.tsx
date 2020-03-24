@@ -55,6 +55,7 @@ interface State {
   width: number
   selectedItemIndex: number
 }
+
 class IssueNavigationBar extends React.Component<{}, State> {
   // region Property
   carouselRef = React.createRef<HTMLDivElement>()
@@ -146,14 +147,14 @@ class IssueNavigationBar extends React.Component<{}, State> {
     return this.calcIndexOf(this.state.width / 2)
   }
 
-  // endregion
-
-  // region State Machine
   carouselStateTransition(s: CarouselState) {
-    console.log(`transition: ${this._carouselState} -> ${s}`)
+    // console.log(`transition: ${this._carouselState} -> ${s}`)
     this._carouselState = s
   }
 
+  // endregion
+
+  // region State Machine - Action
   toGrabbed = (clientX: number) => {
     if (
       !this.assertCarouselState(
@@ -216,49 +217,23 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
   // endregion
 
-  // region DOM Event Handler
-  handleMouseDown = (e: ReactMouseEvent<HTMLDivElement>) => {
-    document.addEventListener('mousemove', this.handleMouseMove)
-    document.addEventListener('mouseup', this.handleMouseUp)
+  // region State Machine - Event
+
+  whenPointerDown(pointerClientX: number) {
     this.toMouseDown()
+    this.lastMouseDownPos = pointerClientX
   }
 
-  handleMouseMove = (e: MouseEvent) => {
+  whenPointerMove(pointerClientX: number) {
+    this.lastMouseDownPos = pointerClientX
     if (this.assertCarouselState(CarouselState.mouseDown)) {
-      this.toGrabbed(e.clientX)
+      this.toGrabbed(pointerClientX)
     } else {
-      this.whileGrabbed(e.clientX)
+      this.whileGrabbed(pointerClientX)
     }
   }
 
-  handleMouseUp = (e: MouseEvent) => {
-    document.removeEventListener('mousemove', this.handleMouseMove)
-    document.removeEventListener('mouseup', this.handleMouseUp)
-    if (this.assertCarouselState(CarouselState.grabbed)) {
-      this.toAnimating(this.calcDestIndex())
-    } else if (this.assertCarouselState(CarouselState.mouseDown)) {
-      // 클릭으로 간주
-      const offsetX = e.clientX - this.carouselRect.left
-      const selectedItemIndex = this.calcIndexOf(offsetX)
-      this.toAnimating(selectedItemIndex)
-    }
-    // 만약 클릭이라면
-  }
-
-  handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-    this.carouselStateTransition(CarouselState.mouseDown)
-  }
-
-  handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
-    this.lastMouseDownPos = e.touches[0].clientX
-    if (this.assertCarouselState(CarouselState.mouseDown)) {
-      this.toGrabbed(e.touches[0].clientX)
-    } else {
-      this.whileGrabbed(e.touches[0].clientX)
-    }
-  }
-
-  handleTouchEnd = () => {
+  whenPointerUp() {
     if (this.assertCarouselState(CarouselState.grabbed)) {
       this.toAnimating(this.calcDestIndex())
     } else if (this.assertCarouselState(CarouselState.mouseDown)) {
@@ -268,18 +243,38 @@ class IssueNavigationBar extends React.Component<{}, State> {
       this.toAnimating(selectedItemIndex)
     }
   }
-  //
-  // handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  //   // FIXME
-  //   if (!this.assertCarouselState(CarouselState.idle)) {
-  //     return
-  //   }
-  //   console.log('click')
-  //   const offsetX = e.clientX - this.carouselRect.left
-  //   const selectedItemIndex = this.calcIndexOf(offsetX)
-  //   this.toAnimating(selectedItemIndex)
-  //   this.setState({ selectedItemIndex })
-  // }
+
+  // endregion
+
+  // region DOM Event Handler
+  handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    document.addEventListener('mousemove', this.handleMouseMove)
+    document.addEventListener('mouseup', this.handleMouseUp)
+    this.whenPointerDown(e.clientX)
+  }
+
+  handleMouseMove = (e: MouseEvent) => {
+    this.whenPointerMove(e.clientX)
+  }
+
+  handleMouseUp = () => {
+    document.removeEventListener('mousemove', this.handleMouseMove)
+    document.removeEventListener('mouseup', this.handleMouseUp)
+    this.whenPointerUp()
+  }
+
+  handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    this.whenPointerDown(e.touches[0].clientX)
+  }
+
+  handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    this.whenPointerMove(e.touches[0].clientX)
+  }
+
+  handleTouchEnd = () => {
+    this.whenPointerUp()
+  }
+
   // endregion
 
   // 시작: start -> animating -> idle
