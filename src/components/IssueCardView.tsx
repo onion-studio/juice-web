@@ -321,6 +321,7 @@ export const IssueCardView: FC<Props> = ({
         onEvent({ type: 'cardGrabbed', x: e.clientX })
       }}
       onMouseMove={e => {
+        e.preventDefault()
         onEvent({ type: 'cardMoved', x: e.clientX })
       }}
       onTouchMove={e => {
