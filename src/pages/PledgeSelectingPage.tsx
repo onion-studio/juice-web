@@ -46,6 +46,7 @@ enum CarouselState {
   idle = 'idle',
   grabbed = 'grabbed',
   animating = 'animating',
+  mouseDown = 'mouseDown',
 }
 
 const itemWidth = 80
@@ -64,6 +65,8 @@ class IssueNavigationBar extends React.Component<{}, State> {
   animationStartTime!: number
   animationStartScrollPos!: number
   animationDestScrollPos!: number
+  lastMouseDownPos!: number
+
   state = {
     width: -1,
     selectedItemIndex: 0,
@@ -100,7 +103,6 @@ class IssueNavigationBar extends React.Component<{}, State> {
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}
           onTouchEnd={this.handleTouchEnd}
-          onClick={this.handleClick}
         />
       </div>
     )
@@ -154,7 +156,11 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   toGrabbed = (clientX: number) => {
     if (
-      !this.assertCarouselState(CarouselState.idle, CarouselState.animating)
+      !this.assertCarouselState(
+        CarouselState.idle,
+        CarouselState.animating,
+        CarouselState.mouseDown,
+      )
     ) {
       return
     }
@@ -171,16 +177,17 @@ class IssueNavigationBar extends React.Component<{}, State> {
       this.initialScrollPos - clientX + this.initialMousePos
   }
 
-  toAnimating = () => {
-    if (!this.assertCarouselState(CarouselState.grabbed)) {
+  toAnimating = (selectedItemIndex: number) => {
+    if (
+      !this.assertCarouselState(CarouselState.grabbed, CarouselState.mouseDown)
+    ) {
       return
     }
-    const destIndex = this.calcDestIndex()
 
     this.animationStartTime = Date.now()
     this.animationStartScrollPos = this.getScroll()
-    this.animationDestScrollPos = this.calcScrollPosOf(destIndex)
-    this.setState({ selectedItemIndex: destIndex })
+    this.animationDestScrollPos = this.calcScrollPosOf(selectedItemIndex)
+    this.setState({ selectedItemIndex })
     this.carouselStateTransition(CarouselState.animating)
     this.whileAnimating()
   }
@@ -203,40 +210,76 @@ class IssueNavigationBar extends React.Component<{}, State> {
       this.carouselStateTransition(CarouselState.idle)
     }
   }
+
+  toMouseDown = () => {
+    this.carouselStateTransition(CarouselState.mouseDown)
+  }
   // endregion
 
   // region DOM Event Handler
   handleMouseDown = (e: ReactMouseEvent<HTMLDivElement>) => {
-    this.toGrabbed(e.clientX)
     document.addEventListener('mousemove', this.handleMouseMove)
     document.addEventListener('mouseup', this.handleMouseUp)
+    this.toMouseDown()
   }
 
   handleMouseMove = (e: MouseEvent) => {
-    this.whileGrabbed(e.clientX)
+    if (this.assertCarouselState(CarouselState.mouseDown)) {
+      this.toGrabbed(e.clientX)
+    } else {
+      this.whileGrabbed(e.clientX)
+    }
   }
 
-  handleMouseUp = () => {
-    this.toAnimating()
+  handleMouseUp = (e: MouseEvent) => {
     document.removeEventListener('mousemove', this.handleMouseMove)
     document.removeEventListener('mouseup', this.handleMouseUp)
+    if (this.assertCarouselState(CarouselState.grabbed)) {
+      this.toAnimating(this.calcDestIndex())
+    } else if (this.assertCarouselState(CarouselState.mouseDown)) {
+      // 클릭으로 간주
+      const offsetX = e.clientX - this.carouselRect.left
+      const selectedItemIndex = this.calcIndexOf(offsetX)
+      this.toAnimating(selectedItemIndex)
+    }
+    // 만약 클릭이라면
   }
 
   handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-    this.toGrabbed(e.touches[0].clientX)
+    this.carouselStateTransition(CarouselState.mouseDown)
   }
 
   handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
-    this.whileGrabbed(e.touches[0].clientX)
+    this.lastMouseDownPos = e.touches[0].clientX
+    if (this.assertCarouselState(CarouselState.mouseDown)) {
+      this.toGrabbed(e.touches[0].clientX)
+    } else {
+      this.whileGrabbed(e.touches[0].clientX)
+    }
   }
 
-  handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
-    this.toAnimating()
+  handleTouchEnd = () => {
+    if (this.assertCarouselState(CarouselState.grabbed)) {
+      this.toAnimating(this.calcDestIndex())
+    } else if (this.assertCarouselState(CarouselState.mouseDown)) {
+      // 클릭으로 간주
+      const offsetX = this.lastMouseDownPos - this.carouselRect.left
+      const selectedItemIndex = this.calcIndexOf(offsetX)
+      this.toAnimating(selectedItemIndex)
+    }
   }
-
-  handleClick = () => {
-    console.log('click')
-  }
+  //
+  // handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   // FIXME
+  //   if (!this.assertCarouselState(CarouselState.idle)) {
+  //     return
+  //   }
+  //   console.log('click')
+  //   const offsetX = e.clientX - this.carouselRect.left
+  //   const selectedItemIndex = this.calcIndexOf(offsetX)
+  //   this.toAnimating(selectedItemIndex)
+  //   this.setState({ selectedItemIndex })
+  // }
   // endregion
 
   // 시작: start -> animating -> idle
