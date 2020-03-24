@@ -85,7 +85,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   render() {
     return (
-      <div>
+      <div className={s.issueNavigator}>
         <div className={s.issueList} ref={this.carouselRef}>
           <div className={s.issueList_spacer} />
           {indicies.map((_, i) => {
