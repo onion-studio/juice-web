@@ -176,6 +176,11 @@ class IssueNavigationBar extends React.Component<{}, State> {
     }
     this.carouselRef.current!.scrollLeft =
       this.initialScrollPos - clientX + this.initialMousePos
+
+    const destIndex = this.calcDestIndex()
+    if (this.state.selectedItemIndex !== destIndex) {
+      this.setState({ selectedItemIndex: destIndex })
+    }
   }
 
   toAnimating = (selectedItemIndex: number) => {
@@ -208,6 +213,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
     ) {
       requestAnimationFrame(this.whileAnimating)
     } else if (!this.assertCarouselState(CarouselState.grabbed)) {
+      // animating -> grabbed 고려
       this.carouselStateTransition(CarouselState.idle)
     }
   }
