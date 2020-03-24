@@ -131,7 +131,7 @@ class IssueNavigationBar extends React.Component {
 
   // region State Machine
   carouselStateTransition(s: CarouselState) {
-    console.log(`transition: ${this._carouselState} -> ${s}`)
+    // console.log(`transition: ${this._carouselState} -> ${s}`)
     this._carouselState = s
   }
 
@@ -221,10 +221,6 @@ class IssueNavigationBar extends React.Component {
   }
   // endregion
 
-  // ********* 마우스 바깥으로 나갔을 때에 대한 처리
-  // ********* animating -> grabbed 갈 때 애니메이션 취소
-  // ***** 스크롤 되지 않게 preventDefault
-
   // 시작: start -> animating -> idle
   // 드래그: idle | animating -> grabbed -> animating -> idle
   // 클릭: idle | animating -> animating -> idle
@@ -245,9 +241,6 @@ class IssueNavigationBar extends React.Component {
   // animating 상태에 빠지는 조건:
   // - 현재 선택되지 않은 아이템 클릭
   // - grabbed 상태에서 touchUp/mouseUp
-
-  // 좌우 끝 스프링
-  // 관성 X
 }
 
 const Header: FC = () => {
