@@ -110,21 +110,20 @@ class IssueNavigationBar extends React.Component {
 
   /// offsetX -> index
   calcIndexOf(offsetX: number): number {
-    // offsetX 되는걸까? clientX로 해야하면 데스크탑이...
-    return 0
-  }
-
-  calcDestIndex(): number {
-    const scroll = this.getScroll()
-    const width = this.state.width
-    let scopeLeft = width / 2
+    // offsetX = targetPosition.clientX - carouselRect.left
+    const coordX = this.carouselRef.current!.scrollLeft + offsetX
+    let scopeLeft = this.state.width
     let scopeRight = scopeLeft + itemWidth
     let index = 0
-    while (scopeRight <= scroll) {
+    while (scopeRight < coordX) {
       scopeRight += itemWidth
       index += 1
     }
     return Math.min(index, indicies.length - 1)
+  }
+
+  calcDestIndex(): number {
+    return this.calcIndexOf(this.state.width / 2)
   }
 
   // endregion
