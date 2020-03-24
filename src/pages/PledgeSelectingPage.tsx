@@ -46,7 +46,7 @@ enum CarouselState {
   idle = 'idle',
   grabbed = 'grabbed',
   animating = 'animating',
-  mouseDown = 'mouseDown',
+  pointerDown = 'pointerDown',
 }
 
 const itemWidth = 80
@@ -66,7 +66,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
   animationStartTime!: number
   animationStartScrollPos!: number
   animationDestScrollPos!: number
-  lastMouseDownPos!: number
+  lastPointerPos!: number
 
   state = {
     width: -1,
@@ -129,10 +129,9 @@ class IssueNavigationBar extends React.Component<{}, State> {
     return base + index * itemWidth
   }
 
-  /// offsetX -> index
   calcIndexOf(offsetX: number): number {
     // offsetX = targetPosition.clientX - carouselRect.left
-    const coordX = this.carouselRef.current!.scrollLeft + offsetX
+    const coordX = this.getScroll() + offsetX
     let scopeLeft = this.state.width
     let scopeRight = scopeLeft + itemWidth
     let index = 0
@@ -143,12 +142,12 @@ class IssueNavigationBar extends React.Component<{}, State> {
     return Math.min(index, indicies.length - 1)
   }
 
-  calcDestIndex(): number {
+  calcDestIndexForSwipe(): number {
     return this.calcIndexOf(this.state.width / 2)
   }
 
-  carouselStateTransition(s: CarouselState) {
-    // console.log(`transition: ${this._carouselState} -> ${s}`)
+  transitTo(s: CarouselState) {
+    console.log(`transition: ${this._carouselState} -> ${s}`)
     this._carouselState = s
   }
 
@@ -160,24 +159,23 @@ class IssueNavigationBar extends React.Component<{}, State> {
       !this.assertCarouselState(
         CarouselState.idle,
         CarouselState.animating,
-        CarouselState.mouseDown,
+        CarouselState.pointerDown,
       )
     ) {
       return
     }
     this.initialMousePos = clientX
-    this.initialScrollPos = this.carouselRef.current!.scrollLeft
-    this.carouselStateTransition(CarouselState.grabbed)
+    this.initialScrollPos = this.getScroll()
+    this.transitTo(CarouselState.grabbed)
   }
 
   whileGrabbed = (clientX: number) => {
     if (!this.assertCarouselState(CarouselState.grabbed)) {
       return
     }
-    this.carouselRef.current!.scrollLeft =
-      this.initialScrollPos - clientX + this.initialMousePos
+    this.setScroll(this.initialScrollPos - clientX + this.initialMousePos)
 
-    const destIndex = this.calcDestIndex()
+    const destIndex = this.calcDestIndexForSwipe()
     if (this.state.selectedItemIndex !== destIndex) {
       this.setState({ selectedItemIndex: destIndex })
     }
@@ -185,7 +183,10 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   toAnimating = (selectedItemIndex: number) => {
     if (
-      !this.assertCarouselState(CarouselState.grabbed, CarouselState.mouseDown)
+      !this.assertCarouselState(
+        CarouselState.grabbed,
+        CarouselState.pointerDown,
+      )
     ) {
       return
     }
@@ -194,7 +195,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
     this.animationStartScrollPos = this.getScroll()
     this.animationDestScrollPos = this.calcScrollPosOf(selectedItemIndex)
     this.setState({ selectedItemIndex })
-    this.carouselStateTransition(CarouselState.animating)
+    this.transitTo(CarouselState.animating)
     this.whileAnimating()
   }
 
@@ -215,21 +216,21 @@ class IssueNavigationBar extends React.Component<{}, State> {
     }
   }
 
-  toMouseDown = () => {
-    this.carouselStateTransition(CarouselState.mouseDown)
+  toPointerDown = () => {
+    this.transitTo(CarouselState.pointerDown)
   }
   // endregion
 
   // region State Machine - Event
 
   whenPointerDown(pointerClientX: number) {
-    this.toMouseDown()
-    this.lastMouseDownPos = pointerClientX
+    this.toPointerDown()
+    this.lastPointerPos = pointerClientX
   }
 
   whenPointerMove(pointerClientX: number) {
-    this.lastMouseDownPos = pointerClientX
-    if (this.assertCarouselState(CarouselState.mouseDown)) {
+    this.lastPointerPos = pointerClientX
+    if (this.assertCarouselState(CarouselState.pointerDown)) {
       this.toGrabbed(pointerClientX)
     } else {
       this.whileGrabbed(pointerClientX)
@@ -238,10 +239,10 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   whenPointerUp() {
     if (this.assertCarouselState(CarouselState.grabbed)) {
-      this.toAnimating(this.calcDestIndex())
-    } else if (this.assertCarouselState(CarouselState.mouseDown)) {
+      this.toAnimating(this.calcDestIndexForSwipe())
+    } else if (this.assertCarouselState(CarouselState.pointerDown)) {
       // 클릭으로 간주
-      const offsetX = this.lastMouseDownPos - this.carouselRect.left
+      const offsetX = this.lastPointerPos - this.carouselRect.left
       const selectedItemIndex = this.calcIndexOf(offsetX)
       this.toAnimating(selectedItemIndex)
     }
@@ -279,27 +280,6 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
 
   // endregion
-
-  // 시작: start -> animating -> idle
-  // 드래그: idle | animating -> grabbed -> animating -> idle
-  // 클릭: idle | animating -> animating -> idle
-
-  // select 이벤트란:
-  // n 번째 엘리먼트가 마킹이 되면서
-  // 하단 목록이 바뀐다.
-
-  // **NOTE** 중앙에 위치하는 애니메이션은 select 이벤트와 별개
-
-  // select 이벤트 발생 조건:
-  // 1. 아이템 클릭하면 발생
-  // 2. 스와이프하면서 '중앙' 영역에 50% 넘게 들어오면 발생
-
-  // animating 상태:
-  // n 번째 엘리먼트가 중앙에 위치하도록 스크롤 포지션을 0.3s 동안 이동시킴
-
-  // animating 상태에 빠지는 조건:
-  // - 현재 선택되지 않은 아이템 클릭
-  // - grabbed 상태에서 touchUp/mouseUp
 }
 
 const Header: FC = () => {
