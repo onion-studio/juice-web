@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, TouchEvent } from 'react'
+import React, { FC, MouseEvent as ReactMouseEvent, TouchEvent } from 'react'
 import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
@@ -79,8 +79,6 @@ class IssueNavigationBar extends React.Component {
         <div
           className={s.window}
           onMouseDown={this.handleMouseDown}
-          onMouseMove={this.handleMouseMove}
-          onMouseUp={this.handleMouseUp}
           onTouchStart={this.handleTouchStart}
           onTouchMove={this.handleTouchMove}
           onTouchEnd={this.handleTouchEnd}
@@ -190,16 +188,20 @@ class IssueNavigationBar extends React.Component {
   // endregion
 
   // region DOM Event Handler
-  handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+  handleMouseDown = (e: ReactMouseEvent<HTMLDivElement>) => {
     this.toGrabbed(e.clientX)
+    document.addEventListener('mousemove', this.handleMouseMove)
+    document.addEventListener('mouseup', this.handleMouseUp)
   }
 
-  handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+  handleMouseMove = (e: MouseEvent) => {
     this.whileGrabbed(e.clientX)
   }
 
   handleMouseUp = () => {
     this.toAnimating()
+    document.removeEventListener('mousemove', this.handleMouseMove)
+    document.removeEventListener('mouseup', this.handleMouseUp)
   }
 
   handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
