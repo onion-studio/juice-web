@@ -181,7 +181,7 @@ class IssueNavigationBar extends React.Component {
       this.assertCarouselState(CarouselState.animating)
     ) {
       requestAnimationFrame(this.whileAnimating)
-    } else {
+    } else if (!this.assertCarouselState(CarouselState.grabbed)) {
       this.carouselStateTransition(CarouselState.idle)
     }
   }
