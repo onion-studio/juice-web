@@ -164,7 +164,6 @@ class IssueNavigationBar extends React.Component<{}, State> {
     ) {
       return
     }
-    this.initialMousePos = clientX
     this.initialScrollPos = this.getScroll()
     this.transitTo(CarouselState.grabbed)
   }
@@ -225,15 +224,19 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   whenPointerDown(pointerClientX: number) {
     this.toPointerDown()
+    this.initialMousePos = pointerClientX
     this.lastPointerPos = pointerClientX
   }
 
   whenPointerMove(pointerClientX: number) {
     this.lastPointerPos = pointerClientX
-    if (this.assertCarouselState(CarouselState.pointerDown)) {
-      this.toGrabbed(pointerClientX)
-    } else {
+    if (this.assertCarouselState(CarouselState.grabbed)) {
       this.whileGrabbed(pointerClientX)
+    } else if (
+      this.assertCarouselState(CarouselState.pointerDown) &&
+      Math.abs(this.lastPointerPos - this.initialMousePos) > 2
+    ) {
+      this.toGrabbed(pointerClientX)
     }
   }
 
