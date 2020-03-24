@@ -3,8 +3,16 @@ import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 
-const IssueNavigationItem: FC = () => {
-  return <div className={s.issueList_item}>1</div>
+const IssueNavigationItem: FC<{ selected: boolean }> = ({ selected }) => {
+  return (
+    <div
+      className={c(s.issueList_item, {
+        [s.issueList_item__selected]: selected,
+      })}
+    >
+      1
+    </div>
+  )
 }
 
 // https://gist.github.com/gre/1650294
@@ -34,7 +42,7 @@ const indicies = [
 ]
 
 enum CarouselState {
-  start = 'start',
+  start = 'start', // TODO: 시작 애니메이션
   idle = 'idle',
   grabbed = 'grabbed',
   animating = 'animating',
@@ -42,7 +50,11 @@ enum CarouselState {
 
 const itemWidth = 80
 
-class IssueNavigationBar extends React.Component {
+interface State {
+  width: number
+  selectedItemIndex: number
+}
+class IssueNavigationBar extends React.Component<{}, State> {
   // region Property
   carouselRef = React.createRef<HTMLDivElement>()
   _carouselState = CarouselState.idle
@@ -54,6 +66,7 @@ class IssueNavigationBar extends React.Component {
   animationDestScrollPos!: number
   state = {
     width: -1,
+    selectedItemIndex: 0,
   }
   // endregion
 
@@ -72,7 +85,12 @@ class IssueNavigationBar extends React.Component {
         <div className={s.issueList} ref={this.carouselRef}>
           <div className={s.issueList_spacer} />
           {indicies.map((_, i) => {
-            return <IssueNavigationItem key={i} />
+            return (
+              <IssueNavigationItem
+                key={i}
+                selected={i === this.state.selectedItemIndex}
+              />
+            )
           })}
           <div className={s.issueList_spacer} />
         </div>
@@ -130,7 +148,7 @@ class IssueNavigationBar extends React.Component {
 
   // region State Machine
   carouselStateTransition(s: CarouselState) {
-    // console.log(`transition: ${this._carouselState} -> ${s}`)
+    console.log(`transition: ${this._carouselState} -> ${s}`)
     this._carouselState = s
   }
 
@@ -162,6 +180,7 @@ class IssueNavigationBar extends React.Component {
     this.animationStartTime = Date.now()
     this.animationStartScrollPos = this.getScroll()
     this.animationDestScrollPos = this.calcScrollPosOf(destIndex)
+    this.setState({ selectedItemIndex: destIndex })
     this.carouselStateTransition(CarouselState.animating)
     this.whileAnimating()
   }

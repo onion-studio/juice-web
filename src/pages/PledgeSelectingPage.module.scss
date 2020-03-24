@@ -19,6 +19,10 @@
   background-color: red;
 }
 
+.issueList_item__selected {
+  background-color: blue;
+}
+
 .issueList_spacer {
   @extend .issueList_item;
   flex: 0 0 100%;
