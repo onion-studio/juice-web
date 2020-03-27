@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent as ReactMouseEvent, TouchEvent } from 'react'
+import React, { FC } from 'react'
 import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
@@ -51,6 +51,13 @@ enum CarouselState {
 
 const itemWidth = 80
 
+interface CarouselAnimationInfo {
+  animationStartTime: number
+  animationStartScrollPos: number
+  animationDestScrollPos: number
+  animationId: number
+}
+
 interface State {
   width: number
   selectedItemIndex: number
@@ -63,15 +70,12 @@ class IssueNavigationBar extends React.Component<{}, State> {
   carouselRect!: DOMRect
   initialMousePos!: number
   initialScrollPos!: number
-  animationStartTime!: number
-  animationStartScrollPos!: number
-  animationDestScrollPos!: number
   lastPointerPos!: number
-
   state = {
     width: -1,
     selectedItemIndex: 0,
   }
+  animationId: number = 0
   // endregion
 
   // region Lifecycle
@@ -154,24 +158,12 @@ class IssueNavigationBar extends React.Component<{}, State> {
   // endregion
 
   // region State Machine - Action
-  toGrabbed = (clientX: number) => {
-    if (
-      !this.assertCarouselState(
-        CarouselState.idle,
-        CarouselState.animating,
-        CarouselState.pointerDown,
-      )
-    ) {
-      return
-    }
+  toGrabbed = () => {
     this.initialScrollPos = this.getScroll()
     this.transitTo(CarouselState.grabbed)
   }
 
   whileGrabbed = (clientX: number) => {
-    if (!this.assertCarouselState(CarouselState.grabbed)) {
-      return
-    }
     this.setScroll(this.initialScrollPos - clientX + this.initialMousePos)
 
     const destIndex = this.calcDestIndexForSwipe()
@@ -181,51 +173,77 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
 
   toAnimating = (selectedItemIndex: number) => {
-    if (
-      !this.assertCarouselState(
-        CarouselState.grabbed,
-        CarouselState.pointerDown,
-      )
-    ) {
+    const animationStartScrollPos = this.getScroll()
+    const animationDestScrollPos = this.calcScrollPosOf(selectedItemIndex)
+    this.setState({ selectedItemIndex })
+    this.transitTo(CarouselState.animating)
+    this.animationId += 1
+    this.whileAnimating({
+      animationStartTime: Date.now(),
+      animationStartScrollPos,
+      animationDestScrollPos,
+      animationId: this.animationId,
+    })
+  }
+
+  whileAnimating = (animationInfo: CarouselAnimationInfo) => {
+    const {
+      animationStartTime,
+      animationStartScrollPos,
+      animationDestScrollPos,
+      animationId,
+    } = animationInfo
+
+    const duration = 300
+    const elapsed = Date.now() - animationStartTime
+
+    // console.log(duration, elapsed)
+    if (elapsed > duration) {
+      console.log('return: animationFinish')
+      this.whenAnimationFinish()
       return
     }
 
-    this.animationStartTime = Date.now()
-    this.animationStartScrollPos = this.getScroll()
-    this.animationDestScrollPos = this.calcScrollPosOf(selectedItemIndex)
-    this.setState({ selectedItemIndex })
-    this.transitTo(CarouselState.animating)
-    this.whileAnimating()
-  }
+    if (animationId !== this.animationId) {
+      console.log('return: animationId different')
+      return
+    }
 
-  whileAnimating = () => {
-    const duration = 300
-    const elapsed = Date.now() - this.animationStartTime
+    if (!this.assertCarouselState(CarouselState.animating)) {
+      console.log('return: not animating state')
+      return
+    }
+
     const progress = easeOutCubic(elapsed / duration)
     const currentScrollPos =
-      this.animationStartScrollPos +
-      (this.animationDestScrollPos - this.animationStartScrollPos) * progress
+      animationStartScrollPos +
+      (animationDestScrollPos - animationStartScrollPos) * progress
     this.setScroll(currentScrollPos)
 
-    if (
-      elapsed < duration &&
-      this.assertCarouselState(CarouselState.animating)
-    ) {
-      requestAnimationFrame(this.whileAnimating)
-    }
+    requestAnimationFrame(() => this.whileAnimating(animationInfo))
   }
 
   toPointerDown = () => {
     this.transitTo(CarouselState.pointerDown)
   }
+
+  toIdle = () => {
+    this.transitTo(CarouselState.idle)
+  }
   // endregion
 
   // region State Machine - Event
 
+  whenAnimationFinish() {
+    this.toIdle()
+  }
+
   whenPointerDown(pointerClientX: number) {
-    this.toPointerDown()
-    this.initialMousePos = pointerClientX
-    this.lastPointerPos = pointerClientX
+    if (this.assertCarouselState(CarouselState.idle, CarouselState.animating)) {
+      this.toPointerDown()
+      this.initialMousePos = pointerClientX
+      this.lastPointerPos = pointerClientX
+    }
   }
 
   whenPointerMove(pointerClientX: number) {
@@ -236,7 +254,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
       this.assertCarouselState(CarouselState.pointerDown) &&
       Math.abs(this.lastPointerPos - this.initialMousePos) > 2
     ) {
-      this.toGrabbed(pointerClientX)
+      this.toGrabbed()
     }
   }
 
@@ -255,6 +273,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   // region DOM Event Handler
   handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log('mousedown')
     document.addEventListener('mousemove', this.handleMouseMove)
     document.addEventListener('mouseup', this.handleMouseUp)
     this.whenPointerDown(e.clientX)
@@ -265,20 +284,25 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
 
   handleMouseUp = () => {
+    console.log('mouseup')
     document.removeEventListener('mousemove', this.handleMouseMove)
     document.removeEventListener('mouseup', this.handleMouseUp)
     this.whenPointerUp()
   }
 
-  handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+  handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    console.log('touchstart!!!!!!!!!')
     this.whenPointerDown(e.touches[0].clientX)
   }
 
-  handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+  handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     this.whenPointerMove(e.touches[0].clientX)
   }
 
-  handleTouchEnd = () => {
+  handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    console.log('touchend')
     this.whenPointerUp()
   }
 
