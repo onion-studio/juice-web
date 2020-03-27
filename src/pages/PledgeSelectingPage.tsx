@@ -151,7 +151,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
 
   transitTo(s: CarouselState) {
-    console.log(`transition: ${this._carouselState} -> ${s}`)
+    // console.log(`transition: ${this._carouselState} -> ${s}`)
     this._carouselState = s
   }
 
@@ -199,18 +199,18 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
     // console.log(duration, elapsed)
     if (elapsed > duration) {
-      console.log('return: animationFinish')
+      // console.log('return: animationFinish')
       this.whenAnimationFinish()
       return
     }
 
     if (animationId !== this.animationId) {
-      console.log('return: animationId different')
+      // console.log('return: animationId different')
       return
     }
 
     if (!this.assertCarouselState(CarouselState.animating)) {
-      console.log('return: not animating state')
+      // console.log('return: not animating state')
       return
     }
 
@@ -220,6 +220,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
       (animationDestScrollPos - animationStartScrollPos) * progress
     this.setScroll(currentScrollPos)
 
+    // console.log('request!')
     requestAnimationFrame(() => this.whileAnimating(animationInfo))
   }
 
@@ -273,7 +274,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   // region DOM Event Handler
   handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('mousedown')
+    // console.log('mousedown')
     document.addEventListener('mousemove', this.handleMouseMove)
     document.addEventListener('mouseup', this.handleMouseUp)
     this.whenPointerDown(e.clientX)
@@ -284,7 +285,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
 
   handleMouseUp = () => {
-    console.log('mouseup')
+    // console.log('mouseup')
     document.removeEventListener('mousemove', this.handleMouseMove)
     document.removeEventListener('mouseup', this.handleMouseUp)
     this.whenPointerUp()
@@ -292,7 +293,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault()
-    console.log('touchstart!!!!!!!!!')
+    // console.log('touchstart!!!!!!!!!')
     this.whenPointerDown(e.touches[0].clientX)
   }
 
@@ -302,7 +303,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
 
   handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault()
-    console.log('touchend')
+    // console.log('touchend')
     this.whenPointerUp()
   }
 
