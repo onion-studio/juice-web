@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
+import { TopNavBar } from '../components/TopNavBar'
 
 const IssueNavigationItem: FC<{ selected: boolean }> = ({ selected }) => {
   return (
@@ -10,7 +11,8 @@ const IssueNavigationItem: FC<{ selected: boolean }> = ({ selected }) => {
         [s.issueList_item__selected]: selected,
       })}
     >
-      1
+      <div className={s.issueList_item_mock} />
+      <div className={s.issueList_item_title}>코로나 19</div>
     </div>
   )
 }
@@ -49,7 +51,7 @@ enum CarouselState {
   pointerDown = 'pointerDown',
 }
 
-const itemWidth = 80
+const itemWidth = 94
 
 interface CarouselAnimationInfo {
   animationStartTime: number
@@ -164,7 +166,8 @@ class IssueNavigationBar extends React.Component<{}, State> {
   }
 
   whileGrabbed = (clientX: number) => {
-    this.setScroll(this.initialScrollPos - clientX + this.initialMousePos)
+    const offset = this.initialMousePos - clientX
+    this.setScroll(this.initialScrollPos + offset * 1.5)
 
     const destIndex = this.calcDestIndexForSwipe()
     if (this.state.selectedItemIndex !== destIndex) {
@@ -362,8 +365,12 @@ const PledgeCardList: FC = () => {
 
 export const PledgeSelectingPage: FC = () => {
   return (
-    <div>
-      <Header />
+    <div className={s.main}>
+      <TopNavBar
+        title="공약을 3개 이상 선택하세요!"
+        progress={0}
+        action={'결과 보기'}
+      />
       <IssueNavigationBar />
       <PledgeCardList />
     </div>
