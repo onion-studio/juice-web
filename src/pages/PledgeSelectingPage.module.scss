@@ -108,45 +108,12 @@
   padding: 20px 30px 0;
 }
 
-.pledgeCard {
-  position: relative;
-  background-color: skyblue;
-  margin-bottom: 12px;
-  padding: 0 20px;
-
-  &:hover {
-    outline: 1px solid red;
-  }
+.completeButton {
+  padding-right: 16px;
+  color: $color-butter;
 }
 
-.pledgeCard_title {
-  @include tp-normal-bold;
-}
-
-.pledgeCard_description {
-  @include tp-small;
-  border-top: 1px solid black;
-  padding-top: 10px;
-  padding-bottom: 16px;
-  padding-right: 40px;
-  word-break: keep-all;
-}
-
-.pledgeCard_foldButton {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 10px;
-  outline: 1px solid green;
-  &:hover {
-    outline: 1px solid red;
-    cursor: pointer;
-  }
-}
-
-.pledgeCard_check {
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  pointer-events: none;
+.completeButton__disabled {
+  color: $color-ink;
+  opacity: 0.3;
 }

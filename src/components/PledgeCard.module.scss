@@ -1,0 +1,55 @@
+@import '../common';
+
+.pledgeCard {
+  position: relative;
+  margin-bottom: 12px;
+  padding: 0 20px;
+
+  border: 1px solid $color-disabled;
+  background-color: $color-butter;
+}
+
+.pledgeCard__selected {
+  box-shadow: 0 4px 8px 0 $color-selected-shadow;
+  border: solid 1px $color-ink;
+}
+
+.pledgeCard_title {
+  @include tp-normal-bold;
+  line-height: 1.86;
+  padding-top: 13px;
+  padding-bottom: 12px;
+  padding-right: 40px;
+  word-break: keep-all;
+}
+
+.pledgeCard_description {
+  @include tp-small;
+  border-top: 1px solid black;
+  padding-top: 10px;
+  padding-bottom: 16px;
+  padding-right: 40px;
+  word-break: keep-all;
+}
+
+.pledgeCard_foldButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.pledgeCard_check {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  pointer-events: none;
+}
+
+.pickIcon {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+}

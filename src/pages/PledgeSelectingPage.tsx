@@ -3,6 +3,7 @@ import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
+import { PledgeCard } from '../components/PledgeCard'
 
 const IssueNavigationItem: FC<{ selected: boolean }> = ({ selected }) => {
   return (
@@ -313,45 +314,6 @@ class IssueNavigationBar extends React.Component<{}, State> {
   // endregion
 }
 
-const Header: FC = () => {
-  return (
-    <div className={s.header}>
-      <div className={s.header_back}>Back</div>
-      <div className={s.header_content}>공약을 5개 이상 선택하세요!</div>
-      <div>결과 보기</div>
-    </div>
-  )
-}
-
-const PledgeCard: FC<{ onSelect: () => void; selected: boolean }> = ({
-  onSelect,
-  selected,
-}) => {
-  const [folded, toggle] = useToggle(true)
-  return (
-    <div className={s.pledgeCard} onClick={onSelect}>
-      <div className={s.pledgeCard_title}>title</div>
-      <div
-        className={s.pledgeCard_foldButton}
-        onClick={e => {
-          e.stopPropagation()
-          toggle()
-        }}
-      >
-        {folded ? '펴기' : '접기'}
-      </div>
-      {folded || (
-        <div className={s.pledgeCard_description}>
-          현재 부동산 보유세 부담은 일반의 폭이 어쩌구인데 이걸 2024년까지
-          이렇게 저렇게 고치는 방안을 추진해서 구름다리 동네에 사는 사람과
-          바람계곡에 사는 사람이 할 수 있도록 하겠습니다.
-        </div>
-      )}
-      {selected && <div className={s.pledgeCard_check}>체크</div>}
-    </div>
-  )
-}
-
 const PledgeCardList: FC = () => {
   const [, { has, toggle }] = useSet<number>()
   return (
@@ -369,7 +331,11 @@ export const PledgeSelectingPage: FC = () => {
       <TopNavBar
         title="공약을 3개 이상 선택하세요!"
         progress={0}
-        action={'결과 보기'}
+        action={
+          <div className={c(s.completeButton, s.completeButton__disabled)}>
+            결과 보기
+          </div>
+        }
       />
       <IssueNavigationBar />
       <PledgeCardList />
