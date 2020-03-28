@@ -8,6 +8,10 @@ import {
   usePledgeSelector,
 } from '../contexts/PledgeSelectorContext'
 import { Issue } from '../contexts/entities'
+import {
+  useIssueSelectorContext,
+  issueSelectorThunk,
+} from '../contexts/IssueSelectorContext'
 
 const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
   selected,
@@ -343,11 +347,18 @@ const PledgeCardList: FC = () => {
 
 export const Inner: FC = () => {
   const pledgeSelector = usePledgeSelector()
-  const progress = Math.min(1, pledgeSelector.selectedPledgeIds.size / 3)
+  const selectedCount = pledgeSelector.selectedPledgeIds.size
+  const progress = Math.min(1, selectedCount / 3)
+  const title =
+    selectedCount === 0
+      ? '공약을 3개 이상 선택하세요!'
+      : selectedCount < 3
+      ? `${selectedCount}개 선택했어요…`
+      : `${selectedCount}개 선택했어요 (최대 10개)`
   return (
     <div className={s.main}>
       <TopNavBar
-        title="공약을 3개 이상 선택하세요!"
+        title={title}
         progress={progress}
         action={
           <div className={c(s.completeButton, s.completeButton__disabled)}>
@@ -367,13 +378,22 @@ export const Inner: FC = () => {
 }
 
 export const PledgeSelectingPage: FC = () => {
+  const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
+
+  if (!issueSelectorState.issuesReq.data) {
+    issueSelectorDispatch(issueSelectorThunk.loadIssues())
+    return null
+  }
+
+  // TODO: 데모용으로 일단 전체 이슈 보여줌
+  // const selectedIssues = issueSelectorState.issuesReq.data.filter(item =>
+  //   issueSelectorState.selectedIssueIds.includes(item.id),
+  // )
+
+  const selectedIssues = issueSelectorState.issuesReq.data
+
   return (
-    <PledgeSelectorProvider
-      selectedIssues={[
-        { id: 1, name: '코로나19' },
-        { id: 2, name: '버닝썬' },
-      ]}
-    >
+    <PledgeSelectorProvider selectedIssues={selectedIssues.slice(0, 4)}>
       <Inner />
     </PledgeSelectorProvider>
   )

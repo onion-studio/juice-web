@@ -21,50 +21,26 @@ const issues = [
 
 const App: React.FC = () => {
   return (
-    <div
-      style={{
-        position: 'relative',
-        maxWidth: 600,
-        minHeight: 700,
-        margin: '0 auto',
-        backgroundColor: '#fff6da',
-      }}
-    >
-      <HashRouter>
-        <Switch>
-          <Route
-            path="/demo/issues"
-            render={() => (
-              <IssueSelectorProvider
-                deps={{}}
-                mockState={{
-                  issuesReq: { loading: false, error: null, data: issues },
-                  selectedIssueIds: [],
-                }}
-              >
-                <IssueSelectingPage />
-              </IssueSelectorProvider>
-            )}
-          />
-          <Route
-            path="/demo/confirm"
-            render={() => (
-              <IssueSelectorProvider
-                deps={{}}
-                mockState={{
-                  issuesReq: { loading: false, error: null, data: issues },
-                  selectedIssueIds: [1, 3, 5, 7, 9],
-                }}
-              >
-                <ConfirmIssuePage />
-              </IssueSelectorProvider>
-            )}
-          />
-          <Route path="/demo/pledge" render={() => <PledgeSelectingPage />} />
-          <Redirect to="/demo/issues" />
-        </Switch>
-      </HashRouter>
-    </div>
+    <IssueSelectorProvider deps={{}}>
+      <div
+        style={{
+          position: 'relative',
+          maxWidth: 600,
+          minHeight: 700,
+          margin: '0 auto',
+          backgroundColor: '#fff6da',
+        }}
+      >
+        <HashRouter>
+          <Switch>
+            <Route path="/demo/issues" component={IssueSelectingPage} />
+            <Route path="/demo/confirm" component={ConfirmIssuePage} />
+            <Route path="/demo/pledge" component={PledgeSelectingPage} />
+            <Redirect to="/demo/issues" />
+          </Switch>
+        </HashRouter>
+      </div>
+    </IssueSelectorProvider>
   )
 }
 

@@ -4,7 +4,7 @@ import { ReactComponent as IconPick } from './svg/ico-pick.svg'
 import c from 'classnames'
 
 export interface Props {
-  items: { id: number; title: string }[]
+  items: { id: number; name: string }[]
   selectedIds: number[]
   onSelect: (id: number) => void
   onDiscard: (id: number) => void
@@ -35,7 +35,7 @@ export const IssueGridSelector: FC<Props> = ({
                 [s.item_label__selected]: selected,
               })}
             >
-              {item.title}
+              {item.name}
             </div>
           </div>
         )

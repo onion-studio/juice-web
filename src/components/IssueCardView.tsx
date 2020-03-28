@@ -13,6 +13,7 @@ import { CardEventContext } from '../contexts/CardEventContext'
 import { ReactComponent as IconPickRed } from './svg/ico-pick-red.svg'
 import { ReactComponent as IconXGray } from './svg/ico-x-gray.svg'
 import { ReactComponent as ArrowBack } from './svg/arr-back.svg'
+import { Issue } from '../contexts/entities'
 
 enum SlideAnimationState {
   start = 'start',
@@ -186,8 +187,7 @@ export interface Props {
   total: number
   distance: number
   interactive: boolean
-  title: string
-  description: string
+  issue: Issue
   onSelect: () => void
   onSelectAnimationEnd: () => void
   onDiscard: () => void
@@ -198,8 +198,7 @@ export const IssueCardView: FC<Props> = ({
   cardNumber,
   total,
   interactive,
-  title,
-  description,
+  issue,
   onSelect,
   onSelectAnimationEnd,
   onDiscard,
@@ -381,19 +380,21 @@ export const IssueCardView: FC<Props> = ({
                 <ArrowBack />
               </div>
               <div className={s.cardTitle_wrap}>
-                <div className={s.cardTitle}>{title}</div>
+                <div className={s.cardTitle}>{issue.name}</div>
               </div>
 
-              <div className={s.cardDescription}>{description}</div>
+              <div className={s.cardDescription}>{issue.summary}</div>
             </>
           ) : (
             <>
               <div className={s.cardTitle_wrap}>
-                <div className={s.cardTitle}>{title}</div>
+                <div className={s.cardTitle}>{issue.name}</div>
               </div>
 
               <div className={s.cardTags}>
-                #질병&nbsp;&nbsp;&nbsp;#감염병&nbsp;&nbsp;&nbsp;#출입국관리
+                {issue.tag1 && <span>#{issue.tag1}</span>}
+                {issue.tag2 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag2}</span>}
+                {issue.tag3 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag3}</span>}
               </div>
               <div style={{ flexGrow: 1 }} />
               <div

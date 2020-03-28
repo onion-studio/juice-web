@@ -1,6 +1,7 @@
 import React from 'react'
 import { Issue, Pledge } from './entities'
 import produce from 'immer'
+import ky from 'ky'
 
 interface RequestResult<Data, Error> {
   loading: boolean
@@ -47,72 +48,34 @@ export class PledgeSelectorProvider extends React.Component<
   }
 
   loadPledges = async () => {
-    // const issueIds = this.props.selectedIssues.map(item => item.id)
+    const issueIds = this.props.selectedIssues.map(item => item.id).join(',')
+    const res: {
+      pledges: {
+        id: number
+        title: string
+        summary: string
+        issue_id: number
+      }[]
+    } = await ky
+      .get(
+        'http://ec2-15-164-100-90.ap-northeast-2.compute.amazonaws.com:3000/pledges',
+        {
+          searchParams: {
+            issue_ids: issueIds,
+          },
+        },
+      )
+      .json()
+
+    const pledges = res.pledges.map(item => ({
+      ...item,
+      issueId: item.issue_id,
+    }))
+
     this.setState(
       produce(draft => {
         draft.pledgesResult.loading = false
-        draft.pledgesResult.data = [
-          {
-            id: 1,
-            title: '1난나난나',
-            issueId: 1,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 2,
-            title: '1난나난나',
-            issueId: 1,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 3,
-            title: '1난나난나',
-            issueId: 1,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 4,
-            title: '1난나난나',
-            issueId: 1,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 5,
-            title: '1난나난나',
-            issueId: 1,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 6,
-            title: '2난나난나',
-            issueId: 2,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 7,
-            title: '2난나난나',
-            issueId: 2,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 8,
-            title: '2난나난나',
-            issueId: 2,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 9,
-            title: '2난나난나',
-            issueId: 2,
-            summary: '눈누눈누 '.repeat(10),
-          },
-          {
-            id: 10,
-            title: '2난나난나',
-            issueId: 2,
-            summary: '눈누눈누 '.repeat(10),
-          },
-        ]
+        draft.pledgesResult.data = pledges
       }),
     )
   }

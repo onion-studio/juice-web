@@ -5,10 +5,14 @@ import s from './ConfirmIssuePage.module.scss'
 import {
   useIssueSelectorContext,
   issueSelectorAction,
+  issueSelectorThunk,
 } from '../contexts/IssueSelectorContext'
 
 export const ConfirmIssuePage: FC = () => {
   const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
+  React.useEffect(() => {
+    issueSelectorDispatch(issueSelectorThunk.loadIssues())
+  }, [])
   const {
     issuesReq: { data: issues },
     selectedIssueIds,
@@ -56,18 +60,20 @@ export const ConfirmIssuePage: FC = () => {
         )}
       </div>
       <div style={{ height: 32 }} />
-      <IssueGridSelector
-        items={issues!}
-        selectedIds={selectedIssueIds}
-        onSelect={id => {
-          setDirty(true)
-          issueSelectorDispatch(issueSelectorAction.selectIssue(id))
-        }}
-        onDiscard={id => {
-          setDirty(true)
-          issueSelectorDispatch(issueSelectorAction.discardIssue(id))
-        }}
-      />
+      {issues && (
+        <IssueGridSelector
+          items={issues}
+          selectedIds={selectedIssueIds}
+          onSelect={id => {
+            setDirty(true)
+            issueSelectorDispatch(issueSelectorAction.selectIssue(id))
+          }}
+          onDiscard={id => {
+            setDirty(true)
+            issueSelectorDispatch(issueSelectorAction.discardIssue(id))
+          }}
+        />
+      )}
     </div>
   )
 }
