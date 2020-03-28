@@ -1,11 +1,18 @@
 import React, { FC } from 'react'
-import { useSet, useToggle } from 'react-use'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
 import { PledgeCard } from '../components/PledgeCard'
+import {
+  PledgeSelectorProvider,
+  usePledgeSelector,
+} from '../contexts/PledgeSelectorContext'
+import { Issue } from '../contexts/entities'
 
-const IssueNavigationItem: FC<{ selected: boolean }> = ({ selected }) => {
+const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
+  selected,
+  title,
+}) => {
   return (
     <div
       className={c(s.issueList_item, {
@@ -13,36 +20,13 @@ const IssueNavigationItem: FC<{ selected: boolean }> = ({ selected }) => {
       })}
     >
       <div className={s.issueList_item_mock} />
-      <div className={s.issueList_item_title}>코로나 19</div>
+      <div className={s.issueList_item_title}>{title}</div>
     </div>
   )
 }
 
 // https://gist.github.com/gre/1650294
 const easeOutCubic = (t: number) => --t * t * t + 1
-
-const indicies = [
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-]
 
 enum CarouselState {
   start = 'start', // TODO: 시작 애니메이션
@@ -66,7 +50,10 @@ interface State {
   selectedItemIndex: number
 }
 
-class IssueNavigationBar extends React.Component<{}, State> {
+class IssueNavigationBar extends React.Component<
+  { issues: Issue[]; onSelectIssue: (id: Issue['id']) => void },
+  State
+> {
   // region Property
   carouselRef = React.createRef<HTMLDivElement>()
   _carouselState = CarouselState.idle
@@ -95,10 +82,11 @@ class IssueNavigationBar extends React.Component<{}, State> {
       <div className={s.issueNavigator}>
         <div className={s.issueList} ref={this.carouselRef}>
           <div className={s.issueList_spacer} />
-          {indicies.map((_, i) => {
+          {this.props.issues.map((item, i) => {
             return (
               <IssueNavigationItem
-                key={i}
+                key={item.id}
+                title={item.name}
                 selected={i === this.state.selectedItemIndex}
               />
             )
@@ -146,7 +134,7 @@ class IssueNavigationBar extends React.Component<{}, State> {
       scopeRight += itemWidth
       index += 1
     }
-    return Math.min(index, indicies.length - 1)
+    return Math.min(index, this.props.issues.length - 1)
   }
 
   calcDestIndexForSwipe(): number {
@@ -180,6 +168,8 @@ class IssueNavigationBar extends React.Component<{}, State> {
     const animationStartScrollPos = this.getScroll()
     const animationDestScrollPos = this.calcScrollPosOf(selectedItemIndex)
     this.setState({ selectedItemIndex })
+    // TODO: debounce
+    this.props.onSelectIssue(this.props.issues[selectedItemIndex].id)
     this.transitTo(CarouselState.animating)
     this.animationId += 1
     this.whileAnimating({
@@ -315,30 +305,76 @@ class IssueNavigationBar extends React.Component<{}, State> {
 }
 
 const PledgeCardList: FC = () => {
-  const [, { has, toggle }] = useSet<number>()
+  const pledgeSelector = usePledgeSelector()
+
+  if (!pledgeSelector.pledgesResult.data) {
+    return null
+  }
+
+  const pledges = pledgeSelector.pledgesResult.data
+  // TODO
+  const filteredPledges = pledges.filter(
+    item => item.issueId === pledgeSelector.currentIssueId,
+  )
   return (
     <div className={s.pledgeCardList}>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((_, i) => (
-        <PledgeCard key={i} selected={has(i)} onSelect={() => toggle(i)} />
-      ))}
+      {filteredPledges.map(item => {
+        const selected = pledgeSelector.selectedPledgeIds.has(item.id)
+        const folded = !pledgeSelector.unfoldedPledgeIds.has(item.id)
+        return (
+          <PledgeCard
+            key={item.id}
+            title={item.title}
+            summary={item.summary}
+            selected={selected}
+            onSelect={() =>
+              pledgeSelector.action.togglePledgeSelection(item.id)
+            }
+            onToggleFolding={() =>
+              pledgeSelector.action.togglePledgeFolding(item.id)
+            }
+            folded={folded}
+          />
+        )
+      })}
     </div>
   )
 }
 
-export const PledgeSelectingPage: FC = () => {
+export const Inner: FC = () => {
+  const pledgeSelector = usePledgeSelector()
+  const progress = Math.min(1, pledgeSelector.selectedPledgeIds.size / 3)
   return (
     <div className={s.main}>
       <TopNavBar
         title="공약을 3개 이상 선택하세요!"
-        progress={0}
+        progress={progress}
         action={
           <div className={c(s.completeButton, s.completeButton__disabled)}>
             결과 보기
           </div>
         }
       />
-      <IssueNavigationBar />
+      <IssueNavigationBar
+        issues={pledgeSelector.selectedIssues}
+        onSelectIssue={(id: Issue['id']) =>
+          pledgeSelector.action.selectIssue(id)
+        }
+      />
       <PledgeCardList />
     </div>
+  )
+}
+
+export const PledgeSelectingPage: FC = () => {
+  return (
+    <PledgeSelectorProvider
+      selectedIssues={[
+        { id: 1, name: '코로나19' },
+        { id: 2, name: '버닝썬' },
+      ]}
+    >
+      <Inner />
+    </PledgeSelectorProvider>
   )
 }

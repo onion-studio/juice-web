@@ -14,6 +14,7 @@
     "@types/react-router-dom": "^5.1.3",
     "classnames": "^2.2.6",
     "event-target-shim": "^5.0.1",
+    "immer": "^6.0.2",
     "node-sass": "^4.13.1",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
