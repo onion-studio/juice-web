@@ -15,44 +15,6 @@
   overflow: hidden;
 }
 
-.card {
-  //background-color: white;
-  width: 300px;
-  height: 300px;
-  transform-origin: 50% 120%;
-
-  position: relative;
-  padding: 1px;
-  display: flex;
-  flex-direction: column;
-
-  cursor: pointer;
-
-  // zeplin
-  border: solid 2px $color-ink;
-  background-color: $color-butter;
-}
-
-.card__hovering {
-  box-shadow: 0 4px 8px 0 $color-selected-shadow;
-}
-
-.card_inner {
-  flex: 1;
-  border: solid 0.7px $color-ink;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.card_inner__collapsed {
-  padding-top: 140px;
-}
-
-.card_inner__expanded {
-  padding-top: 102px;
-}
-
 .cardTitle_wrap {
   display: flex;
   justify-content: center;
@@ -97,15 +59,6 @@
   padding-top: 12px;
   padding-left: 18px;
   cursor: pointer;
-}
-
-.detailButton {
-  @include tp-normal-bold;
-  height: 52px;
-  line-height: 52px;
-  color: $color-butter;
-  text-align: center;
-  background-color: $color-fruit;
 }
 
 .stamp {
@@ -160,56 +113,4 @@
 .discardStamp__visible {
   @extend .stamp__visible;
   transform: rotate(30deg);
-}
-
-.topLabel {
-  width: 86px;
-  height: 22px;
-
-  position: absolute;
-  top: -11px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  &::before {
-    display: block;
-    position: absolute;
-    content: '';
-    width: 8px;
-    height: 8px;
-
-    top: 6px;
-    left: -3px;
-
-    border: 1px solid $color-ink;
-    border-radius: 50%;
-    background-color: $color-butter;
-  }
-  &::after {
-    display: block;
-    position: absolute;
-    content: '';
-    width: 8px;
-    height: 8px;
-
-    top: 6px;
-    right: -3px;
-
-    border: 1px solid $color-ink;
-    border-radius: 50%;
-    background-color: $color-butter;
-  }
-}
-
-.topLabel_content {
-  @include tp-normal-bold;
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-  border: 1px solid $color-ink;
-  border-radius: 50%;
-  background-color: $color-butter;
-  line-height: 18px;
-  text-align: center;
 }

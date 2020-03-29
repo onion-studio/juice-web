@@ -6,6 +6,7 @@ import React, {
   useEffect,
   CSSProperties,
   useContext,
+  ReactNode,
 } from 'react'
 import c from 'classnames'
 import s from './IssueCardView.module.scss'
@@ -14,6 +15,7 @@ import { ReactComponent as IconPickRed } from './svg/ico-pick-red.svg'
 import { ReactComponent as IconXGray } from './svg/ico-x-gray.svg'
 import { ReactComponent as ArrowBack } from './svg/arr-back.svg'
 import { Issue } from '../contexts/entities'
+import { Card } from './Card'
 
 enum SlideAnimationState {
   start = 'start',
@@ -333,15 +335,17 @@ export const IssueCardView: FC<Props> = ({
         onEvent({ type: 'cardReleased' })
       }}
     >
-      <div
-        className={c(s.card, { [s.card__hovering]: hovering })}
+      <Card
+        topLabel={`${cardNumber} / ${total}`}
         style={cardStyle}
+        hovering={hovering}
+        actionLabel={detailVisible ? undefined : '자세히 보기'}
+        onAction={() => {
+          if (Math.abs(offset) < 2) {
+            setDetailVisible(true)
+          }
+        }}
       >
-        <div className={s.topLabel}>
-          <div className={s.topLabel_content}>
-            {cardNumber} / {total}
-          </div>
-        </div>
         <div
           className={c(s.selectStamp, {
             [s.selectStamp__visible]: offset > threshold,
@@ -362,55 +366,39 @@ export const IssueCardView: FC<Props> = ({
           </div>
           <div>싫어요</div>
         </div>
+        {detailVisible ? (
+          <>
+            <div style={{ flex: '0 0 102px' }} />
+            <div
+              className={s.card_hideDetail}
+              onClick={() => {
+                setDetailVisible(false)
+              }}
+            >
+              <ArrowBack />
+            </div>
+            <div className={s.cardTitle_wrap}>
+              <div className={s.cardTitle}>{issue.name}</div>
+            </div>
 
-        <div
-          className={c(
-            s.card_inner,
-            detailVisible ? s.card_inner__expanded : s.card_inner__collapsed,
-          )}
-        >
-          {detailVisible ? (
-            <>
-              <div
-                className={s.card_hideDetail}
-                onClick={() => {
-                  setDetailVisible(false)
-                }}
-              >
-                <ArrowBack />
-              </div>
-              <div className={s.cardTitle_wrap}>
-                <div className={s.cardTitle}>{issue.name}</div>
-              </div>
+            <div className={s.cardDescription}>{issue.summary}</div>
+          </>
+        ) : (
+          <>
+            <div style={{ flex: '0 0 140px' }} />
+            <div className={s.cardTitle_wrap}>
+              <div className={s.cardTitle}>{issue.name}</div>
+            </div>
 
-              <div className={s.cardDescription}>{issue.summary}</div>
-            </>
-          ) : (
-            <>
-              <div className={s.cardTitle_wrap}>
-                <div className={s.cardTitle}>{issue.name}</div>
-              </div>
-
-              <div className={s.cardTags}>
-                {issue.tag1 && <span>#{issue.tag1}</span>}
-                {issue.tag2 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag2}</span>}
-                {issue.tag3 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag3}</span>}
-              </div>
-              <div style={{ flexGrow: 1 }} />
-              <div
-                className={s.detailButton}
-                onClick={() => {
-                  if (Math.abs(offset) < 2) {
-                    setDetailVisible(true)
-                  }
-                }}
-              >
-                자세히 보기
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+            <div className={s.cardTags}>
+              {issue.tag1 && <span>#{issue.tag1}</span>}
+              {issue.tag2 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag2}</span>}
+              {issue.tag3 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag3}</span>}
+            </div>
+            <div style={{ flexGrow: 1 }} />
+          </>
+        )}
+      </Card>
     </div>
   )
 }
