@@ -311,10 +311,10 @@ export const IssueCardView: FC<Props> = ({
       style={{
         zIndex: 100 - distance,
         pointerEvents: interactive ? 'auto' : 'none',
-        transform: `translateX(-50%) scale(${(100 - distance) /
-          100}) translateY(${distance * 3}px)`,
+        transform: `scale(${(100 - distance) / 100}) translateY(${distance *
+          3}px)`,
       }}
-      className={s.container}
+      className={s.swipeContainer}
       onTouchStart={e => {
         onEvent({ type: 'cardGrabbed', x: e.touches[0].clientX })
       }}
@@ -335,70 +335,72 @@ export const IssueCardView: FC<Props> = ({
         onEvent({ type: 'cardReleased' })
       }}
     >
-      <Card
-        topLabel={`${cardNumber} / ${total}`}
-        style={cardStyle}
-        hovering={hovering}
-        actionLabel={detailVisible ? undefined : '자세히 보기'}
-        onAction={() => {
-          if (Math.abs(offset) < 2) {
-            setDetailVisible(true)
-          }
-        }}
-      >
-        <div
-          className={c(s.selectStamp, {
-            [s.selectStamp__visible]: offset > threshold,
-          })}
+      <div className={s.cardContainer}>
+        <Card
+          topLabel={`${cardNumber} / ${total}`}
+          style={cardStyle}
+          hovering={hovering}
+          actionLabel={detailVisible ? undefined : '자세히 보기'}
+          onAction={() => {
+            if (Math.abs(offset) < 2) {
+              setDetailVisible(true)
+            }
+          }}
         >
-          <div>
-            <IconPickRed />
+          <div
+            className={c(s.selectStamp, {
+              [s.selectStamp__visible]: offset > threshold,
+            })}
+          >
+            <div>
+              <IconPickRed />
+            </div>
+            <div>담을래요</div>
           </div>
-          <div>담을래요</div>
-        </div>
-        <div
-          className={c(s.discardStamp, {
-            [s.discardStamp__visible]: offset < -threshold,
-          })}
-        >
-          <div>
-            <IconXGray />
+          <div
+            className={c(s.discardStamp, {
+              [s.discardStamp__visible]: offset < -threshold,
+            })}
+          >
+            <div>
+              <IconXGray />
+            </div>
+            <div>싫어요</div>
           </div>
-          <div>싫어요</div>
-        </div>
-        {detailVisible ? (
-          <>
-            <div style={{ flex: '0 0 102px' }} />
-            <div
-              className={s.card_hideDetail}
-              onClick={() => {
-                setDetailVisible(false)
-              }}
-            >
-              <ArrowBack />
-            </div>
-            <div className={s.cardTitle_wrap}>
-              <div className={s.cardTitle}>{issue.name}</div>
-            </div>
+          {detailVisible ? (
+            <>
+              <div style={{ flex: '0 0 102px' }} />
+              <div
+                className={s.card_hideDetail}
+                onClick={() => {
+                  setDetailVisible(false)
+                }}
+              >
+                <ArrowBack />
+              </div>
+              <div className={s.cardTitle_wrap}>
+                <div className={s.cardTitle}>{issue.name}</div>
+              </div>
 
-            <div className={s.cardDescription}>{issue.summary}</div>
-          </>
-        ) : (
-          <>
-            <div style={{ flex: '0 0 140px' }} />
-            <div className={s.cardTitle_wrap}>
-              <div className={s.cardTitle}>{issue.name}</div>
-            </div>
+              <div className={s.cardDescription}>{issue.summary}</div>
+            </>
+          ) : (
+            <>
+              <div style={{ flex: '0 0 140px' }} />
+              <div className={s.cardTitle_wrap}>
+                <div className={s.cardTitle}>{issue.name}</div>
+              </div>
 
-            <div className={s.cardTags}>
-              {issue.tag1 && <span>#{issue.tag1}</span>}
-              {issue.tag2 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag2}</span>}
-              {issue.tag3 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag3}</span>}
-            </div>
-            <div style={{ flexGrow: 1 }} />
-          </>
-        )}
-      </Card>
+              <div className={s.cardTags}>
+                {issue.tag1 && <span>#{issue.tag1}</span>}
+                {issue.tag2 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag2}</span>}
+                {issue.tag3 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag3}</span>}
+              </div>
+              <div style={{ flexGrow: 1 }} />
+            </>
+          )}
+        </Card>
+      </div>
     </div>
   )
 }

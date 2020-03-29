@@ -3,7 +3,6 @@
 .card {
   //background-color: white;
   width: 300px;
-  height: 300px;
   transform-origin: 50% 120%;
 
   position: relative;
@@ -30,7 +29,7 @@
   flex-direction: column;
 }
 
-.detailButton {
+.actionButton {
   @include tp-normal-bold;
   height: 52px;
   line-height: 52px;

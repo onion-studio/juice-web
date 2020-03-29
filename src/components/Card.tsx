@@ -18,7 +18,7 @@ export const Card: FC<{
       <div className={s.card_inner}>
         {children}
         {actionLabel && (
-          <div className={s.detailButton} onClick={onAction}>
+          <div className={s.actionButton} onClick={onAction}>
             {actionLabel}
           </div>
         )}
