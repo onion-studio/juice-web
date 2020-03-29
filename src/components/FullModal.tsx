@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 import s from './FullModal.module.scss'
+import { Card } from './Card'
 
 interface Props {
   label: ReactNode
@@ -18,10 +19,16 @@ export const FullModal: FC<Props> = ({
 }) => {
   return (
     <div className={s.main}>
-      <div>{label}</div>
-      <div>{title}</div>
-      <div>{description}</div>
-      <div onClick={onDismiss}>{dismissLabel}</div>
+      <Card
+        style={{ height: 500, marginTop: 72 }}
+        topLabel={label}
+        actionLabel={dismissLabel}
+        onAction={onDismiss}
+      >
+        <div className={s.title}>{title}</div>
+        <div className={s.spacer} />
+        <div className={s.description}>{description}</div>
+      </Card>
     </div>
   )
 }

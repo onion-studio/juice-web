@@ -7,7 +7,7 @@ export const Card: FC<{
   topLabel: ReactNode
   hovering?: boolean
   actionLabel?: ReactNode
-  onAction: () => void
+  onAction?: () => void
   children: ReactNode
 }> = ({ style, topLabel, hovering, actionLabel, onAction, children }) => {
   return (

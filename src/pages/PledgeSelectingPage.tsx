@@ -408,7 +408,15 @@ export const PledgeSelectingPage: FC = () => {
         <FullModal
           label="STEP 2"
           title="맘에 드는 공약 고르기"
-          description=""
+          description={
+            <div>
+              주제별 공약을 보여드릴게요.
+              <br />
+              맘에 드는 공약을 마음껏 선택하면,
+              <br />
+              나만의 쥬―스 만들 준비가 완료돼요!
+            </div>
+          }
           dismissLabel="시작하기"
           onDismiss={() => {
             setModalVisible(false)

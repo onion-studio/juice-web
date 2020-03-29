@@ -188,8 +188,23 @@ export const IssueSelectingPage: FC = () => {
       {modalVisible && (
         <FullModal
           label="STEP 1"
-          title="1단계: 내 관심 주제 고르기"
-          description=""
+          title={
+            <div>
+              1단계:
+              <br />내 관심 주제 고르기
+            </div>
+          }
+          description={
+            <div>
+              앗, 뜨거운 감자!
+              <br />
+              20개의 재료 카드를 보여드려요.
+              <br />
+              좌우로 스와이프해서
+              <br />
+              관심 있는 재료 카드를 골라주세요!
+            </div>
+          }
           dismissLabel="시작하기"
           onDismiss={() => setModalVisible(false)}
         />
