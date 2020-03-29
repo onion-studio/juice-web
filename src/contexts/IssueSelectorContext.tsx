@@ -61,11 +61,7 @@ export const {
           tag2: string | null
           tag3: string | null
         }[]
-      } = await ky
-        .get(
-          'http://ec2-15-164-100-90.ap-northeast-2.compute.amazonaws.com:3000/issues',
-        )
-        .json()
+      } = await ky.get('https://api.juice.vote/issues').json()
 
       dispatch(a.issuesReq('complete', res.issues))
     },

@@ -57,14 +57,11 @@ export class PledgeSelectorProvider extends React.Component<
         issue_id: number
       }[]
     } = await ky
-      .get(
-        'http://ec2-15-164-100-90.ap-northeast-2.compute.amazonaws.com:3000/pledges',
-        {
-          searchParams: {
-            issue_ids: issueIds,
-          },
+      .get('https://api.juice.vote/pledges', {
+        searchParams: {
+          issue_ids: issueIds,
         },
-      )
+      })
       .json()
 
     const pledges = res.pledges.map(item => ({

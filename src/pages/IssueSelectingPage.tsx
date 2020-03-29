@@ -117,7 +117,7 @@ const IssueSelectorView: FC = () => {
         addDiscardedId(id)
       }
     },
-    [currentCardIndex, selectedIds, issues],
+    [issues, currentCardIndex, selectedIds, addSelectedId, addDiscardedId],
   )
   const onConclusionAnimationEnd = useCallback(() => {
     setCurrentCardIndex(currentCardIndex + 1)
