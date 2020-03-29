@@ -17,7 +17,7 @@ export const {
   actionCreators: issueSelectorAction,
   thunkCreators: issueSelectorThunk,
 } = buildContext({
-  name: 'SelectorContext',
+  name: 'IssueSelectorContext',
   logging: true,
 })
   .mixins([

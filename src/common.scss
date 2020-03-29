@@ -5,6 +5,8 @@ $color-ink: #000000;
 $color-selected-shadow: rgba(156, 93, 10, 0.3);
 $color-disabled: #d8cdb1;
 
+$layer-modal: 500;
+
 @mixin tp-big {
   font-size: 20px;
   font-weight: 300;

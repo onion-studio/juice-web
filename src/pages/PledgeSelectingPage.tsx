@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
@@ -12,6 +12,7 @@ import {
   useIssueSelectorContext,
   issueSelectorThunk,
 } from '../contexts/IssueSelectorContext'
+import { FullModal } from '../components/FullModal'
 
 const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
   selected,
@@ -348,20 +349,31 @@ const PledgeCardList: FC = () => {
 export const Inner: FC = () => {
   const pledgeSelector = usePledgeSelector()
   const selectedCount = pledgeSelector.selectedPledgeIds.size
-  const progress = Math.min(1, selectedCount / 3)
+
   const title =
     selectedCount === 0
       ? '공약을 3개 이상 선택하세요!'
       : selectedCount < 3
       ? `${selectedCount}개 선택했어요…`
       : `${selectedCount}개 선택했어요 (최대 10개)`
+  const canProceed = selectedCount >= 3 && selectedCount <= 10
+  const progress = selectedCount <= 10 ? Math.min(1, selectedCount / 3) : 0
   return (
     <div className={s.main}>
       <TopNavBar
         title={title}
         progress={progress}
         action={
-          <div className={c(s.completeButton, s.completeButton__disabled)}>
+          <div
+            className={c(s.completeButton, {
+              [s.completeButton__disabled]: !canProceed,
+            })}
+            onClick={() => {
+              if (canProceed) {
+                alert('준비중')
+              }
+            }}
+          >
             결과 보기
           </div>
         }
@@ -379,21 +391,30 @@ export const Inner: FC = () => {
 
 export const PledgeSelectingPage: FC = () => {
   const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
+  const [modalVisible, setModalVisible] = useState(true)
 
   if (!issueSelectorState.issuesReq.data) {
     issueSelectorDispatch(issueSelectorThunk.loadIssues())
     return null
   }
 
-  // TODO: 데모용으로 일단 전체 이슈 보여줌
-  // const selectedIssues = issueSelectorState.issuesReq.data.filter(item =>
-  //   issueSelectorState.selectedIssueIds.includes(item.id),
-  // )
-
-  const selectedIssues = issueSelectorState.issuesReq.data
+  const selectedIssues = issueSelectorState.issuesReq.data.filter(item =>
+    issueSelectorState.selectedIssueIds.includes(item.id),
+  )
 
   return (
-    <PledgeSelectorProvider selectedIssues={selectedIssues.slice(0, 4)}>
+    <PledgeSelectorProvider selectedIssues={selectedIssues}>
+      {modalVisible && (
+        <FullModal
+          label="STEP 2"
+          title="맘에 드는 공약 고르기"
+          description=""
+          dismissLabel="시작하기"
+          onDismiss={() => {
+            setModalVisible(false)
+          }}
+        />
+      )}
       <Inner />
     </PledgeSelectorProvider>
   )

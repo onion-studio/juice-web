@@ -1,23 +1,11 @@
 import React from 'react'
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { HashRouter, Switch, Route } from 'react-router-dom'
 
 import { IssueSelectingPage } from './pages/IssueSelectingPage'
 import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 import { IssueSelectorProvider } from './contexts/IssueSelectorContext'
 import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
-
-const issues = [
-  { id: 1, title: '주거 여건', description: '' },
-  { id: 2, title: '주거 여건', description: '' },
-  { id: 3, title: '주거 여건', description: '' },
-  { id: 4, title: '주거 여건', description: '' },
-  { id: 5, title: '주거 여건', description: '' },
-  { id: 6, title: '주거 여건', description: '' },
-  { id: 7, title: '주거 여건', description: '' },
-  { id: 8, title: '주거 여건', description: '' },
-  { id: 9, title: '주거 여건', description: '' },
-  { id: 10, title: '주거 여건', description: '' },
-]
+import { IntroPage } from './pages/IntroPage'
 
 const App: React.FC = () => {
   return (
@@ -36,7 +24,10 @@ const App: React.FC = () => {
             <Route path="/demo/issues" component={IssueSelectingPage} />
             <Route path="/demo/confirm" component={ConfirmIssuePage} />
             <Route path="/demo/pledge" component={PledgeSelectingPage} />
-            <Redirect to="/demo/issues" />
+            <Route exact path="/" component={IntroPage} />
+            <Route path="/select" component={IssueSelectingPage} />
+            <Route path="/confirm" component={ConfirmIssuePage} />
+            <Route path="/pledges" component={PledgeSelectingPage} />
           </Switch>
         </HashRouter>
       </div>

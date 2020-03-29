@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useHistory } from 'react-router-dom'
 import { IssueCardView } from '../components/IssueCardView'
 import s from './IssueSelectingPage.module.scss'
 import {
@@ -9,45 +10,20 @@ import {
 import {
   useIssueSelectorContext,
   issueSelectorThunk,
+  issueSelectorAction,
 } from '../contexts/IssueSelectorContext'
 import { TopNavBar } from '../components/TopNavBar'
 import { useSet } from 'react-use'
 import { ReactComponent as IconXBlack } from '../components/svg/ico-x-black.svg'
 import { ReactComponent as IconPickBlack } from '../components/svg/ico-pick-black.svg'
 import { Issue } from '../contexts/entities'
+import { FullModal } from '../components/FullModal'
 
 interface IssueCard {
   id: number
   title: string
   description: string
 }
-
-// const desc =
-//   '지금 중국이랑 한국, 비상이 걸렸어요.\n' +
-//   '중국 ‘우한 폐렴’의 확진 환자가 우리나라에서도 나왔거든요. 이게 코로나 바이러스의 일종인데, 치료제는 없고 전염성은 강해서 자칫하면 집단으로 감염될 수 있어요.'
-//
-// const issues: IssueCard[] = [
-//   { id: 1, title: '코로나 19 바이러스 공포 1', description: desc },
-//   { id: 2, title: '코로나 19 바이러스 공포 2', description: desc },
-//   { id: 3, title: '코로나 19 바이러스 공포 3', description: desc },
-//   { id: 4, title: '코로나 19 바이러스 공포 4', description: desc },
-//   { id: 5, title: '코로나 19 바이러스 공포 5', description: desc },
-//   { id: 6, title: '코로나 19 바이러스 공포 6', description: desc },
-//   { id: 7, title: '코로나 19 바이러스 공포 7', description: desc },
-//   { id: 8, title: '코로나 19 바이러스 공포 8', description: desc },
-//   { id: 9, title: '코로나 19 바이러스 공포 9', description: desc },
-//   { id: 10, title: '코로나 19 바이러스 공포 10', description: desc },
-//   // { id: 11, title: '코로나 19 바이러스 공포 11', description: desc },
-//   // { id: 12, title: '코로나 19 바이러스 공포 12', description: desc },
-//   // { id: 13, title: '코로나 19 바이러스 공포 13', description: desc },
-//   // { id: 14, title: '코로나 19 바이러스 공포 14', description: desc },
-//   // { id: 15, title: '코로나 19 바이러스 공포 15', description: desc },
-//   // { id: 16, title: '코로나 19 바이러스 공포 16', description: desc },
-//   // { id: 17, title: '코로나 19 바이러스 공포 17', description: desc },
-//   // { id: 18, title: '코로나 19 바이러스 공포 18', description: desc },
-//   // { id: 19, title: '코로나 19 바이러스 공포 19', description: desc },
-//   // { id: 20, title: '코로나 19 바이러스 공포 20', description: desc },
-// ]
 
 const ConfirmModal: FC<{ ids: number[]; onRemove: (id: number) => void }> = ({
   ids,
@@ -103,33 +79,54 @@ const ConfirmModal: FC<{ ids: number[]; onRemove: (id: number) => void }> = ({
   )
 }
 
-const IssueSelectorView: FC<{ issues: Issue[] }> = ({ issues }) => {
+const IssueSelectorView: FC = () => {
+  const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
+  const issues = issueSelectorState.issuesReq.data
+  useEffect(() => {
+    issueSelectorDispatch(issueSelectorThunk.loadIssues())
+  }, [])
+  const cardEventManager = useContext(CardEventContext)
+  const history = useHistory()
   // card stack
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
+  const allSelected =
+    issues !== null ? currentCardIndex >= issues.length : false
+  const progress = issues !== null ? currentCardIndex / issues.length : 0
   const [
     selectedIds,
     { add: addSelectedId, remove: removeSelectedId },
   ] = useSet<number>()
   const [discardedIds, { add: addDiscardedId }] = useSet<number>()
-  const cardEventManager = useContext(CardEventContext)
+  useEffect(() => {
+    if (allSelected) {
+      if (selectedIds.size < 3 || selectedIds.size > 5) {
+        history.push('/confirm')
+      } else {
+        history.push('/pledges')
+      }
+    }
+  }, [allSelected, selectedIds.size])
 
   const onConclude = useCallback(
     (selected: boolean) => {
+      const id = issues![currentCardIndex].id
       if (selected) {
-        addSelectedId(issues[currentCardIndex].id)
+        addSelectedId(id)
+        issueSelectorDispatch(issueSelectorAction.selectIssue(id))
       } else {
-        addDiscardedId(issues[currentCardIndex].id)
+        addDiscardedId(id)
       }
     },
-    [currentCardIndex, selectedIds],
+    [currentCardIndex, selectedIds, issues],
   )
   const onConclusionAnimationEnd = useCallback(() => {
     setCurrentCardIndex(currentCardIndex + 1)
   }, [currentCardIndex])
 
+  if (!issues) {
+    return null
+  }
   // const conclusionCount = selectedIds.size + discardedIds.size
-  const allSelected = currentCardIndex >= issues.length
-  const progress = currentCardIndex / issues.length
 
   return (
     <div>
@@ -140,6 +137,7 @@ const IssueSelectorView: FC<{ issues: Issue[] }> = ({ issues }) => {
       <div style={{ position: 'relative', height: 372 }}>
         {issues.map((c, i) => (
           <IssueCardView
+            key={c.id}
             total={issues.length}
             cardNumber={i + 1}
             distance={Math.max(0, i - currentCardIndex)}
@@ -183,16 +181,20 @@ const IssueSelectorView: FC<{ issues: Issue[] }> = ({ issues }) => {
 }
 
 export const IssueSelectingPage: FC = () => {
-  const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
-
-  if (!issueSelectorState.issuesReq.data) {
-    issueSelectorDispatch(issueSelectorThunk.loadIssues())
-    return null
-  }
+  const [modalVisible, setModalVisible] = useState(true)
 
   return (
     <CardEventProvider>
-      <IssueSelectorView issues={issueSelectorState.issuesReq.data} />
+      {modalVisible && (
+        <FullModal
+          label="STEP 1"
+          title="1단계: 내 관심 주제 고르기"
+          description=""
+          dismissLabel="시작하기"
+          onDismiss={() => setModalVisible(false)}
+        />
+      )}
+      <IssueSelectorView />
     </CardEventProvider>
   )
 }

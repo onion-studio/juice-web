@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { IssueGridSelector } from '../components/IssueGridSelector'
 import { TopNavBar } from '../components/TopNavBar'
 import s from './ConfirmIssuePage.module.scss'
@@ -9,10 +10,13 @@ import {
 } from '../contexts/IssueSelectorContext'
 
 export const ConfirmIssuePage: FC = () => {
+  const history = useHistory()
   const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
   React.useEffect(() => {
-    issueSelectorDispatch(issueSelectorThunk.loadIssues())
-  }, [])
+    if (!issueSelectorState.issuesReq.data) {
+      issueSelectorDispatch(issueSelectorThunk.loadIssues())
+    }
+  }, [issueSelectorState.issuesReq.data])
   const {
     issuesReq: { data: issues },
     selectedIssueIds,
@@ -31,7 +35,7 @@ export const ConfirmIssuePage: FC = () => {
             className={s.nextButton}
             onClick={() => {
               if (!tooLittle) {
-                alert('준비중')
+                history.push('/pledges')
               }
             }}
           >
