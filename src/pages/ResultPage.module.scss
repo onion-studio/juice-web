@@ -1,2 +1,11 @@
+@import '../common';
+
 .wrap {
+}
+
+.resetButton {
+  @include fruit-button;
+  width: 300px;
+  margin: 32px auto;
+  padding: 14px;
 }

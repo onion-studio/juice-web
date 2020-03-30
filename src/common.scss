@@ -7,11 +7,16 @@ $color-disabled: #d8cdb1;
 
 $layer-modal: 500;
 
+@mixin han-sans {
+  font-family: 'Spoqa Han Sans', sans-serif;
+}
+
 @mixin keep-all {
   word-break: keep-all;
 }
 
 @mixin tp-big {
+  @include han-sans;
   @include keep-all;
   font-size: 20px;
   font-weight: 300;
@@ -28,6 +33,7 @@ $layer-modal: 500;
 }
 
 @mixin tp-normal {
+  @include han-sans;
   @include keep-all;
   font-size: 14px;
   font-stretch: normal;
@@ -43,6 +49,7 @@ $layer-modal: 500;
 }
 
 @mixin tp-stamp {
+  @include han-sans;
   @include keep-all;
   font-size: 14px;
   font-weight: bold;
@@ -53,6 +60,7 @@ $layer-modal: 500;
 }
 
 @mixin tp-small {
+  @include han-sans;
   @include keep-all;
   font-size: 12px;
   font-weight: normal;
@@ -64,7 +72,6 @@ $layer-modal: 500;
 }
 
 @mixin tp-small-bold {
-  @include keep-all;
   @include tp-small;
   font-weight: bold;
   line-height: 2.33;
@@ -82,4 +89,13 @@ $layer-modal: 500;
   letter-spacing: -0.5px;
   text-align: center;
   color: $color-ink;
+}
+
+@mixin fruit-button {
+  @include tp-normal-bold;
+  display: block;
+  background-color: $color-fruit;
+  color: $color-butter;
+  border: none;
+  outline: none;
 }

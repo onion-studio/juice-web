@@ -1,11 +1,17 @@
 import React, { FC } from 'react'
 import s from './PartyInfo.module.scss'
 import { PledgeCard } from './PledgeCard'
-import { partyColor, PartyId, partyNames } from '../constants'
+import {
+  introLinks,
+  partyColor,
+  PartyID,
+  partyNames,
+  profileLinks,
+} from '../constants'
 
 interface Props {
   nickname: string
-  partyId: PartyId
+  partyId: PartyID
   pledges: { id: number; title: string; summary: string; count: number }[]
 }
 
@@ -17,10 +23,18 @@ export const PartyInfo: FC<Props> = ({ nickname, partyId, pledges }) => {
         <div className={s.header_name}>{nickname}님이 선택한</div>
         <div className={s.header_party}>{partyName}의 공약</div>
         <div className={s.header_links}>
-          <a className={s.header_link} href="https://naver.com" target="_blank">
+          <a
+            className={s.header_link}
+            href={introLinks[partyId]}
+            target="_blank"
+          >
             소개
           </a>
-          <a className={s.header_link} href="https://naver.com" target="_blank">
+          <a
+            className={s.header_link}
+            href={profileLinks[partyId]}
+            target="_blank"
+          >
             비례대표 명부
           </a>
         </div>

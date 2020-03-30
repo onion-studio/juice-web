@@ -46,12 +46,34 @@
 
 .recommendedParty {
   @include tp-normal;
-  text-align: center;
   margin-top: 10px;
   margin-bottom: 20px;
+  padding: 0 20px;
+  word-break: keep-all;
 }
 
 .keyword {
   display: inline-block;
   color: $color-fruit;
+}
+
+.detailBox_wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.detailBox {
+  width: 300px;
+  border: 1px solid $color-ink;
+  padding: 20px;
+  margin-bottom: 32px;
+}
+
+.detailTitle {
+  @include tp-normal-bold;
+  text-align: center;
+}
+
+.detailDesc {
+  @include tp-small;
 }
