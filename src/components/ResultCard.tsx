@@ -64,8 +64,7 @@ export const ResultCard: FC<Props> = ({
             <span className={s.keyword}>#{descriptionSet.keyword1}</span>
             {과와(descriptionSet.keyword1)}{' '}
             <span className={s.keyword}>#{descriptionSet.keyword2}</span>
-            {을를(descriptionSet.keyword2)}
-            중시하는 당신!
+            {을를(descriptionSet.keyword2)} 중시하는 당신!
           </div>
           <div className={s.recommendedParty}>
             {descriptionSet.resultSummary(nickname)}
