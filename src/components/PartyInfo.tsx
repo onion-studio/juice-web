@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import s from './PartyInfo.module.scss'
 import { PledgeCard } from './PledgeCard'
-import { PartyId, partyNames } from '../constants'
+import { partyColor, PartyId, partyNames } from '../constants'
 
 interface Props {
   nickname: string
@@ -12,7 +12,7 @@ interface Props {
 export const PartyInfo: FC<Props> = ({ nickname, partyId, pledges }) => {
   const partyName = partyNames[partyId]
   return (
-    <div className={s.wrap} style={{ backgroundColor: 'silver' }}>
+    <div className={s.wrap} style={{ backgroundColor: partyColor[partyId] }}>
       <div className={s.borderBox}>
         <div className={s.header_name}>{nickname}님이 선택한</div>
         <div className={s.header_party}>{partyName}의 공약</div>

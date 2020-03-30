@@ -21,3 +21,15 @@ export const partyNames = {
 } as const
 
 export type PartyId = keyof typeof partyNames
+
+export const partyColor: { [K in PartyId]: string } = {
+  1: '#397FD3',
+  2: '#EF426F',
+  3: '#FFBD0A',
+  4: '#FF952C',
+  5: '#00A85F',
+  6: '#C95352',
+  7: '#F26522',
+  8: '#AB2222',
+  9: '#62C546',
+}
