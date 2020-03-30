@@ -21,6 +21,8 @@ export const partyNames = {
 } as const
 
 export type PartyID = keyof typeof partyNames
+export const progressiveParties: PartyID[] = [1, 3, 7, 9]
+export const conservativeParties: PartyID[] = [2, 5, 6, 4, 8]
 
 export const partyNamesWithPro: { [K in PartyID]: string } = {
   1: '더불어민주당(더불어시민당)',

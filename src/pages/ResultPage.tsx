@@ -4,7 +4,7 @@ import { ResultCard } from '../components/ResultCard'
 import { PartyInfo } from '../components/PartyInfo'
 import s from './ResultPage.module.scss'
 import { usePersistency } from '../contexts/PersistencyContext'
-import { JuiceID, PartyID } from '../constants'
+import { JuiceID, PartyID, progressiveParties } from '../constants'
 
 interface Result {
   respondentLog: {
@@ -62,6 +62,17 @@ export const ResultPage: React.FC = () => {
     {},
   )
 
+  const progressivePledgeCount = result.pledges.filter(item =>
+    progressiveParties.includes(item.party_id),
+  ).length
+  const conservativePledgeCount = result.pledges.length - progressivePledgeCount
+  const pScore = Math.round(
+    (progressivePledgeCount / result.pledges.length) * 100,
+  )
+  const cScore = Math.round(
+    (conservativePledgeCount / result.pledges.length) * 100,
+  )
+
   const sortedIssues = result.issues.sort((i1, i2) => {
     const i1Count = pledgeCountPerIssue[i1.id] ?? 0
     const i2Count = pledgeCountPerIssue[i2.id] ?? 0
@@ -81,6 +92,8 @@ export const ResultPage: React.FC = () => {
         juiceName={result.respondentLog.juice_name}
         juiceId={result.respondentLog.juice_id}
         issueNames={sortedIssues.map(item => item.name)}
+        pScore={pScore}
+        cScore={cScore}
       />
       {partyIds.map(partyId => {
         return (

@@ -3,7 +3,13 @@ import s from './ResultCard.module.scss'
 import { Card } from './Card'
 import { Lace } from './Lace'
 import { juiceMap } from './images/juices/juiceMap'
-import { JuiceID, PartyID, partyNamesWithPro } from '../constants'
+import {
+  conservativeParties,
+  JuiceID,
+  PartyID,
+  partyNamesWithPro,
+  progressiveParties,
+} from '../constants'
 
 // https://github.com/e-/Josa.js/blob/master/josa.js
 function hasJong(s: string): boolean {
@@ -24,6 +30,8 @@ interface Props {
   juiceName: string
   juiceId: JuiceID
   issueNames: string[]
+  pScore: number
+  cScore: number
 }
 
 export const ResultCard: FC<Props> = ({
@@ -31,6 +39,8 @@ export const ResultCard: FC<Props> = ({
   juiceName,
   juiceId,
   issueNames,
+  pScore,
+  cScore,
 }) => {
   const descriptionSet = descriptionsPerJuiceId[juiceId]
   return (
@@ -80,8 +90,8 @@ export const ResultCard: FC<Props> = ({
           <div className={s.detailDesc}>
             {descriptionSet.resultDetail({
               name: nickname,
-              pScore: 60,
-              cScore: 40,
+              pScore,
+              cScore,
               issueNames: issueNames.slice(0, 3),
             })}
           </div>
@@ -116,7 +126,8 @@ function similarParties(
   cScore: number,
   except: number,
 ): string {
-  let partyIds: PartyID[] = pScore > cScore ? [1, 3, 5, 7, 9] : [2, 4, 6, 8]
+  let partyIds: PartyID[] =
+    pScore > cScore ? progressiveParties : conservativeParties
   partyIds = partyIds.filter(id => id !== except)
   return partyIds.map(id => partyNamesWithPro[id]).join(', ')
 }
