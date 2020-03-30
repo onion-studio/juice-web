@@ -9,6 +9,7 @@ import {
 } from '../contexts/PledgeSelectorContext'
 import { Issue } from '../contexts/entities'
 import { FullModal } from '../components/FullModal'
+import { PersonalForm } from '../components/PersonalForm'
 
 const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
   selected,
@@ -346,6 +347,7 @@ export const Inner: FC = () => {
   const pledgeSelector = usePledgeSelector()
   const selectedCount = pledgeSelector.selectedPledgeIds.size
   const [disabled, setDisabled] = useState(false)
+  const [formVisible, setFormVisible] = useState(false)
 
   const title =
     selectedCount === 0
@@ -357,6 +359,14 @@ export const Inner: FC = () => {
   const progress = selectedCount <= 10 ? Math.min(1, selectedCount / 3) : 0
   return (
     <div className={s.main}>
+      {formVisible && (
+        <PersonalForm
+          onSubmit={info => {
+            // TODO
+            pledgeSelector.action.sendResult(info)
+          }}
+        />
+      )}
       <TopNavBar
         title={title}
         progress={progress}
@@ -369,11 +379,7 @@ export const Inner: FC = () => {
               if (canProceed && !disabled) {
                 // TODO
                 setDisabled(true)
-                try {
-                  await pledgeSelector.action.sendResult()
-                } catch (e) {
-                  setDisabled(false)
-                }
+                setFormVisible(true)
               }
             }}
           >

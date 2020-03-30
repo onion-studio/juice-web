@@ -16,6 +16,15 @@ export interface Deps {
   onComplete: (selectedPledgeIds: number[]) => void
 }
 
+export type PersonalInfo = {
+  isVoter: 1 | 0
+  ageStart: number
+  ageEnd: number
+  gender: 'M' | 'F' | 'O'
+  location: string
+  nickname: string
+}
+
 type PledgeId = Pledge['id']
 
 export interface ContextValue {
@@ -29,7 +38,7 @@ export interface ContextValue {
     togglePledgeSelection: (id: PledgeId) => void
     togglePledgeFolding: (id: PledgeId) => void
     selectIssue: (id: Issue['id']) => void
-    sendResult: () => Promise<void>
+    sendResult: (personal: PersonalInfo) => Promise<void>
   }
 }
 
@@ -143,7 +152,7 @@ export class PledgeSelectorProviderUnbound extends React.Component<
     localStorage.setItem('token', token)
   }
 
-  sendResult = async () => {
+  sendResult = async (personal: PersonalInfo) => {
     try {
       await ky.post('https://api.juice.vote/result', {
         json: {
@@ -157,14 +166,7 @@ export class PledgeSelectorProviderUnbound extends React.Component<
           selected_pledge_ids: Array.from(this.state.selectedPledgeIds).join(
             ',',
           ),
-          personal: {
-            isVoter: 1,
-            ageStart: 10,
-            ageEnd: 20,
-            gender: 'O', // 'M', 'F', 'O'
-            location: '서울특별시',
-            nickname: '테스트',
-          },
+          personal,
         },
       })
       this.props.onComplete(Array.from(this.state.selectedPledgeIds))
@@ -205,8 +207,7 @@ export const PledgeSelectorProvider: React.FC = ({ children }) => {
       selectedIssues={selectedIssues}
       onComplete={selectedPledgeIds =>
         persistency.action.navigate({
-          to: PageID.personalInfo,
-          selectedPledgeIds,
+          to: PageID.result,
         })
       }
     >

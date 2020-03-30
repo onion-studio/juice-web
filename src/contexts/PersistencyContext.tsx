@@ -15,7 +15,6 @@ export enum PageID {
   issueSelector = 'issueSelector',
   issueConfirmation = 'issueConfirmation',
   pledgeSelector = 'pledgeSelector',
-  personalInfo = 'personalInfo',
   result = 'result',
 }
 
@@ -28,10 +27,6 @@ export type NavigateCommand =
   | {
       to: PageID.pledgeSelector
       selectedIssueIds: number[]
-    }
-  | {
-      to: PageID.personalInfo
-      selectedPledgeIds: number[]
     }
   | {
       to: PageID.result
@@ -84,9 +79,6 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
       case PageID.pledgeSelector:
         this.setState({ currentPage: PageID.issueSelector })
         break
-      case PageID.personalInfo:
-        this.setState({ currentPage: PageID.pledgeSelector })
-        break
       default:
         throw new Error('Cannot go back')
     }
@@ -117,15 +109,6 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
           {
             currentPage: command.to,
             selectedIssueIds: command.selectedIssueIds,
-          },
-          this.persist,
-        )
-        break
-      case PageID.personalInfo:
-        this.setState(
-          {
-            currentPage: command.to,
-            selectedPledgeIds: command.selectedPledgeIds,
           },
           this.persist,
         )

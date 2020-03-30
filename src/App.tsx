@@ -31,23 +31,6 @@ const App: React.FC = () => {
   )
 }
 
-function PersonalInfo() {
-  const persistency = usePersistency()
-  return (
-    <div>
-      <button
-        onClick={() => {
-          persistency.action.navigate({
-            to: PageID.result,
-          })
-        }}
-      >
-        고고
-      </button>
-    </div>
-  )
-}
-
 function Router() {
   const persistency = usePersistency()
   switch (persistency.currentPage) {
@@ -59,8 +42,6 @@ function Router() {
       return <ConfirmIssuePage />
     case PageID.pledgeSelector:
       return <PledgeSelectingPage />
-    case PageID.personalInfo:
-      return <PersonalInfo />
     case PageID.result:
       return <ResultPage />
     default:
