@@ -1,28 +1,21 @@
 import React, { FC, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { IssueGridSelector } from '../components/IssueGridSelector'
 import { TopNavBar } from '../components/TopNavBar'
 import s from './ConfirmIssuePage.module.scss'
-import {
-  useIssueSelectorContext,
-  issueSelectorAction,
-  issueSelectorThunk,
-} from '../contexts/IssueSelectorContext'
+import { PageID, usePersistency } from '../contexts/PersistencyContext'
+import { useIssueSelector } from '../contexts/IssueSelectorContext'
 
 export const ConfirmIssuePage: FC = () => {
-  const history = useHistory()
-  const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
+  const persistency = usePersistency()
+  const issueSelector = useIssueSelector()
   React.useEffect(() => {
-    if (!issueSelectorState.issuesReq.data) {
-      issueSelectorDispatch(issueSelectorThunk.loadIssues())
+    if (!issueSelector.issues) {
+      issueSelector.action.loadIssues()
     }
-  }, [issueSelectorState.issuesReq.data])
-  const {
-    issuesReq: { data: issues },
-    selectedIssueIds,
-  } = issueSelectorState
+  }, [issueSelector.issues])
+  const { issues, selectedIssueIds } = issueSelector
   const [dirty, setDirty] = useState(false)
-  const selectedIssueCount = selectedIssueIds.length
+  const selectedIssueCount = selectedIssueIds.size
   const tooLittle = selectedIssueCount < 3
   const progress = tooLittle ? 0 : 1
   return (
@@ -35,7 +28,10 @@ export const ConfirmIssuePage: FC = () => {
             className={s.nextButton}
             onClick={() => {
               if (!tooLittle) {
-                history.push('/pledges')
+                persistency.action.navigate({
+                  to: PageID.pledgeSelector,
+                  selectedIssueIds: Array.from(selectedIssueIds),
+                })
               }
             }}
           >
@@ -67,14 +63,14 @@ export const ConfirmIssuePage: FC = () => {
       {issues && (
         <IssueGridSelector
           items={issues}
-          selectedIds={selectedIssueIds}
+          selectedIds={Array.from(selectedIssueIds)}
           onSelect={id => {
             setDirty(true)
-            issueSelectorDispatch(issueSelectorAction.selectIssue(id))
+            issueSelector.action.selectIssue(id)
           }}
           onDiscard={id => {
             setDirty(true)
-            issueSelectorDispatch(issueSelectorAction.discardIssue(id))
+            issueSelector.action.discardIssue(id)
           }}
         />
       )}

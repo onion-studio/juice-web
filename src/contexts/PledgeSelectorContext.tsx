@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Issue, Pledge } from './entities'
 import produce from 'immer'
 import ky from 'ky'
+import { PageID, usePersistency } from './PersistencyContext'
+import { useIssueSelector } from './IssueSelectorContext'
 
 interface RequestResult<Data, Error> {
   loading: boolean
@@ -9,13 +11,9 @@ interface RequestResult<Data, Error> {
   error: Error | null
 }
 
-interface History {
-  push(url: string): void
-}
-
 export interface Deps {
-  history: History
   selectedIssues: Issue[]
+  onComplete: (selectedPledgeIds: number[]) => void
 }
 
 type PledgeId = Pledge['id']
@@ -46,7 +44,7 @@ const PledgeSelectorContext = React.createContext<ContextValue>(null as any)
  * -
  *
  * */
-export class PledgeSelectorProvider extends React.Component<
+export class PledgeSelectorProviderUnbound extends React.Component<
   Deps,
   ContextValue
 > {
@@ -169,7 +167,7 @@ export class PledgeSelectorProvider extends React.Component<
           },
         },
       })
-      this.props.history.push('/result')
+      this.props.onComplete(Array.from(this.state.selectedPledgeIds))
     } catch (e) {
       // TODO: 에러 토스트
       alert('통신 에러')
@@ -184,6 +182,37 @@ export class PledgeSelectorProvider extends React.Component<
       </PledgeSelectorContext.Provider>
     )
   }
+}
+
+export const PledgeSelectorProvider: React.FC = ({ children }) => {
+  const persistency = usePersistency()
+  const issueSelector = useIssueSelector()
+
+  useEffect(() => {
+    issueSelector.action.loadIssues()
+  }, [])
+
+  if (!issueSelector.issues) {
+    return null
+  }
+
+  const selectedIssues = issueSelector.issues.filter(item =>
+    issueSelector.selectedIssueIds.has(item.id),
+  )
+
+  return (
+    <PledgeSelectorProviderUnbound
+      selectedIssues={selectedIssues}
+      onComplete={selectedPledgeIds =>
+        persistency.action.navigate({
+          to: PageID.personalInfo,
+          selectedPledgeIds,
+        })
+      }
+    >
+      {children}
+    </PledgeSelectorProviderUnbound>
+  )
 }
 
 export const usePledgeSelector = () => React.useContext(PledgeSelectorContext)

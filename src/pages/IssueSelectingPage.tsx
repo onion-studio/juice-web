@@ -1,92 +1,26 @@
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { useHistory } from 'react-router-dom'
 import { IssueCardView } from '../components/IssueCardView'
 import s from './IssueSelectingPage.module.scss'
 import {
   CardEventContext,
   CardEventProvider,
 } from '../contexts/CardEventContext'
-import {
-  useIssueSelectorContext,
-  issueSelectorThunk,
-  issueSelectorAction,
-} from '../contexts/IssueSelectorContext'
 import { TopNavBar } from '../components/TopNavBar'
 import { useSet } from 'react-use'
 import { ReactComponent as IconXBlack } from '../components/svg/ico-x-black.svg'
 import { ReactComponent as IconPickBlack } from '../components/svg/ico-pick-black.svg'
-import { Issue } from '../contexts/entities'
 import { FullModal } from '../components/FullModal'
-
-interface IssueCard {
-  id: number
-  title: string
-  description: string
-}
-
-const ConfirmModal: FC<{ ids: number[]; onRemove: (id: number) => void }> = ({
-  ids,
-  onRemove,
-}) => {
-  return createPortal(
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        backgroundColor: 'rgba(153, 153, 153, 0.7)',
-        padding: 20,
-        overflowY: 'scroll',
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: 'white',
-          display: 'flex',
-          flexDirection: 'column',
-          width: 300,
-          margin: '0 auto',
-        }}
-      >
-        <div className={s.confirmModalTitle}>내가 고른 재료</div>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div className={s.confirmModalList}>
-            {ids.map(id => (
-              <div key={id} className={s.confirmModalItem}>
-                <div style={{ textAlign: 'center', flexGrow: 1 }}>{id}</div>
-
-                <div className={s.confirmModalItemLabel}>코로나 19</div>
-                <div
-                  className={s.confirmModalRemove}
-                  onClick={() => onRemove(id)}
-                >
-                  x
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className={s.confirmModalButton} onClick={() => alert('준비중^^')}>
-          확인
-        </div>
-      </div>
-    </div>,
-    document.querySelector('#modal')!,
-  )
-}
+import { PageID, usePersistency } from '../contexts/PersistencyContext'
+import { useIssueSelector } from '../contexts/IssueSelectorContext'
 
 const IssueSelectorView: FC = () => {
-  const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
-  const issues = issueSelectorState.issuesReq.data
+  const persistency = usePersistency()
+  const issueSelector = useIssueSelector()
+  const issues = issueSelector.issues
   useEffect(() => {
-    issueSelectorDispatch(issueSelectorThunk.loadIssues())
+    issueSelector.action.loadIssues()
   }, [])
   const cardEventManager = useContext(CardEventContext)
-  const history = useHistory()
   // card stack
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const allSelected =
@@ -100,9 +34,14 @@ const IssueSelectorView: FC = () => {
   useEffect(() => {
     if (allSelected) {
       if (selectedIds.size < 3 || selectedIds.size > 5) {
-        history.push('/confirm')
+        persistency.action.navigate({
+          to: PageID.issueConfirmation,
+        })
       } else {
-        history.push('/pledges')
+        persistency.action.navigate({
+          to: PageID.pledgeSelector,
+          selectedIssueIds: Array.from(selectedIds),
+        })
       }
     }
   }, [allSelected, selectedIds.size])
@@ -112,7 +51,7 @@ const IssueSelectorView: FC = () => {
       const id = issues![currentCardIndex].id
       if (selected) {
         addSelectedId(id)
-        issueSelectorDispatch(issueSelectorAction.selectIssue(id))
+        issueSelector.action.selectIssue(id)
       } else {
         addDiscardedId(id)
       }

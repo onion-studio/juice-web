@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
@@ -9,10 +8,6 @@ import {
   usePledgeSelector,
 } from '../contexts/PledgeSelectorContext'
 import { Issue } from '../contexts/entities'
-import {
-  useIssueSelectorContext,
-  issueSelectorThunk,
-} from '../contexts/IssueSelectorContext'
 import { FullModal } from '../components/FullModal'
 
 const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
@@ -398,21 +393,10 @@ export const Inner: FC = () => {
 }
 
 export const PledgeSelectingPage: FC = () => {
-  const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
   const [modalVisible, setModalVisible] = useState(true)
-  const history = useHistory()
-
-  if (!issueSelectorState.issuesReq.data) {
-    issueSelectorDispatch(issueSelectorThunk.loadIssues())
-    return null
-  }
-
-  const selectedIssues = issueSelectorState.issuesReq.data.filter(item =>
-    issueSelectorState.selectedIssueIds.includes(item.id),
-  )
 
   return (
-    <PledgeSelectorProvider selectedIssues={selectedIssues} history={history}>
+    <PledgeSelectorProvider>
       {modalVisible && (
         <FullModal
           label="STEP 2"

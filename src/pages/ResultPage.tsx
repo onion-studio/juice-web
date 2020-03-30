@@ -3,6 +3,7 @@ import ky from 'ky'
 import { ResultCard } from '../components/ResultCard'
 import { PartyInfo } from '../components/PartyInfo'
 import s from './ResultPage.module.scss'
+import { usePersistency } from '../contexts/PersistencyContext'
 
 interface Result {
   respondentLog: {
@@ -27,6 +28,8 @@ interface Result {
 
 export const ResultPage: React.FC = () => {
   const [result, setResult] = useState<Result | null>(null)
+  const persistency = usePersistency()
+
   useEffect(() => {
     const init = async () => {
       console.log('init result')
@@ -60,12 +63,14 @@ export const ResultPage: React.FC = () => {
       {partyIds.map(partyId => {
         return (
           <PartyInfo
+            key={partyId}
             partyId={partyId as any}
             nickname={result.respondentLog.nickname}
             pledges={result.pledges.filter(item => item.party_id === partyId)}
           />
         )
       })}
+      <button onClick={() => persistency.action.reset()}>다시 주문하기</button>
     </div>
   )
 }

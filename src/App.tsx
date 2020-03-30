@@ -1,40 +1,71 @@
 import React from 'react'
-import { HashRouter, Switch, Route } from 'react-router-dom'
-
 import { IssueSelectingPage } from './pages/IssueSelectingPage'
-import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 import { IssueSelectorProvider } from './contexts/IssueSelectorContext'
+import {
+  PageID,
+  PersistencyProvider,
+  usePersistency,
+} from './contexts/PersistencyContext'
 import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
 import { IntroPage } from './pages/IntroPage'
 import { ResultPage } from './pages/ResultPage'
+import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 
 const App: React.FC = () => {
   return (
-    <IssueSelectorProvider deps={{}}>
-      <div
-        style={{
-          position: 'relative',
-          maxWidth: 600,
-          minHeight: 700,
-          margin: '0 auto',
-          backgroundColor: '#fff6da',
+    <PersistencyProvider storage={localStorage}>
+      <IssueSelectorProvider>
+        <div
+          style={{
+            position: 'relative',
+            maxWidth: 600,
+            minHeight: 700,
+            margin: '0 auto',
+            backgroundColor: '#fff6da',
+          }}
+        >
+          <Router />
+        </div>
+      </IssueSelectorProvider>
+    </PersistencyProvider>
+  )
+}
+
+function PersonalInfo() {
+  const persistency = usePersistency()
+  return (
+    <div>
+      <button
+        onClick={() => {
+          persistency.action.navigate({
+            to: PageID.result,
+          })
         }}
       >
-        <HashRouter>
-          <Switch>
-            <Route path="/demo/issues" component={IssueSelectingPage} />
-            <Route path="/demo/confirm" component={ConfirmIssuePage} />
-            <Route path="/demo/pledge" component={PledgeSelectingPage} />
-            <Route exact path="/" component={IntroPage} />
-            <Route path="/select" component={IssueSelectingPage} />
-            <Route path="/confirm" component={ConfirmIssuePage} />
-            <Route path="/pledges" component={PledgeSelectingPage} />
-            <Route path="/result" component={ResultPage} />
-          </Switch>
-        </HashRouter>
-      </div>
-    </IssueSelectorProvider>
+        고고
+      </button>
+    </div>
   )
+}
+
+function Router() {
+  const persistency = usePersistency()
+  switch (persistency.currentPage) {
+    case PageID.intro:
+      return <IntroPage />
+    case PageID.issueSelector:
+      return <IssueSelectingPage />
+    case PageID.issueConfirmation:
+      return <ConfirmIssuePage />
+    case PageID.pledgeSelector:
+      return <PledgeSelectingPage />
+    case PageID.personalInfo:
+      return <PersonalInfo />
+    case PageID.result:
+      return <ResultPage />
+    default:
+      return <div>ERROR</div>
+  }
 }
 
 export default App
