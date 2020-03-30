@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
@@ -349,6 +350,7 @@ const PledgeCardList: FC = () => {
 export const Inner: FC = () => {
   const pledgeSelector = usePledgeSelector()
   const selectedCount = pledgeSelector.selectedPledgeIds.size
+  const [disabled, setDisabled] = useState(false)
 
   const title =
     selectedCount === 0
@@ -368,9 +370,15 @@ export const Inner: FC = () => {
             className={c(s.completeButton, {
               [s.completeButton__disabled]: !canProceed,
             })}
-            onClick={() => {
-              if (canProceed) {
-                alert('준비중')
+            onClick={async () => {
+              if (canProceed && !disabled) {
+                // TODO
+                setDisabled(true)
+                try {
+                  await pledgeSelector.action.sendResult()
+                } catch (e) {
+                  setDisabled(false)
+                }
               }
             }}
           >
@@ -392,6 +400,7 @@ export const Inner: FC = () => {
 export const PledgeSelectingPage: FC = () => {
   const [issueSelectorState, issueSelectorDispatch] = useIssueSelectorContext()
   const [modalVisible, setModalVisible] = useState(true)
+  const history = useHistory()
 
   if (!issueSelectorState.issuesReq.data) {
     issueSelectorDispatch(issueSelectorThunk.loadIssues())
@@ -403,7 +412,7 @@ export const PledgeSelectingPage: FC = () => {
   )
 
   return (
-    <PledgeSelectorProvider selectedIssues={selectedIssues}>
+    <PledgeSelectorProvider selectedIssues={selectedIssues} history={history}>
       {modalVisible && (
         <FullModal
           label="STEP 2"

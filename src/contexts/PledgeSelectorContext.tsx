@@ -9,13 +9,19 @@ interface RequestResult<Data, Error> {
   error: Error | null
 }
 
+interface History {
+  push(url: string): void
+}
+
 export interface Deps {
+  history: History
   selectedIssues: Issue[]
 }
 
 type PledgeId = Pledge['id']
 
-export interface ContextValue extends Deps {
+export interface ContextValue {
+  selectedIssues: Issue[]
   currentIssueId: Issue['id']
   pledgesResult: RequestResult<Pledge[], string>
   selectedPledgeIds: Set<PledgeId>
@@ -25,6 +31,7 @@ export interface ContextValue extends Deps {
     togglePledgeSelection: (id: PledgeId) => void
     togglePledgeFolding: (id: PledgeId) => void
     selectIssue: (id: Issue['id']) => void
+    sendResult: () => Promise<void>
   }
 }
 
@@ -43,7 +50,30 @@ export class PledgeSelectorProvider extends React.Component<
   Deps,
   ContextValue
 > {
+  constructor(props: Deps) {
+    super(props)
+    this.state = {
+      currentIssueId: this.props.selectedIssues[0].id,
+      selectedIssues: this.props.selectedIssues,
+      pledgesResult: {
+        loading: true,
+        data: null,
+        error: null,
+      },
+      selectedPledgeIds: new Set<PledgeId>(),
+      unfoldedPledgeIds: new Set<PledgeId>(),
+      action: {
+        loadPledges: this.loadPledges,
+        togglePledgeSelection: this.togglePledgeSelection,
+        togglePledgeFolding: this.togglePledgeFolding,
+        selectIssue: this.selectIssue,
+        sendResult: this.sendResult,
+      },
+    }
+  }
+
   componentDidMount() {
+    this.createToken()
     this.loadPledges()
   }
 
@@ -109,22 +139,42 @@ export class PledgeSelectorProvider extends React.Component<
     )
   }
 
-  state = {
-    currentIssueId: this.props.selectedIssues[0].id,
-    selectedIssues: this.props.selectedIssues,
-    pledgesResult: {
-      loading: true,
-      data: null,
-      error: null,
-    },
-    selectedPledgeIds: new Set<PledgeId>(),
-    unfoldedPledgeIds: new Set<PledgeId>(),
-    action: {
-      loadPledges: this.loadPledges,
-      togglePledgeSelection: this.togglePledgeSelection,
-      togglePledgeFolding: this.togglePledgeFolding,
-      selectIssue: this.selectIssue,
-    },
+  // TODO: 더 앞에서 해야 함
+  createToken = async () => {
+    const { token } = await ky.post('https://api.juice.vote/init').json()
+    localStorage.setItem('token', token)
+  }
+
+  sendResult = async () => {
+    try {
+      await ky.post('https://api.juice.vote/result', {
+        json: {
+          // TODO: 분리해야
+          token: localStorage.getItem('token'),
+          // TODO: timestamp 없애도 됨
+          timestamp: Date.now(),
+          selected_issue_ids: this.props.selectedIssues
+            .map(item => item.id)
+            .join(','),
+          selected_pledge_ids: Array.from(this.state.selectedPledgeIds).join(
+            ',',
+          ),
+          personal: {
+            isVoter: 1,
+            ageStart: 10,
+            ageEnd: 20,
+            gender: 'O', // 'M', 'F', 'O'
+            location: '서울특별시',
+            nickname: '테스트',
+          },
+        },
+      })
+      this.props.history.push('/result')
+    } catch (e) {
+      // TODO: 에러 토스트
+      alert('통신 에러')
+      throw e
+    }
   }
 
   render() {

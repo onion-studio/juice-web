@@ -1,12 +1,21 @@
 import React, { FC } from 'react'
 import s from './PartyInfo.module.scss'
 import { PledgeCard } from './PledgeCard'
-export const PartyInfo: FC = () => {
+import { PartyId, partyNames } from '../constants'
+
+interface Props {
+  nickname: string
+  partyId: PartyId
+  pledges: { id: number; title: string; summary: string; count: number }[]
+}
+
+export const PartyInfo: FC<Props> = ({ nickname, partyId, pledges }) => {
+  const partyName = partyNames[partyId]
   return (
     <div className={s.wrap} style={{ backgroundColor: 'silver' }}>
       <div className={s.borderBox}>
-        <div className={s.header_name}>Name님이 선택한</div>
-        <div className={s.header_party}>더불어민주당의 공약</div>
+        <div className={s.header_name}>{nickname}님이 선택한</div>
+        <div className={s.header_party}>{partyName}의 공약</div>
         <div className={s.header_links}>
           <a className={s.header_link} href="https://naver.com" target="_blank">
             소개
@@ -17,11 +26,16 @@ export const PartyInfo: FC = () => {
         </div>
       </div>
       <div style={{ width: 300, marginTop: 15 }}>
-        <PledgeCard
-          title="호호"
-          summary="하하"
-          style={{ borderColor: 'black' }}
-        />
+        {pledges.map(item => {
+          return (
+            <PledgeCard
+              key={item.id}
+              title={item.title}
+              summary={item.summary}
+              style={{ borderColor: 'black' }}
+            />
+          )
+        })}
       </div>
     </div>
   )

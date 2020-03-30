@@ -4,7 +4,21 @@ import { Card } from './Card'
 import { Lace } from './Lace'
 import { juiceMap } from './images/juices/juiceMap'
 
-export const ResultCard: FC = () => {
+interface Props {
+  nickname: string
+  juiceName: string
+  juiceId: number
+  // issueKeywords: [string, string]
+  // partyKeywords: [string, string]
+}
+
+export const ResultCard: FC<Props> = ({
+  nickname,
+  juiceName,
+  juiceId,
+  // issueKeywords,
+  // partyKeywords,
+}) => {
   return (
     <div className={s.cardContainer}>
       <Card
@@ -12,22 +26,26 @@ export const ResultCard: FC = () => {
         topLabel={<span className={s.topLabel}>SPECIAL MENU</span>}
         actionLabel="공약쥬스 메뉴판 공유하기!"
       >
-        <div className={s.s1}>NAME님, 주문하신 공약쥬스 나왔습니다</div>
-        <div className={s.s2}>베리블루하우스익스트림!</div>
+        <div className={s.s1}>{nickname}님, 주문하신 공약쥬스 나왔습니다</div>
+        <div className={s.s2}>{juiceName}!</div>
         <div className={s.juiceImageContainer}>
-          <img className={s.juiceImage} src={juiceMap.y01} alt="베리" />
+          <img
+            className={s.juiceImage}
+            src={(juiceMap as any)[`y${juiceId.toString().padStart(2, '0')}`]}
+            alt="베리"
+          />
         </div>
         <Lace style={{ backgroundPositionX: -1 }} />
         <div className={s.interests}>
-          <span className={s.keyword}>#부동산</span>과{' '}
-          <span className={s.keyword}>#디지털 성범죄</span> 문제에 관심이 많고,
+          <span className={s.keyword}>#TODO</span>과{' '}
+          <span className={s.keyword}>#TODO</span> 문제에 관심이 많고,
           <br />
-          <span className={s.keyword}>#공정함</span>과{' '}
-          <span className={s.keyword}>#정의로움</span>을 중시하는 당신!
+          <span className={s.keyword}>#TODO</span>과{' '}
+          <span className={s.keyword}>#TODO</span>을 중시하는 당신!
         </div>
         <div className={s.recommendedParty}>
           이번 총선에서는 <br />
-          더불어민주당을 눈여겨 보세요!
+          TODO를 눈여겨 보세요!
         </div>
       </Card>
     </div>
