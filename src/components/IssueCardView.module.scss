@@ -50,6 +50,12 @@
 
   color: $color-ink;
   text-align: center;
+
+  padding: 0 10px;
+}
+
+.card_tag {
+  display: inline-block;
 }
 
 .card_hideDetail {

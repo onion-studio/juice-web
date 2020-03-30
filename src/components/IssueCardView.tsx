@@ -340,12 +340,13 @@ export const IssueCardView: FC<Props> = ({
           topLabel={`${cardNumber} / ${total}`}
           style={cardStyle}
           hovering={hovering}
-          actionLabel={detailVisible ? undefined : '자세히 보기'}
-          onAction={() => {
-            if (Math.abs(offset) < 2) {
-              setDetailVisible(true)
-            }
-          }}
+          // TODO
+          // actionLabel={detailVisible ? undefined : '자세히 보기'}
+          // onAction={() => {
+          //   if (Math.abs(offset) < 2) {
+          //     setDetailVisible(true)
+          //   }
+          // }}
         >
           <div
             className={c(s.selectStamp, {
@@ -392,9 +393,19 @@ export const IssueCardView: FC<Props> = ({
               </div>
 
               <div className={s.cardTags}>
-                {issue.tag1 && <span>#{issue.tag1}</span>}
-                {issue.tag2 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag2}</span>}
-                {issue.tag3 && <span>&nbsp;&nbsp;&nbsp;#{issue.tag3}</span>}
+                {issue.tag1 && (
+                  <span className={s.card_tag}>#{issue.tag1}</span>
+                )}
+                {issue.tag2 && (
+                  <span className={s.card_tag}>
+                    &nbsp;&nbsp;&nbsp;#{issue.tag2}
+                  </span>
+                )}
+                {issue.tag3 && (
+                  <span className={s.card_tag}>
+                    &nbsp;&nbsp;&nbsp;#{issue.tag3}
+                  </span>
+                )}
               </div>
               <div style={{ flexGrow: 1 }} />
             </>

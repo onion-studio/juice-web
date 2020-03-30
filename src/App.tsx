@@ -6,6 +6,7 @@ import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 import { IssueSelectorProvider } from './contexts/IssueSelectorContext'
 import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
 import { IntroPage } from './pages/IntroPage'
+import { ResultPage } from './pages/ResultPage'
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             <Route path="/select" component={IssueSelectingPage} />
             <Route path="/confirm" component={ConfirmIssuePage} />
             <Route path="/pledges" component={PledgeSelectingPage} />
+            <Route path="/result" component={ResultPage} />
           </Switch>
         </HashRouter>
       </div>

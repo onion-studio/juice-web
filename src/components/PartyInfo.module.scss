@@ -1,0 +1,68 @@
+@import '../common';
+
+.wrap {
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.borderBox {
+  width: 300px;
+  position: relative;
+  border: solid 2px $color-ink;
+  background-color: $color-butter;
+  &::after {
+    display: block;
+    position: absolute;
+    content: '';
+    pointer-events: none;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    left: 1px;
+    border: solid 1px $color-ink;
+  }
+}
+
+.header_name {
+  @include tp-normal;
+  text-align: center;
+  margin-top: 13px;
+}
+
+.header_party {
+  @include tp-big-bold;
+  text-align: center;
+}
+
+.header_links {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.header_link {
+  @include tp-small-bold;
+  position: relative;
+  display: inline-block;
+  font-weight: normal;
+  &,
+  &:hover,
+  &:visited,
+  &:active {
+    color: $color-ink;
+    text-decoration: none;
+  }
+  &:not(:first-child) {
+    margin-left: 15px;
+  }
+  &::after {
+    display: block;
+    position: absolute;
+    content: '';
+    left: 0;
+    right: 0;
+    bottom: 3px;
+    border-bottom: 1px solid $color-ink;
+  }
+}
