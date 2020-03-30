@@ -24,8 +24,8 @@ export const PledgeCard: FC<{
   style,
 }) => {
   const [foldedState, toggleFolded] = useToggle(true)
-  const folded = foldedExt || foldedState
-  const onToggleFolding = onToggleFoldingExt || toggleFolded
+  const folded = foldedExt ?? foldedState
+  const onToggleFolding = onToggleFoldingExt ?? toggleFolded
   return (
     <div
       className={c(s.pledgeCard, { [s.pledgeCard__selected]: selected })}
