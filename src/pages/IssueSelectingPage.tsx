@@ -19,8 +19,8 @@ import { ReactComponent as IconPickBlack } from '../components/svg/ico-pick-blac
 import { FullModal } from '../components/FullModal'
 import { PageID, usePersistency } from '../contexts/PersistencyContext'
 import { useIssueSelector } from '../contexts/IssueSelectorContext'
-import { Md5 } from 'ts-md5'
 import { Issue } from '../contexts/entities'
+import { deterministicShuffle } from '../utils/sort'
 
 const IssueSelectorView: FC = () => {
   const persistency = usePersistency()
@@ -30,27 +30,20 @@ const IssueSelectorView: FC = () => {
     issueSelector.action.loadIssues()
   }, [])
 
-  const issues = useMemo<Issue[] | null>(() => {
+  const shuffledIssues = useMemo<Issue[] | null>(() => {
     if (!_issues) return null
-    return [..._issues].sort((i1, i2) => {
-      const hashed1 = Md5.hashStr(persistency.token! + i1.id)
-      const hashed2 = Md5.hashStr(persistency.token! + i2.id)
-      if (hashed1 < hashed2) {
-        return -1
-      } else if (hashed1 === hashed2) {
-        return 0
-      } else {
-        return 1
-      }
-    })
+    return deterministicShuffle(_issues, persistency.token!, issue =>
+      issue.id.toString(),
+    )
   }, [_issues, persistency.token])
 
   const cardEventManager = useContext(CardEventContext)
   // card stack
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const allSelected =
-    issues !== null ? currentCardIndex >= issues.length : false
-  const progress = issues !== null ? currentCardIndex / issues.length : 0
+    shuffledIssues !== null ? currentCardIndex >= shuffledIssues.length : false
+  const progress =
+    shuffledIssues !== null ? currentCardIndex / shuffledIssues.length : 0
   const [
     selectedIds,
     { add: addSelectedId, remove: removeSelectedId },
@@ -73,7 +66,7 @@ const IssueSelectorView: FC = () => {
 
   const onConclude = useCallback(
     (selected: boolean) => {
-      const id = issues![currentCardIndex].id
+      const id = shuffledIssues![currentCardIndex].id
       if (selected) {
         addSelectedId(id)
         issueSelector.action.selectIssue(id)
@@ -81,13 +74,19 @@ const IssueSelectorView: FC = () => {
         addDiscardedId(id)
       }
     },
-    [issues, currentCardIndex, selectedIds, addSelectedId, addDiscardedId],
+    [
+      shuffledIssues,
+      currentCardIndex,
+      selectedIds,
+      addSelectedId,
+      addDiscardedId,
+    ],
   )
   const onConclusionAnimationEnd = useCallback(() => {
     setCurrentCardIndex(currentCardIndex + 1)
   }, [currentCardIndex])
 
-  if (!issues) {
+  if (!shuffledIssues) {
     return null
   }
 
@@ -98,13 +97,13 @@ const IssueSelectorView: FC = () => {
         이 재료를 <br /> 내 공약쥬스에 담을까요?
       </div>
       <div style={{ position: 'relative', height: 372 }}>
-        {issues.map((c, i) => (
+        {shuffledIssues.map((c, i) => (
           <IssueCardView
             key={c.id}
-            total={issues.length}
+            total={shuffledIssues.length}
             cardNumber={i + 1}
             distance={Math.max(0, i - currentCardIndex)}
-            interactive={issues[currentCardIndex]?.id === c.id}
+            interactive={shuffledIssues[currentCardIndex]?.id === c.id}
             issue={c}
             onSelect={() => onConclude(true)}
             onSelectAnimationEnd={onConclusionAnimationEnd}

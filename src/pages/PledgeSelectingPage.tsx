@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
@@ -10,6 +10,8 @@ import {
 import { Issue } from '../contexts/entities'
 import { FullModal } from '../components/FullModal'
 import { PersonalForm } from '../components/PersonalForm'
+import { deterministicShuffle } from '../utils/sort'
+import { usePersistency } from '../contexts/PersistencyContext'
 
 const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
   selected,
@@ -307,20 +309,26 @@ class IssueNavigationBar extends React.Component<
 }
 
 const PledgeCardList: FC = () => {
+  const persistency = usePersistency()
   const pledgeSelector = usePledgeSelector()
 
   if (!pledgeSelector.pledgesResult.data) {
     return null
   }
 
-  const pledges = pledgeSelector.pledgesResult.data
-  // TODO
-  const filteredPledges = pledges.filter(
+  const filteredPledges = pledgeSelector.pledgesResult.data.filter(
     item => item.issueId === pledgeSelector.currentIssueId,
   )
+
+  const shuffledPledges = deterministicShuffle(
+    filteredPledges,
+    persistency.token!,
+    item => item.id.toString(),
+  )
+
   return (
     <div className={s.pledgeCardList}>
-      {filteredPledges.map(item => {
+      {shuffledPledges.map(item => {
         const selected = pledgeSelector.selectedPledgeIds.has(item.id)
         const folded = !pledgeSelector.unfoldedPledgeIds.has(item.id)
         return (
