@@ -52,7 +52,17 @@ export const ResultPage: React.FC = () => {
 
   const partyIds = Array.from(
     new Set(result.pledges.map(item => item.party_id)),
-  )
+  ).sort((id1, id2) => {
+    const count1 = result.pledges.filter(item => item.party_id === id1)
+    const count2 = result.pledges.filter(item => item.party_id === id2)
+    if (count1 > count2) {
+      return -1
+    } else if (count1 === count2) {
+      return 0
+    } else {
+      return 1
+    }
+  })
 
   const pledgeCountPerIssue = result.pledges.reduce(
     (acc: { [k: number]: number }, item) => ({
@@ -73,7 +83,7 @@ export const ResultPage: React.FC = () => {
     (conservativePledgeCount / result.pledges.length) * 100,
   )
 
-  const sortedIssues = result.issues.sort((i1, i2) => {
+  const issuesSortedByPledgeCount = result.issues.sort((i1, i2) => {
     const i1Count = pledgeCountPerIssue[i1.id] ?? 0
     const i2Count = pledgeCountPerIssue[i2.id] ?? 0
     if (i1Count > i2Count) {
@@ -91,7 +101,7 @@ export const ResultPage: React.FC = () => {
         nickname={result.respondentLog.nickname}
         juiceName={result.respondentLog.juice_name}
         juiceId={result.respondentLog.juice_id}
-        issueNames={sortedIssues.map(item => item.name)}
+        issueNames={issuesSortedByPledgeCount.map(item => item.name)}
         pScore={pScore}
         cScore={cScore}
       />
