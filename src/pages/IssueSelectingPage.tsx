@@ -1,4 +1,11 @@
-import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { IssueCardView } from '../components/IssueCardView'
 import s from './IssueSelectingPage.module.scss'
 import {
@@ -12,14 +19,32 @@ import { ReactComponent as IconPickBlack } from '../components/svg/ico-pick-blac
 import { FullModal } from '../components/FullModal'
 import { PageID, usePersistency } from '../contexts/PersistencyContext'
 import { useIssueSelector } from '../contexts/IssueSelectorContext'
+import { Md5 } from 'ts-md5'
+import { Issue } from '../contexts/entities'
 
 const IssueSelectorView: FC = () => {
   const persistency = usePersistency()
   const issueSelector = useIssueSelector()
-  const issues = issueSelector.issues
+  const _issues = issueSelector.issues
   useEffect(() => {
     issueSelector.action.loadIssues()
   }, [])
+
+  const issues = useMemo<Issue[] | null>(() => {
+    if (!_issues) return null
+    return [..._issues].sort((i1, i2) => {
+      const hashed1 = Md5.hashStr(persistency.token! + i1.id)
+      const hashed2 = Md5.hashStr(persistency.token! + i2.id)
+      if (hashed1 < hashed2) {
+        return -1
+      } else if (hashed1 === hashed2) {
+        return 0
+      } else {
+        return 1
+      }
+    })
+  }, [_issues, persistency.token])
+
   const cardEventManager = useContext(CardEventContext)
   // card stack
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
@@ -65,7 +90,6 @@ const IssueSelectorView: FC = () => {
   if (!issues) {
     return null
   }
-  // const conclusionCount = selectedIds.size + discardedIds.size
 
   return (
     <div>
