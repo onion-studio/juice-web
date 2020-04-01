@@ -4,6 +4,7 @@ import produce from 'immer'
 import ky from 'ky'
 import { PageID, usePersistency } from './PersistencyContext'
 import { useIssueSelector } from './IssueSelectorContext'
+import { deterministicShuffle } from '../utils/sort'
 
 interface RequestResult<Data, Error> {
   loading: boolean
@@ -202,9 +203,15 @@ export const PledgeSelectorProvider: React.FC = ({ children }) => {
     issueSelector.selectedIssueIds.has(item.id),
   )
 
+  const shuffledIssues = deterministicShuffle(
+    selectedIssues,
+    persistency.token!,
+    item => item.id.toString(),
+  )
+
   return (
     <PledgeSelectorProviderUnbound
-      selectedIssues={selectedIssues}
+      selectedIssues={shuffledIssues}
       onComplete={selectedPledgeIds =>
         persistency.action.navigate({
           to: PageID.result,
