@@ -34,7 +34,7 @@ export const ResultPage: React.FC = () => {
   useEffect(() => {
     const init = async () => {
       console.log('init result')
-      const token = localStorage.getItem('token')!
+      const token = persistency.token!
       const res: any = await ky
         .get('https://api.juice.vote/result', {
           searchParams: {

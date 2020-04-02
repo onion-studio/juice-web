@@ -8,6 +8,7 @@ interface Storage {
 
 interface Deps {
   storage: Storage
+  tokenOverride: () => string | null
 }
 
 export enum PageID {
@@ -56,17 +57,27 @@ const PersistencyContext = React.createContext<ContextValue>(null as any)
 export class PersistencyProvider extends React.Component<Deps, ContextValue> {
   constructor(props: Deps) {
     super(props)
+    const action = {
+      goBack: this.goBack,
+      navigate: this.navigate,
+      reset: this.reset,
+    }
+    const token = props.tokenOverride()
+    if (token) {
+      this.state = {
+        token,
+        currentPage: PageID.result,
+        action,
+      }
+      return
+    }
     const storageItem = props.storage.getItem('state')
     const override = storageItem
       ? (JSON.parse(storageItem) as PersistedState)
       : {}
     this.state = {
       currentPage: PageID.intro,
-      action: {
-        goBack: this.goBack,
-        navigate: this.navigate,
-        reset: this.reset,
-      },
+      action,
       ...override,
     }
   }
@@ -140,6 +151,12 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
       selectedPledgeIds: undefined,
       selectedIssueIds: undefined,
       token: undefined,
+    })
+  }
+
+  setToken = (token: string) => {
+    this.setState({
+      token,
     })
   }
 

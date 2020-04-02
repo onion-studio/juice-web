@@ -15,6 +15,7 @@ interface RequestResult<Data, Error> {
 export interface Deps {
   selectedIssues: Issue[]
   onComplete: (selectedPledgeIds: number[]) => void
+  token: string
 }
 
 export type PersonalInfo = {
@@ -81,7 +82,6 @@ export class PledgeSelectorProviderUnbound extends React.Component<
   }
 
   componentDidMount() {
-    this.createToken()
     this.loadPledges()
   }
 
@@ -147,18 +147,11 @@ export class PledgeSelectorProviderUnbound extends React.Component<
     )
   }
 
-  // TODO: 더 앞에서 해야 함
-  createToken = async () => {
-    const { token } = await ky.post('https://api.juice.vote/init').json()
-    localStorage.setItem('token', token)
-  }
-
   sendResult = async (personal: PersonalInfo) => {
     try {
       await ky.post('https://api.juice.vote/result', {
         json: {
-          // TODO: 분리해야
-          token: localStorage.getItem('token'),
+          token: this.props.token!,
           // TODO: timestamp 없애도 됨
           timestamp: Date.now(),
           selected_issue_ids: this.props.selectedIssues
@@ -211,6 +204,7 @@ export const PledgeSelectorProvider: React.FC = ({ children }) => {
 
   return (
     <PledgeSelectorProviderUnbound
+      token={persistency.token!}
       selectedIssues={shuffledIssues}
       onComplete={selectedPledgeIds =>
         persistency.action.navigate({

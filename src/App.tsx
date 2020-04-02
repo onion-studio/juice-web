@@ -13,7 +13,12 @@ import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 
 const App: React.FC = () => {
   return (
-    <PersistencyProvider storage={localStorage}>
+    <PersistencyProvider
+      storage={localStorage}
+      tokenOverride={() =>
+        new URLSearchParams(window.location.search).get('token')
+      }
+    >
       <IssueSelectorProvider>
         <div
           style={{
