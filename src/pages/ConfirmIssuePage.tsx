@@ -1,9 +1,11 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { IssueGridSelector } from '../components/IssueGridSelector'
 import { TopNavBar } from '../components/TopNavBar'
 import s from './ConfirmIssuePage.module.scss'
 import { PageID, usePersistency } from '../contexts/PersistencyContext'
 import { useIssueSelector } from '../contexts/IssueSelectorContext'
+import { deterministicShuffle } from '../utils/sort'
+import { Issue } from '../contexts/entities'
 
 export const ConfirmIssuePage: FC = () => {
   const persistency = usePersistency()
@@ -15,6 +17,13 @@ export const ConfirmIssuePage: FC = () => {
   }, [issueSelector.issues])
   const { issues, selectedIssueIds } = issueSelector
   const [dirty, setDirty] = useState(false)
+  const shuffledIssues = useMemo<Issue[] | null>(() => {
+    if (issues) {
+      return deterministicShuffle(issues, persistency.token!, item =>
+        item.id.toString(),
+      )
+    } else return null
+  }, [issues, persistency.token])
   const selectedIssueCount = selectedIssueIds.size
   const tooLittle = selectedIssueCount < 3
   const progress = tooLittle ? 0 : 1
@@ -60,9 +69,9 @@ export const ConfirmIssuePage: FC = () => {
         )}
       </div>
       <div style={{ height: 32 }} />
-      {issues && (
+      {shuffledIssues && (
         <IssueGridSelector
-          items={issues}
+          items={shuffledIssues}
           selectedIds={Array.from(selectedIssueIds)}
           onSelect={id => {
             setDirty(true)
