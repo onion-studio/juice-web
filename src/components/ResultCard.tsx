@@ -114,7 +114,7 @@ interface ResultSet {
 }
 
 function leftOrRight(pScore: number, cScore: number): string {
-  return pScore > cScore ? '<b>진보</b>' : '<b>보수</b>'
+  return pScore > cScore ? '진보' : '보수'
 }
 
 function larger(pScore: number, cScore: number) {
