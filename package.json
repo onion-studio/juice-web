@@ -28,7 +28,8 @@
     "start": "HOST=0.0.0.0 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "yarn build && AWS_PROFILE=onion aws s3 sync ./build s3://www.juice.vote"
   },
   "eslintConfig": {
     "extends": "react-app"
