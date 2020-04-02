@@ -74,11 +74,12 @@ class IssueNavigationBar extends React.Component<
 
   // region Lifecycle
   componentDidMount() {
-    // FIXME: 바뀔 수 있음
-    this.carouselRect = this.carouselRef.current!.getBoundingClientRect()
-    this.setState({ width: this.carouselRect.width }, () => {
-      this.setScroll(this.calcScrollPosOf(0))
-    })
+    this.updateDimension()
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize)
   }
 
   render() {
@@ -148,6 +149,13 @@ class IssueNavigationBar extends React.Component<
   transitTo(s: CarouselState) {
     // console.log(`transition: ${this._carouselState} -> ${s}`)
     this._carouselState = s
+  }
+
+  updateDimension() {
+    this.carouselRect = this.carouselRef.current!.getBoundingClientRect()
+    this.setState({ width: this.carouselRect.width }, () =>
+      this.setScroll(this.calcScrollPosOf(this.state.selectedItemIndex)),
+    )
   }
 
   // endregion
@@ -303,6 +311,10 @@ class IssueNavigationBar extends React.Component<
     e.preventDefault()
     // console.log('touchend')
     this.whenPointerUp()
+  }
+
+  handleResize = () => {
+    this.updateDimension()
   }
 
   // endregion
