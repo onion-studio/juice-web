@@ -54,6 +54,7 @@ const IssueSelectorView: FC = () => {
       if (selectedIds.size < 3 || selectedIds.size > 5) {
         persistency.action.navigate({
           to: PageID.issueConfirmation,
+          selectedIssueIds: Array.from(selectedIds),
         })
       } else {
         persistency.action.navigate({

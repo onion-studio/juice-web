@@ -24,7 +24,10 @@ export type NavigateCommand =
       to: PageID.issueSelector
       token: string
     }
-  | { to: PageID.issueConfirmation }
+  | {
+      to: PageID.issueConfirmation
+      selectedIssueIds: number[]
+    }
   | {
       to: PageID.pledgeSelector
       selectedIssueIds: number[]
@@ -111,6 +114,7 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
         this.setState(
           {
             currentPage: command.to,
+            selectedIssueIds: command.selectedIssueIds,
           },
           this.persist,
         )
