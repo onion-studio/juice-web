@@ -4,4 +4,4 @@ import './index.scss'
 import App from './App'
 import { enableMapSet } from 'immer'
 enableMapSet()
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('app-root'))

@@ -21,13 +21,13 @@ const App: React.FC = () => {
     >
       <IssueSelectorProvider>
         <div
-          style={{
-            position: 'relative',
-            maxWidth: 600,
-            minHeight: 700,
-            margin: '0 auto',
-            backgroundColor: '#fff6da',
-          }}
+        // style={{
+        //   position: 'relative',
+        //   maxWidth: 600,
+        //   minHeight: 700,
+        //   margin: '0 auto',
+        //   backgroundColor: '#fff6da',
+        // }}
         >
           <Router />
         </div>
