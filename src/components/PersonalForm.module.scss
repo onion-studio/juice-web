@@ -141,3 +141,8 @@
     color: $color-butter;
   }
 }
+
+.privacy {
+  @include tp-small;
+  margin-top: 20px;
+}

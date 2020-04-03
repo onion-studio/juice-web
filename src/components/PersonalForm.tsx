@@ -101,7 +101,13 @@ export const PersonalForm: FC<{ onSubmit: (info: PersonalInfo) => void }> = ({
           </select>
           <div className={s.placeholder}>연령대를 선택해 주세요</div>
         </div>
-
+        <div className={s.group}>
+          <div className={s.privacy}>
+            제공하신 정보는 연령, 성별, 지역에 따라 관심 공약, 정책 등이 어떻게
+            다른지 분석하기 위한 목적으로만 활용됩니다. 분석 내용은 선거 이후
+            공약쥬스 웹사이트 등에서 확인하실 수 있습니다.
+          </div>
+        </div>
         <button type="submit" className={s.button} title="연료 공급!" />
       </form>
     </div>,
