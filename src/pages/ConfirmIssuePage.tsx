@@ -50,10 +50,10 @@ export const ConfirmIssuePage: FC = () => {
       />
       <div className={s.heading}>
         {tooLittle
-          ? `재료를 ${3 - selectedIssueCount}개 더 골라주세요!`
+          ? `주제를 ${3 - selectedIssueCount}개 더 골라주세요!`
           : dirty
-          ? `재료를 ${selectedIssueCount}개 골랐어요.`
-          : `재료는 5개 정도가 가장 적당해요!`}
+          ? `주제를 ${selectedIssueCount}개 골랐어요.`
+          : `주제는 5개 정도가 가장 적당해요!`}
       </div>
       <div className={s.subheading}>
         {tooLittle ? (
@@ -65,7 +65,7 @@ export const ConfirmIssuePage: FC = () => {
         ) : dirty ? (
           `그냥 넘어가도 되지만, 5개면 딱 좋아요!`
         ) : (
-          `혹시 뺄 만한 재료는 없는지 생각해 보세요.`
+          `혹시 뺄 만한 주제는 없는지 생각해 보세요.`
         )}
       </div>
       <div style={{ height: 32 }} />

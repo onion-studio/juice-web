@@ -97,7 +97,7 @@ const IssueSelectorView: FC = () => {
     <div>
       <TopNavBar title="관심 주제 고르기" progress={progress} />
       <div className={s.upperAreaGuide}>
-        이 재료를 <br /> 내 공약쥬스에 담을까요?
+        이 주제를 <br /> 내 공약쥬스에 담을까요?
       </div>
       <div style={{ position: 'relative', height: 372 }}>
         {shuffledIssues.map((c, i) => (
