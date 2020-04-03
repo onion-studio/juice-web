@@ -41,7 +41,6 @@ const handleShare = () => {
     nav.share({
       title: '공약쥬스',
       url: 'https://www.juice.vote',
-      text: '공약이 내 마음에 쿵! 1분 만에 정당 찾기',
     })
   }
 }
