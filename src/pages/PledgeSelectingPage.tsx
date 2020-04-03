@@ -41,7 +41,6 @@ const IssueNavigationItem: FC<{
 const easeOutCubic = (t: number) => --t * t * t + 1
 
 enum CarouselState {
-  start = 'start', // TODO: 시작 애니메이션
   idle = 'idle',
   grabbed = 'grabbed',
   animating = 'animating',
@@ -323,7 +322,9 @@ class IssueNavigationBar extends React.Component<
   }
 
   handleResize = () => {
-    this.updateDimension()
+    if (this._carouselState === CarouselState.idle) {
+      this.updateDimension()
+    }
   }
 
   // endregion
