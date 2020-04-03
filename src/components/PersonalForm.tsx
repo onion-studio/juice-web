@@ -74,7 +74,7 @@ export const PersonalForm: FC<{ onSubmit: (info: PersonalInfo) => void }> = ({
             <option value="F">여성</option>
             <option value="O">그 외 젠더</option>
           </select>
-          <div className={s.placeholder}>연령대를 선택해 주세요</div>
+          <div className={s.placeholder}>성별을 선택해 주세요</div>
         </div>
 
         <div className={s.group}>
@@ -100,7 +100,7 @@ export const PersonalForm: FC<{ onSubmit: (info: PersonalInfo) => void }> = ({
             <option value="제주특별자치도">제주특별자치도</option>
             <option value="해외">해외</option>
           </select>
-          <div className={s.placeholder}>연령대를 선택해 주세요</div>
+          <div className={s.placeholder}>거주 지역을 선택해 주세요</div>
         </div>
         <div className={s.group}>
           <div className={s.privacy}>
