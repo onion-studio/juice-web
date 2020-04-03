@@ -34,6 +34,18 @@ interface Props {
   cScore: number
 }
 
+const nav = window.navigator as any
+const canShare = !!nav.share
+const handleShare = () => {
+  if (canShare) {
+    nav.share({
+      title: '공약쥬스',
+      url: 'https://www.juice.vote',
+      text: '공약이 내 마음에 쿵! 1분 만에 정당 찾기',
+    })
+  }
+}
+
 export const ResultCard: FC<Props> = ({
   nickname,
   juiceName,
@@ -49,7 +61,8 @@ export const ResultCard: FC<Props> = ({
         <Card
           style={{}}
           topLabel={<span className={s.topLabel}>SPECIAL MENU</span>}
-          actionLabel="공약쥬스 메뉴판 공유하기!"
+          actionLabel={canShare ? '단톡방에 공유하기!' : undefined}
+          onAction={handleShare}
         >
           <div className={s.s1}>{nickname}님, 주문하신 공약쥬스 나왔습니다</div>
           <div className={s.s2}>{juiceName}!</div>
