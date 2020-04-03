@@ -35,14 +35,22 @@ export const ResultPage: React.FC = () => {
     const init = async () => {
       console.log('init result')
       const token = persistency.token!
-      const res: any = await ky
-        .get('https://api.juice.vote/result', {
-          searchParams: {
-            token,
-          },
-        })
-        .json()
-      setResult(res.result)
+      try {
+        const res: any = await ky
+          .get('https://api.juice.vote/result', {
+            searchParams: {
+              token,
+            },
+          })
+          .json()
+        setResult(res.result)
+      } catch (e) {
+        if (
+          window.confirm('통신 문제가 발생했습니다. 처음으로 돌아가시겠습니까?')
+        ) {
+          persistency.action.reset()
+        }
+      }
     }
     init()
   }, [])

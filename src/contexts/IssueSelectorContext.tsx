@@ -14,6 +14,7 @@ interface Issue {
 
 interface Deps {
   selectedIssueIds: number[] | null
+  reset: () => void
 }
 
 interface ContextValue {
@@ -51,21 +52,29 @@ export class IssueSelectorProviderUnbound extends React.Component<
     if (this.state.issues) {
       return
     }
-    const res: {
-      issues: {
-        id: number
-        name: string
-        summary: string
-        tag1: string | null
-        tag2: string | null
-        tag3: string | null
-      }[]
-    } = await ky.get('https://api.juice.vote/issues').json()
-    this.setState(
-      produce(draft => {
-        draft.issues = res.issues
-      }),
-    )
+    try {
+      const res: {
+        issues: {
+          id: number
+          name: string
+          summary: string
+          tag1: string | null
+          tag2: string | null
+          tag3: string | null
+        }[]
+      } = await ky.get('https://api.juice.vote/issues').json()
+      this.setState(
+        produce(draft => {
+          draft.issues = res.issues
+        }),
+      )
+    } catch (e) {
+      if (
+        window.confirm('통신 문제가 발생했습니다. 처음으로 돌아가시겠습니까?')
+      ) {
+        this.props.reset()
+      }
+    }
   }
 
   selectIssue = (id: number) => {
@@ -98,6 +107,7 @@ export const IssueSelectorProvider: React.FC = ({ children }) => {
   return (
     <IssueSelectorProviderUnbound
       selectedIssueIds={persistency.selectedIssueIds ?? null}
+      reset={() => persistency.action.reset()}
     >
       {children}
     </IssueSelectorProviderUnbound>

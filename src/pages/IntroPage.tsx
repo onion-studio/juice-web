@@ -10,8 +10,12 @@ export const IntroPage: FC = () => {
   let tokenRef = useRef<string | null>(null)
   useEffect(() => {
     async function init() {
-      const res: any = await ky.post('https://api.juice.vote/init').json()
-      tokenRef.current = res.token
+      try {
+        const res: any = await ky.post('https://api.juice.vote/init').json()
+        tokenRef.current = res.token
+      } catch (e) {
+        alert('통신 문제가 발생했습니다. 잠시 후 다시 접속해주세요.')
+      }
     }
     init()
   }, [])

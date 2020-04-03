@@ -16,6 +16,7 @@ export interface Deps {
   selectedIssues: Issue[]
   onComplete: (selectedPledgeIds: number[]) => void
   token: string
+  reset: () => void
 }
 
 export type PersonalInfo = {
@@ -87,32 +88,40 @@ export class PledgeSelectorProviderUnbound extends React.Component<
 
   loadPledges = async () => {
     const issueIds = this.props.selectedIssues.map(item => item.id).join(',')
-    const res: {
-      pledges: {
-        id: number
-        title: string
-        summary: string
-        issue_id: number
-      }[]
-    } = await ky
-      .get('https://api.juice.vote/pledges', {
-        searchParams: {
-          issue_ids: issueIds,
-        },
-      })
-      .json()
+    try {
+      const res: {
+        pledges: {
+          id: number
+          title: string
+          summary: string
+          issue_id: number
+        }[]
+      } = await ky
+        .get('https://api.juice.vote/pledges', {
+          searchParams: {
+            issue_ids: issueIds,
+          },
+        })
+        .json()
 
-    const pledges = res.pledges.map(item => ({
-      ...item,
-      issueId: item.issue_id,
-    }))
+      const pledges = res.pledges.map(item => ({
+        ...item,
+        issueId: item.issue_id,
+      }))
 
-    this.setState(
-      produce(draft => {
-        draft.pledgesResult.loading = false
-        draft.pledgesResult.data = pledges
-      }),
-    )
+      this.setState(
+        produce(draft => {
+          draft.pledgesResult.loading = false
+          draft.pledgesResult.data = pledges
+        }),
+      )
+    } catch (e) {
+      if (
+        window.confirm('통신 문제가 발생했습니다. 처음으로 돌아가시겠습니까?')
+      ) {
+        this.props.reset()
+      }
+    }
   }
 
   togglePledgeSelection = (id: PledgeId) => {
@@ -211,6 +220,7 @@ export const PledgeSelectorProvider: React.FC = ({ children }) => {
           to: PageID.result,
         })
       }
+      reset={() => persistency.action.reset()}
     >
       {children}
     </PledgeSelectorProviderUnbound>
