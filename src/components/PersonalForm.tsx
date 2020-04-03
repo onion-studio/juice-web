@@ -98,6 +98,7 @@ export const PersonalForm: FC<{ onSubmit: (info: PersonalInfo) => void }> = ({
             <option value="경상북도">경상북도</option>
             <option value="경상남도">경상남도</option>
             <option value="제주특별자치도">제주특별자치도</option>
+            <option value="해외">해외</option>
           </select>
           <div className={s.placeholder}>연령대를 선택해 주세요</div>
         </div>
