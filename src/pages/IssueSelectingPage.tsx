@@ -23,6 +23,7 @@ import { Issue } from '../contexts/entities'
 import { deterministicShuffle } from '../utils/sort'
 import cover from './cover-issue.png'
 import { issueImageMap } from '../components/images/issues/issueImageMap'
+import { minimumIssueCount, recommendedIssueCount } from '../constants'
 
 const IssueSelectorView: FC = () => {
   const persistency = usePersistency()
@@ -53,7 +54,10 @@ const IssueSelectorView: FC = () => {
   const [discardedIds, { add: addDiscardedId }] = useSet<number>()
   useEffect(() => {
     if (allSelected) {
-      if (selectedIds.size < 3 || selectedIds.size > 5) {
+      if (
+        selectedIds.size < minimumIssueCount ||
+        selectedIds.size > recommendedIssueCount
+      ) {
         persistency.action.navigate({
           to: PageID.issueConfirmation,
           selectedIssueIds: Array.from(selectedIds),

@@ -6,6 +6,7 @@ import { PageID, usePersistency } from '../contexts/PersistencyContext'
 import { useIssueSelector } from '../contexts/IssueSelectorContext'
 import { deterministicShuffle } from '../utils/sort'
 import { Issue } from '../contexts/entities'
+import { minimumIssueCount, recommendedIssueCount } from '../constants'
 
 export const ConfirmIssuePage: FC = () => {
   const persistency = usePersistency()
@@ -25,7 +26,7 @@ export const ConfirmIssuePage: FC = () => {
     } else return null
   }, [issues, persistency.token])
   const selectedIssueCount = selectedIssueIds.size
-  const tooLittle = selectedIssueCount < 3
+  const tooLittle = selectedIssueCount < minimumIssueCount
   const progress = tooLittle ? 0 : 1
   return (
     <div className={s.main}>
@@ -50,20 +51,20 @@ export const ConfirmIssuePage: FC = () => {
       />
       <div className={s.heading}>
         {tooLittle
-          ? `주제를 ${3 - selectedIssueCount}개 더 골라주세요!`
+          ? `주제를 ${minimumIssueCount - selectedIssueCount}개 더 골라주세요!`
           : dirty
           ? `주제를 ${selectedIssueCount}개 골랐어요.`
-          : `주제는 5개 정도가 가장 적당해요!`}
+          : `주제는 ${recommendedIssueCount}개 정도가 가장 적당해요!`}
       </div>
       <div className={s.subheading}>
         {tooLittle ? (
           <div>
-            최소 3개의 주제를 골라야 맛있는 공약쥬스를
+            최소 {minimumIssueCount}개의 주제를 골라야 맛있는 공약쥬스를
             <br />
             만들 수 있답니다.
           </div>
         ) : dirty ? (
-          `그냥 넘어가도 되지만, 5개면 딱 좋아요!`
+          `그냥 넘어가도 되지만, ${recommendedIssueCount}개면 딱 좋아요!`
         ) : (
           `혹시 뺄 만한 주제는 없는지 생각해 보세요.`
         )}

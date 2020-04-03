@@ -94,3 +94,6 @@ export type JuiceID =
   | 19
   | 20
   | 21
+
+export const minimumIssueCount = 3
+export const recommendedIssueCount = 7
