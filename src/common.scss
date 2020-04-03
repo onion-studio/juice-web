@@ -78,6 +78,16 @@ $layer-modal: 500;
   letter-spacing: -0.45px;
 }
 
+@mixin tp-xsmall {
+  font-size: 10px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.8;
+  letter-spacing: -0.3px;
+  color: $color-ink;
+}
+
 @mixin tp-xsmall-serif {
   @include keep-all;
   font-family: 'TimesNewRomanPS-MT', serif;

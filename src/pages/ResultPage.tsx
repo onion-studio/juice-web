@@ -129,6 +129,12 @@ export const ResultPage: React.FC = () => {
       >
         다시 주문하기
       </button>
+      <div className={s.copyright}>
+        <a href="https://brunch.co.kr/@pactum" target="_blank">
+          공약쥬스 소개
+        </a>{' '}
+        | team pactum <br /> Copyrightⓒ2020 pactum All rights reserved.
+      </div>
     </div>
   )
 }
