@@ -2,6 +2,7 @@
   "name": "juice-web",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://www.juice.vote",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -26,7 +27,7 @@
   },
   "scripts": {
     "start": "HOST=0.0.0.0 react-scripts start",
-    "build": "react-scripts build",
+    "build": "PUBLIC_URL=https://www.juice.vote react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "yarn build && AWS_PROFILE=onion aws s3 sync ./build s3://www.juice.vote"
