@@ -391,6 +391,10 @@ export const Inner: FC = () => {
     <div className={s.main}>
       {formVisible && (
         <PersonalForm
+          onDismiss={() => {
+            setFormVisible(false)
+            setDisabled(false)
+          }}
           onSubmit={info => {
             // TODO
             pledgeSelector.action.sendResult(info)

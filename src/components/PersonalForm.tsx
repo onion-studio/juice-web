@@ -5,9 +5,12 @@ import { PersonalInfo } from '../contexts/PledgeSelectorContext'
 
 const modalSlot = document.querySelector('#modal')!
 
-export const PersonalForm: FC<{ onSubmit: (info: PersonalInfo) => void }> = ({
-  onSubmit,
-}) => {
+interface Props {
+  onSubmit: (info: PersonalInfo) => void
+  onDismiss: () => void
+}
+
+export const PersonalForm: FC<Props> = ({ onSubmit, onDismiss }) => {
   const nicknameRef = React.createRef<HTMLInputElement>()
   const voterRef = React.createRef<HTMLSelectElement>()
   const ageRef = React.createRef<HTMLSelectElement>()
@@ -27,6 +30,7 @@ export const PersonalForm: FC<{ onSubmit: (info: PersonalInfo) => void }> = ({
   return createPortal(
     <div className={s.wrap}>
       <form className={s.form} onSubmit={handleSubmit}>
+        <div className={s.dismiss} onClick={onDismiss} />
         <div className={s.header_title}>앗, 연료가 부족해요!</div>
         <div className={s.header_subtitle}>
           아래 내용을 채워 연료를 공급해 주세요!

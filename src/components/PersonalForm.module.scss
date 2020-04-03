@@ -17,6 +17,7 @@
 }
 
 .form {
+  position: relative;
   background-color: $color-butter;
   border: 1px solid $color-ink;
   width: 300px;
@@ -145,4 +146,17 @@
 .privacy {
   @include tp-small;
   margin-top: 20px;
+}
+
+.dismiss {
+  width: 45px;
+  height: 45px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+
+  background-image: url('./svg/ico-x-black.svg');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
 }
