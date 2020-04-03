@@ -1,6 +1,9 @@
 import React, { FC, useEffect, useRef } from 'react'
 import ky from 'ky'
 import { PageID, usePersistency } from '../contexts/PersistencyContext'
+import { FullModal } from '../components/FullModal'
+import coverIntro from './cover-intro.png'
+import cover from './cover-issue.png'
 
 export const IntroPage: FC = () => {
   const persistency = usePersistency()
@@ -14,9 +17,32 @@ export const IntroPage: FC = () => {
   }, [])
   return (
     <div>
-      <h1>INTRO</h1>
-      <div
-        onClick={() => {
+      <FullModal
+        label="JUICE"
+        title={
+          <div style={{ marginTop: -10 }}>
+            나랑 어울리는 정당을 찾아주는
+            <br /> <span style={{ fontSize: 28 }}>공약쥬스</span>
+          </div>
+        }
+        description={<div>쉽고 편하게 투표할 정당을 정해 보세요!</div>}
+        spacerInner={
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0,
+              backgroundImage: `url('${coverIntro}')`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: '50% 70%',
+              backgroundSize: '90%',
+            }}
+          />
+        }
+        dismissLabel="시작하기"
+        onDismiss={() => {
           if (tokenRef.current) {
             persistency.action.navigate({
               to: PageID.issueSelector,
@@ -24,9 +50,7 @@ export const IntroPage: FC = () => {
             })
           }
         }}
-      >
-        시작
-      </div>
+      />
     </div>
   )
 }

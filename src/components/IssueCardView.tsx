@@ -16,6 +16,7 @@ import { ReactComponent as IconXGray } from './svg/ico-x-gray.svg'
 import { ReactComponent as ArrowBack } from './svg/arr-back.svg'
 import { Issue } from '../contexts/entities'
 import { Card } from './Card'
+import { issueImageMap } from './images/issues/issueImageMap'
 
 enum SlideAnimationState {
   start = 'start',
@@ -194,6 +195,7 @@ export interface Props {
   onSelectAnimationEnd: () => void
   onDiscard: () => void
   onDiscardAnimationEnd: () => void
+  imageUrl: string
 }
 
 export const IssueCardView: FC<Props> = ({
@@ -206,6 +208,7 @@ export const IssueCardView: FC<Props> = ({
   onDiscard,
   onDiscardAnimationEnd,
   distance,
+  imageUrl,
 }) => {
   const threshold = 40
   const [
@@ -387,7 +390,15 @@ export const IssueCardView: FC<Props> = ({
             </>
           ) : (
             <>
-              <div style={{ flex: '0 0 140px' }} />
+              <div
+                style={{
+                  flex: '0 0 140px',
+                  backgroundImage: `url('${imageUrl}')`,
+                  backgroundSize: 80,
+                  backgroundPosition: '50% 90%',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
               <div className={s.cardTitle_wrap}>
                 <div className={s.cardTitle}>{issue.name}</div>
               </div>

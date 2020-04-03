@@ -12,18 +12,26 @@ import { FullModal } from '../components/FullModal'
 import { PersonalForm } from '../components/PersonalForm'
 import { deterministicShuffle } from '../utils/sort'
 import { usePersistency } from '../contexts/PersistencyContext'
+import cover from './cover-pledge.png'
+import { issueImageMap } from '../components/images/issues/issueImageMap'
 
-const IssueNavigationItem: FC<{ selected: boolean; title: string }> = ({
-  selected,
-  title,
-}) => {
+const IssueNavigationItem: FC<{
+  selected: boolean
+  title: string
+  imageUrl: string
+}> = ({ selected, title, imageUrl }) => {
   return (
     <div
       className={c(s.issueList_item, {
         [s.issueList_item__selected]: selected,
       })}
     >
-      <div className={s.issueList_item_mock} />
+      <div
+        className={s.issueList_item_mock}
+        style={{
+          backgroundImage: `url('${imageUrl}')`,
+        }}
+      />
       <div className={s.issueList_item_title}>{title}</div>
     </div>
   )
@@ -93,6 +101,7 @@ class IssueNavigationBar extends React.Component<
                 key={item.id}
                 title={item.name}
                 selected={i === this.state.selectedItemIndex}
+                imageUrl={issueImageMap[item.id]}
               />
             )
           })}
@@ -426,15 +435,36 @@ export const PledgeSelectingPage: FC = () => {
       {modalVisible && (
         <FullModal
           label="STEP 2"
-          title="맘에 드는 공약 고르기"
+          title={
+            <>
+              마지막 단계:
+              <br />
+              맘에 드는 공약 고르기
+            </>
+          }
           description={
             <div>
               주제별 공약을 보여드릴게요.
               <br />
-              맘에 드는 공약을 마음껏 선택하면,
+              맘에 드는 공약을 10개까지 선택하면,
               <br />
-              나만의 쥬―스 만들 준비가 완료돼요!
+              나만의 쥬―스 만들 준비 끝!
             </div>
+          }
+          spacerInner={
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                backgroundImage: `url('${cover}')`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: '55% 60%',
+                backgroundSize: '60%',
+              }}
+            />
           }
           dismissLabel="시작하기"
           onDismiss={() => {

@@ -21,6 +21,8 @@ import { PageID, usePersistency } from '../contexts/PersistencyContext'
 import { useIssueSelector } from '../contexts/IssueSelectorContext'
 import { Issue } from '../contexts/entities'
 import { deterministicShuffle } from '../utils/sort'
+import cover from './cover-issue.png'
+import { issueImageMap } from '../components/images/issues/issueImageMap'
 
 const IssueSelectorView: FC = () => {
   const persistency = usePersistency()
@@ -103,6 +105,7 @@ const IssueSelectorView: FC = () => {
             key={c.id}
             total={shuffledIssues.length}
             cardNumber={i + 1}
+            imageUrl={issueImageMap[c.id]}
             distance={Math.max(0, i - currentCardIndex)}
             interactive={shuffledIssues[currentCardIndex]?.id === c.id}
             issue={c}
@@ -159,14 +162,27 @@ export const IssueSelectingPage: FC = () => {
           }
           description={
             <div>
-              앗, 뜨거운 감자!
+              19개의 주제 카드를 보여드려요.
               <br />
-              20개의 재료 카드를 보여드려요.
+              관심이 있으면 오른쪽,
               <br />
-              좌우로 스와이프해서
-              <br />
-              관심 있는 재료 카드를 골라주세요!
+              아니면 왼쪽으로 넘겨주세요!
             </div>
+          }
+          spacerInner={
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: -50,
+                bottom: 0,
+                left: -50,
+                backgroundImage: `url('${cover}')`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: '50% 70%',
+                backgroundSize: '100%',
+              }}
+            />
           }
           dismissLabel="시작하기"
           onDismiss={() => setModalVisible(false)}
