@@ -380,7 +380,7 @@ export const Inner: FC = () => {
 
   const title =
     selectedCount === 0
-      ? '공약을 3개 이상 선택하세요!'
+      ? '10개까지 선택할 수 있어요'
       : selectedCount < 3
       ? `${selectedCount}개 선택했어요…`
       : `${selectedCount}개 선택했어요 (최대 10개)`
@@ -446,7 +446,9 @@ export const PledgeSelectingPage: FC = () => {
             <div>
               주제별 공약을 보여드릴게요.
               <br />
-              맘에 드는 공약을 10개까지 선택하면,
+              맘에 드는 공약을
+              <br />
+              <b>최소 3개, 최대 10개</b>까지 선택하면,
               <br />
               나만의 쥬―스 만들 준비 끝!
             </div>
