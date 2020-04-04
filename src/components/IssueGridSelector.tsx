@@ -27,16 +27,16 @@ export const IssueGridSelector: FC<Props> = ({
             key={item.id}
             onClick={() => (selected ? onDiscard(item.id) : onSelect(item.id))}
           >
-            {selected && <IconPick className={s.item_pickIcon} />}
-            <div
-              className={c(s.item_img, { [s.item_img__selected]: selected })}
-              style={{
-                backgroundImage: `url('${issueImageMap[item.id]}')`,
-              }}
-            />
             <div
               className={c(s.item_box, { [s.item_box__selected]: selected })}
-            />
+            >
+              <div
+                className={c(s.item_img, { [s.item_img__selected]: selected })}
+                style={{
+                  backgroundImage: `url('${issueImageMap[item.id]}')`,
+                }}
+              />
+            </div>
             <div
               className={c(s.item_label, {
                 [s.item_label__selected]: selected,
@@ -44,6 +44,7 @@ export const IssueGridSelector: FC<Props> = ({
             >
               {item.name}
             </div>
+            {selected && <IconPick className={s.item_pickIcon} />}
           </div>
         )
       })}
