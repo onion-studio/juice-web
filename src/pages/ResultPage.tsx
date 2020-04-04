@@ -5,6 +5,7 @@ import { PartyInfo } from '../components/PartyInfo'
 import s from './ResultPage.module.scss'
 import { usePersistency } from '../contexts/PersistencyContext'
 import { JuiceID, PartyID, progressiveParties } from '../constants'
+import AdditonalLanding from '../components/AdditionalLanding'
 
 interface Result {
   respondentLog: {
@@ -53,7 +54,7 @@ export const ResultPage: React.FC = () => {
       }
     }
     init()
-  }, [])
+  }, [persistency.action, persistency.token])
   if (!result) {
     return null
   }
@@ -123,6 +124,7 @@ export const ResultPage: React.FC = () => {
           />
         )
       })}
+      <AdditonalLanding />
       <button
         className={s.resetButton}
         onClick={() => persistency.action.reset()}
