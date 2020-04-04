@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import s from './AdditionalLanding.module.scss'
 import { JuiceID } from '../constants'
 import { ReactComponent as ArrowFold } from './svg/arr-fold.svg'
@@ -12,7 +12,7 @@ interface Props {
   cScore: number
 }
 
-const AdditonalLanding: FC<any> = ({ nickname }) => {
+const AdditonalLanding: FC<any> = ({ nickname, setFormVisible }) => {
   return (
     <>
       <div className={s.s2}>
@@ -29,7 +29,7 @@ const AdditonalLanding: FC<any> = ({ nickname }) => {
               <br />
               궁금하다면?
             </div>
-            <div className={s.foldButton}>
+            <div className={s.foldButton} onClick={() => setFormVisible(true)}>
               <ArrowFold style={{ transform: 'rotate(90deg' }} />
             </div>
           </div>
