@@ -1,11 +1,17 @@
 @import '../common';
 
-.container {
-  @include tp-normal-bold;
-  position: absolute;
+.wrap {
+  z-index: $layer-topnav;
+  position: fixed;
   top: 0;
   right: 0;
   left: 0;
+  height: 52px;
+}
+
+.container {
+  @include tp-normal-bold;
+  position: relative;
   height: 52px;
   line-height: 52px;
   background-color: $color-gray;
@@ -51,7 +57,12 @@
 
 .lace {
   position: absolute;
-  bottom: -7px;
+  bottom: -6px;
   left: 0;
   right: 0;
+  transition: bottom 0.1s;
+}
+
+.lace__hidden {
+  bottom: 0;
 }
