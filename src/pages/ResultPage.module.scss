@@ -10,6 +10,17 @@
   padding: 14px;
 }
 
+.credit {
+  @include tp-small-bold;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 8px;
+  a,
+  a:visited {
+    color: $color-ink;
+  }
+}
+
 .copyright {
   @include tp-xsmall;
   text-align: center;
