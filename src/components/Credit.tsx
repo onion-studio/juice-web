@@ -1,8 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import s from './Credit.module.scss'
 import { TopNavBar } from './TopNavBar'
 
 export const Credit: FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
   return (
     <>
       <TopNavBar title="공약쥬스를 만든 사람들" progress={0} isCredit={true} />
