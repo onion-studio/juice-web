@@ -19,6 +19,7 @@ export const Mixer: FC<Props> = ({
     initialProgress,
   )
   useEffect(() => {
+    window.scrollTo(0, 0)
     setTimeout(() => {
       setCurrentProgress(targetProgress)
     })
