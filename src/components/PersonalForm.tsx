@@ -50,7 +50,7 @@ export const PersonalForm: FC<Props> = ({ onSubmit, onDismiss }) => {
             <option value="1">예 (투표권 있음)</option>
             <option value="0">아니오 (투표권 없음)</option>
           </select>
-          <div className={s.placeholder}>연령대를 선택해 주세요</div>
+          <div className={s.placeholder}>투표권이 있나요?</div>
         </div>
 
         <div className={s.group}>
