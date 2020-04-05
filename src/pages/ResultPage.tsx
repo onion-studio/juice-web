@@ -6,6 +6,7 @@ import s from './ResultPage.module.scss'
 import { usePersistency } from '../contexts/PersistencyContext'
 import { JuiceID, PartyID, progressiveParties } from '../constants'
 import { Mixer } from '../components/Mixer'
+import AdditonalLanding from '../components/AdditionalLanding'
 
 interface Result {
   respondentLog: {
@@ -136,12 +137,16 @@ export const ResultPage: React.FC = () => {
           />
         )
       })}
+      <AdditonalLanding nickname={result.respondentLog.nickname} />
       <button
         className={s.resetButton}
         onClick={() => persistency.action.reset()}
       >
         다시 주문하기
       </button>
+      <div className={s.credit}>
+        <a href="/#/credit">공약쥬스를 만든 사람들</a>
+      </div>
       <div className={s.copyright}>
         <a href="https://brunch.co.kr/@pactum" target="_blank">
           공약쥬스 소개

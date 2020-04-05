@@ -7,6 +7,7 @@ import {
   PartyID,
   partyNames,
   profileLinks,
+  pledgeLinks,
 } from '../constants'
 
 interface Props {
@@ -36,6 +37,13 @@ export const PartyInfo: FC<Props> = ({ nickname, partyId, pledges }) => {
             target="_blank"
           >
             비례대표 명부
+          </a>
+          <a
+            className={s.header_link}
+            href={pledgeLinks[partyId]}
+            target="_blank"
+          >
+            10대 공약 원문
           </a>
         </div>
       </div>

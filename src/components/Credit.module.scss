@@ -1,0 +1,81 @@
+@import '../common';
+.header {
+  @include tp-big-bold;
+  padding-top: 85px;
+  text-align: center;
+}
+.title {
+  @include tp-normal-bold;
+  color: $color-fruit;
+  margin: 32px 0 12px 0;
+}
+.wrap {
+  width: 300px;
+  margin: 0 auto;
+  padding-bottom: 41px;
+}
+.card {
+  width: 300px;
+  transform-origin: 50% 120%;
+  position: relative;
+  padding: 12px 0 15px 16px;
+  display: flex;
+  border: solid 2px $color-ink;
+  background-color: $color-butter;
+  flex-wrap: wrap;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  margin-right: 8px;
+}
+.investor.card,
+.pactum.card {
+  padding-bottom: 0;
+}
+:not(.partner) > .col {
+  padding-bottom: 76px;
+}
+.advisor .col {
+  padding-bottom: 25px;
+}
+.pactum .col {
+  width: 115px;
+}
+.item {
+  display: flex;
+}
+.name {
+  @include tp-small;
+  font-weight: bold;
+}
+.pactum .col:nth-child(3) .name {
+  width: 25px;
+}
+.partner .name {
+  width: 72px;
+}
+.item a {
+  text-decoration: underline;
+}
+.partner .role {
+  text-decoration: underline;
+}
+.role {
+  @include tp-small;
+  margin-left: 8px;
+}
+a,
+a:visited {
+  color: $color-ink;
+  text-decoration: none;
+}
+.link {
+  @include tp-small;
+  position: absolute;
+  right: 60px;
+  bottom: 12px;
+}
+.link span {
+  border-bottom: 1px solid black;
+}

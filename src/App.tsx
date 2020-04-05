@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IssueSelectingPage } from './pages/IssueSelectingPage'
 import { IssueSelectorProvider } from './contexts/IssueSelectorContext'
 import {
@@ -12,6 +12,7 @@ import { ResultPage } from './pages/ResultPage'
 import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 import { Toast } from './components/Toast'
 import { ToasterProvider } from './contexts/ToasterContext'
+import { Credit } from './components/Credit'
 
 const App: React.FC = () => {
   return (
@@ -35,6 +36,15 @@ const App: React.FC = () => {
 
 function Router() {
   const persistency = usePersistency()
+  const [hash, setHash] = useState(window.location.hash)
+  useEffect(() => {
+    window.addEventListener('hashchange', () => {
+      setHash(window.location.hash)
+    })
+  }, [])
+  if (hash === '#/credit') {
+    return <Credit />
+  }
   switch (persistency.currentPage) {
     case PageID.intro:
       return <IntroPage />

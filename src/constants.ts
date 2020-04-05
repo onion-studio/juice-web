@@ -60,6 +60,18 @@ export const profileLinks: { [K in PartyID]: string } = {
   9: 'https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&mra=bjFY&query=%EB%85%B9%EC%83%89%EB%8B%B9%20%EB%B9%84%EB%A1%80%EB%8C%80%ED%91%9C%20%ED%9B%84%EB%B3%B4',
 }
 
+export const pledgeLinks: { [K in PartyID]: string } = {
+  1: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  2: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  3: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  4: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  5: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  6: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  7: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  8: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  9: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+}
+
 export const partyColor: { [K in PartyID]: string } = {
   1: '#397FD3',
   2: '#EF426F',

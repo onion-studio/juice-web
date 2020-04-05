@@ -11,7 +11,8 @@ export const TopNavBar: FC<{
   title: ReactNode
   action?: ReactNode
   progress: number
-}> = ({ title, action, progress }) => {
+  isCredit?: boolean
+}> = ({ title, action, progress, isCredit }) => {
   const persistency = usePersistency()
   const [scrollIsTop, setScrollIsTop] = useState(true)
   useEffect(() => {
@@ -42,8 +43,12 @@ export const TopNavBar: FC<{
         <div
           className={s.backButton}
           onClick={() => {
-            if (window.confirm('처음으로 돌아가시겠어요?')) {
-              persistency.action.reset()
+            if (!isCredit) {
+              if (window.confirm('처음으로 돌아가시겠어요?')) {
+                persistency.action.reset()
+              }
+            } else {
+              window.location.href = '/'
             }
           }}
         />

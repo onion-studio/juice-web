@@ -1,0 +1,93 @@
+@import '../common';
+
+.topLabel {
+  @include tp-xsmall-serif;
+  position: relative;
+  top: -1px;
+}
+
+.cardContainer {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.s1 {
+  @include tp-normal;
+  text-align: center;
+
+  margin-top: 20px;
+}
+
+.s2 {
+  @include tp-big-bold;
+  text-align: center;
+  padding: 32px 0 0 0;
+}
+
+.juiceImageContainer {
+  position: relative;
+  margin-top: 252px;
+  user-select: none;
+}
+
+.juiceImage {
+  width: 280px;
+  height: 285px;
+  position: absolute;
+  left: 6px;
+  bottom: -27px;
+}
+
+.interests {
+  @include tp-normal-bold;
+  text-align: center;
+  padding: 0 10px;
+  margin-top: 15px;
+}
+
+.recommendedParty {
+  @include tp-normal;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  word-break: keep-all;
+}
+
+.keyword {
+  display: inline-block;
+  color: $color-fruit;
+}
+
+.detailBox_wrap {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.detailBox {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  width: 300px;
+  height: 156px;
+  border: 1px solid $color-ink;
+  padding: 12px 58px 0 20px;
+  margin-bottom: 12px;
+}
+
+.detailTitle {
+  @include tp-normal-bold;
+}
+
+.detailDesc {
+  @include tp-small;
+}
+
+.foldButton {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  display: block;
+  text-align: right;
+}
