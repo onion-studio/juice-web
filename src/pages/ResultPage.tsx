@@ -6,7 +6,6 @@ import s from './ResultPage.module.scss'
 import { usePersistency } from '../contexts/PersistencyContext'
 import { JuiceID, PartyID, progressiveParties } from '../constants'
 import AdditonalLanding from '../components/AdditionalLanding'
-import { IdentityForm } from '../components/IdentityForm'
 
 interface Result {
   respondentLog: {
@@ -31,8 +30,6 @@ interface Result {
 
 export const ResultPage: React.FC = () => {
   const [result, setResult] = useState<Result | null>(null)
-  const [formVisible, setFormVisible] = useState(false)
-  const [disabled, setDisabled] = useState(false)
 
   const persistency = usePersistency()
 
@@ -128,8 +125,7 @@ export const ResultPage: React.FC = () => {
           />
         )
       })}
-      {formVisible && <IdentityForm />}
-      <AdditonalLanding setFormVisible={setFormVisible} />
+      <AdditonalLanding />
       <button
         className={s.resetButton}
         onClick={() => persistency.action.reset()}

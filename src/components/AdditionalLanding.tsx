@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import s from './AdditionalLanding.module.scss'
 import { JuiceID } from '../constants'
 import { ReactComponent as ArrowFold } from './svg/arr-fold.svg'
@@ -23,15 +23,32 @@ const AdditonalLanding: FC<any> = ({ nickname, setFormVisible }) => {
         <div className={s.detailBox_wrap}>
           <div className={s.detailBox}>
             <div className={s.detailTitle}>
-              {nickname}님이랑 비슷한 사람들이
+              {nickname}님, 선택한 공약이 잘 지켜질지
               <br />
-              어떤 쥬스를 만들었는지
+              궁금하지 않으세요?
               <br />
-              궁금하다면?
             </div>
-            <div className={s.foldButton} onClick={() => setFormVisible(true)}>
+            <a
+              className={s.foldButton}
+              href="https://forms.gle/CcTcpVyDfVEdbpsA7"
+              target="_blank"
+            >
               <ArrowFold style={{ transform: 'rotate(90deg' }} />
+            </a>
+          </div>
+          <div className={s.detailBox}>
+            <div className={s.detailTitle}>
+              나를 위한 공약, 더 알고 싶다면?
+              <br />
+              밀레니얼을 위한 시사 뉴스레터 '뉴닉'이 뽀갠 총선공약 보러가기
             </div>
+            <a
+              className={s.foldButton}
+              href="https://napp.newneek.co/2020election"
+              target="_blank"
+            >
+              <ArrowFold style={{ transform: 'rotate(90deg' }} />
+            </a>
           </div>
           <div className={s.detailBox}>
             <div className={s.detailTitle}>
