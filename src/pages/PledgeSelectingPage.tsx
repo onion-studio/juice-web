@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import s from './PledgeSelectingPage.module.scss'
 import c from 'classnames'
 import { TopNavBar } from '../components/TopNavBar'
@@ -14,6 +14,7 @@ import { deterministicShuffle } from '../utils/sort'
 import { usePersistency } from '../contexts/PersistencyContext'
 import cover from './cover-pledge.png'
 import { issueImageMap } from '../components/images/issues/issueImageMap'
+import { Mixer } from '../components/Mixer'
 
 const IssueNavigationItem: FC<{
   selected: boolean
@@ -376,8 +377,16 @@ const PledgeCardList: FC = () => {
 export const Inner: FC = () => {
   const pledgeSelector = usePledgeSelector()
   const selectedCount = pledgeSelector.selectedPledgeIds.size
-  const [disabled, setDisabled] = useState(false)
+  const [introModalVisible, setIntroModalVisible] = useState(true)
   const [formVisible, setFormVisible] = useState(false)
+  const [isMixingStep, setIsMixingStep] = useState(false)
+  useEffect(() => {
+    if (isMixingStep) {
+      setTimeout(() => {
+        setFormVisible(true)
+      }, 2000)
+    }
+  }, [isMixingStep])
 
   const title =
     selectedCount === 0
@@ -387,57 +396,29 @@ export const Inner: FC = () => {
       : `${selectedCount}개 선택했어요 (최대 10개)`
   const canProceed = selectedCount >= 3 && selectedCount <= 10
   const progress = selectedCount <= 10 ? Math.min(1, selectedCount / 3) : 0
+
+  if (isMixingStep) {
+    return (
+      <>
+        <Mixer animating={!formVisible} targetProgress={50} />
+        {formVisible && (
+          <PersonalForm
+            onDismiss={() => {
+              setFormVisible(false)
+              setIsMixingStep(false)
+            }}
+            onSubmit={info => {
+              pledgeSelector.action.sendResult(info)
+            }}
+          />
+        )}
+      </>
+    )
+  }
+
   return (
     <div className={s.main}>
-      {formVisible && (
-        <PersonalForm
-          onDismiss={() => {
-            setFormVisible(false)
-            setDisabled(false)
-          }}
-          onSubmit={info => {
-            // TODO
-            pledgeSelector.action.sendResult(info)
-          }}
-        />
-      )}
-      <TopNavBar
-        title={title}
-        progress={progress}
-        action={
-          <div
-            className={c(s.completeButton, {
-              [s.completeButton__disabled]: !canProceed,
-            })}
-            onClick={async () => {
-              if (canProceed && !disabled) {
-                // TODO
-                setDisabled(true)
-                setFormVisible(true)
-              }
-            }}
-          >
-            결과 보기
-          </div>
-        }
-      />
-      <IssueNavigationBar
-        issues={pledgeSelector.selectedIssues}
-        onSelectIssue={(id: Issue['id']) =>
-          pledgeSelector.action.selectIssue(id)
-        }
-      />
-      <PledgeCardList />
-    </div>
-  )
-}
-
-export const PledgeSelectingPage: FC = () => {
-  const [modalVisible, setModalVisible] = useState(true)
-
-  return (
-    <PledgeSelectorProvider>
-      {modalVisible && (
+      {introModalVisible && (
         <FullModal
           label="STEP 2"
           title={
@@ -475,10 +456,42 @@ export const PledgeSelectingPage: FC = () => {
           }
           dismissLabel="시작하기"
           onDismiss={() => {
-            setModalVisible(false)
+            setIntroModalVisible(false)
           }}
         />
       )}
+      <TopNavBar
+        title={title}
+        progress={progress}
+        action={
+          <div
+            className={c(s.completeButton, {
+              [s.completeButton__disabled]: !canProceed,
+            })}
+            onClick={async () => {
+              if (canProceed) {
+                setIsMixingStep(true)
+              }
+            }}
+          >
+            결과 보기
+          </div>
+        }
+      />
+      <IssueNavigationBar
+        issues={pledgeSelector.selectedIssues}
+        onSelectIssue={(id: Issue['id']) =>
+          pledgeSelector.action.selectIssue(id)
+        }
+      />
+      <PledgeCardList />
+    </div>
+  )
+}
+
+export const PledgeSelectingPage: FC = () => {
+  return (
+    <PledgeSelectorProvider>
       <Inner />
     </PledgeSelectorProvider>
   )

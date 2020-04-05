@@ -1,0 +1,109 @@
+@import '../common';
+
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress {
+  position: relative;
+  height: 12px;
+  background-color: $color-gray;
+  &::before {
+    display: block;
+    position: absolute;
+    content: '';
+    background-color: $color-fruit;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 100%;
+    transition: right 2s linear;
+  }
+}
+
+.progress__50 {
+  &::before {
+    right: 50%;
+  }
+}
+
+.progress__100 {
+  &::before {
+    right: 0;
+  }
+}
+
+.upper {
+  margin-top: 50px;
+}
+
+.header {
+  @include tp-big-bold;
+  text-align: center;
+  padding: 28px 0 25px;
+}
+
+.lower {
+  flex: 1;
+  background-color: $color-gray;
+}
+
+.canvas {
+  height: 255px;
+  position: relative;
+  z-index: $layer-topnav;
+}
+
+.mixer {
+  position: absolute;
+  width: 174px;
+  height: 264px;
+  left: 50%;
+  bottom: -50px;
+  transform: translateX(-45%);
+  background-image: url('./images/D_mix.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.mixer__animating {
+  animation: mixer-up-down 0.5s infinite alternate;
+}
+
+.brrr {
+  position: absolute;
+  width: 472px;
+  height: 46px;
+  left: 50%;
+  background-image: url('./images/D_mix_sound.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translateX(-50%) rotate(-15deg);
+}
+
+.brrr__animating {
+  animation: brrr-left-right 1s infinite;
+}
+
+@keyframes mixer-up-down {
+  0% {
+    transform: translateX(-45%) translateY(20px);
+  }
+  100% {
+    transform: translateX(-45%) translateY(0px);
+  }
+}
+
+@keyframes brrr-left-right {
+  0% {
+    transform: translateX(-50%) rotate(-13deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(-17deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(-13deg);
+  }
+}

@@ -5,6 +5,7 @@ import { PartyInfo } from '../components/PartyInfo'
 import s from './ResultPage.module.scss'
 import { usePersistency } from '../contexts/PersistencyContext'
 import { JuiceID, PartyID, progressiveParties } from '../constants'
+import { Mixer } from '../components/Mixer'
 
 interface Result {
   respondentLog: {
@@ -29,11 +30,12 @@ interface Result {
 
 export const ResultPage: React.FC = () => {
   const [result, setResult] = useState<Result | null>(null)
+  const [mixerVisible, setMixerVisible] = useState(true)
+
   const persistency = usePersistency()
 
   useEffect(() => {
     const init = async () => {
-      console.log('init result')
       const token = persistency.token!
       try {
         const res: any = await ky
@@ -54,6 +56,17 @@ export const ResultPage: React.FC = () => {
     }
     init()
   }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMixerVisible(false)
+    }, 2000)
+  }, [])
+
+  if (mixerVisible) {
+    return <Mixer animating={true} initialProgress={50} targetProgress={100} />
+  }
+
   if (!result) {
     return null
   }
