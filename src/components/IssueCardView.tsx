@@ -267,7 +267,7 @@ export const IssueCardView: FC<Props> = ({
       //   }
       animationState === SlideAnimationState.idle
       ? {
-          transition: `transform ${dLeftSide}, opacity ${dLeftSide} .2s`,
+          transition: `transform ${dLeftSide}, opacity ${dLeftSide} .1s`,
         }
       : animationState === SlideAnimationState.grabbed
       ? {
@@ -275,7 +275,7 @@ export const IssueCardView: FC<Props> = ({
         }
       : animationState === SlideAnimationState.leftSlide
       ? {
-          transition: `transform ${dLeftSide}, opacity ${dLeftSide} .2s`,
+          transition: `transform ${dLeftSide}, opacity ${dLeftSide} .1s`,
           transform: `translateX(${Math.min(offset, -300)}px) rotate(${Math.min(
             rotation,
             -10,
@@ -284,7 +284,7 @@ export const IssueCardView: FC<Props> = ({
         }
       : animationState === SlideAnimationState.rightSlide
       ? {
-          transition: `transform ${dRightSlide}, opacity ${dRightSlide} .2s`,
+          transition: `transform ${dRightSlide}, opacity ${dRightSlide} .1s`,
           transform: `translateX(${Math.max(offset, 300)}px) rotate(${Math.max(
             rotation,
             10,
