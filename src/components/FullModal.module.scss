@@ -10,7 +10,8 @@
   background-color: #ffea57;
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
@@ -28,4 +29,11 @@
 .spacer {
   position: relative;
   flex: 1;
+}
+
+.logo {
+  margin-top: 24px;
+  display: block;
+  width: 60px;
+  height: 10px;
 }

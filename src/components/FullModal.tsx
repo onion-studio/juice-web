@@ -1,6 +1,7 @@
-import React, { CSSProperties, FC, ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react'
 import s from './FullModal.module.scss'
 import { Card } from './Card'
+import logo from './images/pactum_logo.png'
 
 interface Props {
   label: ReactNode
@@ -9,6 +10,7 @@ interface Props {
   dismissLabel: ReactNode
   onDismiss: () => void
   spacerInner?: ReactNode
+  logoVisible?: boolean
 }
 
 export const FullModal: FC<Props> = ({
@@ -18,6 +20,7 @@ export const FullModal: FC<Props> = ({
   dismissLabel,
   onDismiss,
   spacerInner,
+  logoVisible,
 }) => {
   return (
     <div className={s.main}>
@@ -31,6 +34,7 @@ export const FullModal: FC<Props> = ({
         <div className={s.spacer}>{spacerInner}</div>
         <div className={s.description}>{description}</div>
       </Card>
+      {logoVisible && <img className={s.logo} src={logo} alt="pactum" />}
     </div>
   )
 }

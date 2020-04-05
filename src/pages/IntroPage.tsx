@@ -22,6 +22,7 @@ export const IntroPage: FC = () => {
   return (
     <div>
       <FullModal
+        logoVisible={true}
         label="JUICE"
         title={
           <div style={{ marginTop: -10 }}>
