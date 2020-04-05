@@ -13,6 +13,11 @@
   width: 300px;
   margin: 0 auto;
   padding-bottom: 41px;
+  a,
+  a:visited {
+    color: $color-ink;
+    text-decoration: none;
+  }
 }
 .card {
   width: 300px;
@@ -65,11 +70,7 @@
   @include tp-small;
   margin-left: 8px;
 }
-a,
-a:visited {
-  color: $color-ink;
-  text-decoration: none;
-}
+
 .link {
   @include tp-small;
   position: absolute;

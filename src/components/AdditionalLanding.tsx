@@ -1,18 +1,8 @@
 import React, { FC } from 'react'
 import s from './AdditionalLanding.module.scss'
-import { JuiceID } from '../constants'
 import { ReactComponent as ArrowFold } from './svg/arr-fold.svg'
 
-interface Props {
-  nickname: string
-  juiceName: string
-  juiceId: JuiceID
-  issueNames: string[]
-  pScore: number
-  cScore: number
-}
-
-const AdditonalLanding: FC<any> = ({ nickname, setFormVisible }) => {
+const AdditionalLanding: FC<{ nickname: string }> = ({ nickname }) => {
   return (
     <>
       <div className={s.s2}>
@@ -25,6 +15,7 @@ const AdditonalLanding: FC<any> = ({ nickname, setFormVisible }) => {
             className={s.detailBox}
             href="https://forms.gle/CcTcpVyDfVEdbpsA7"
             target="_blank"
+            rel="noopener noreferrer"
           >
             <div className={s.detailTitle}>
               {nickname}님, 선택한 공약이 잘 지켜질지
@@ -40,6 +31,7 @@ const AdditonalLanding: FC<any> = ({ nickname, setFormVisible }) => {
             className={s.detailBox}
             href="https://napp.newneek.co/2020election"
             target="_blank"
+            rel="noopener noreferrer"
           >
             <div className={s.detailTitle}>
               나를 위한 공약, 더 알고 싶다면?
@@ -75,4 +67,4 @@ const AdditonalLanding: FC<any> = ({ nickname, setFormVisible }) => {
   )
 }
 
-export default AdditonalLanding
+export default AdditionalLanding

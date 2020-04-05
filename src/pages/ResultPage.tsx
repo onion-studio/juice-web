@@ -6,7 +6,7 @@ import s from './ResultPage.module.scss'
 import { usePersistency } from '../contexts/PersistencyContext'
 import { JuiceID, PartyID, progressiveParties } from '../constants'
 import { Mixer } from '../components/Mixer'
-import AdditonalLanding from '../components/AdditionalLanding'
+import AdditionalLanding from '../components/AdditionalLanding'
 
 interface Result {
   respondentLog: {
@@ -137,7 +137,7 @@ export const ResultPage: React.FC = () => {
           />
         )
       })}
-      <AdditonalLanding nickname={result.respondentLog.nickname} />
+      <AdditionalLanding nickname={result.respondentLog.nickname} />
       <button
         className={s.resetButton}
         onClick={() => persistency.action.reset()}

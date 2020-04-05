@@ -17,10 +17,14 @@ export const Credit: FC = () => {
         </div>
         <div className={s.title}>PACTUM</div>
         <div className={`${s.card} ${s.pactum}`}>
-          <div></div>
           <div className={s.col}>
             <div className={s.item}>
-              <a href="https://github.com/seungha-kim" className={s.name}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://github.com/seungha-kim"
+                className={s.name}
+              >
                 댄
               </a>
               <div className={s.role}>Dev(client)</div>
@@ -44,7 +48,12 @@ export const Credit: FC = () => {
               <div className={s.role}>Contents</div>
             </div>
             <div className={s.item}>
-              <a href="https://www.instagram.com/eun9ook/" className={s.name}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.instagram.com/eun9ook/"
+                className={s.name}
+              >
                 은국
               </a>
               <div className={s.role}>Design</div>
@@ -58,13 +67,23 @@ export const Credit: FC = () => {
               <div className={s.role}>Contents</div>
             </div>
             <div className={s.item}>
-              <a href="https://jeesoo.work" className={s.name}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://jeesoo.work"
+                className={s.name}
+              >
                 퍼핀
               </a>
               <div className={s.role}>Dev(server)</div>
             </div>
           </div>
-          <a className={s.link} href="https://brunch.co.kr/@pactum">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className={s.link}
+            href="https://brunch.co.kr/@pactum"
+          >
             <span>Pactum Blog</span>
           </a>
         </div>
@@ -73,19 +92,34 @@ export const Credit: FC = () => {
           <div className={s.col}>
             <div className={s.item}>
               <div className={s.name}>nonce</div>
-              <a className={s.role} href="https://nonce.community/">
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className={s.role}
+                href="https://nonce.community/"
+              >
                 nonce.community
               </a>
             </div>
             <div className={s.item}>
               <div className={s.name}>NEWNEEK</div>
-              <a href="https://newneek.co/" className={s.role}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://newneek.co/"
+                className={s.role}
+              >
                 newneek.co
               </a>
             </div>
             <div className={s.item}>
               <div className={s.name}>잼있는인생</div>
-              <a href="http://jaminlife.me/" className={s.role}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://jaminlife.me/"
+                className={s.role}
+              >
                 jaminlife.me
               </a>
             </div>
@@ -112,7 +146,12 @@ export const Credit: FC = () => {
               <div className={s.name}>신수</div>
             </div>
           </div>
-          <a className={s.link} href="https://brunch.co.kr/@pactum/8">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className={s.link}
+            href="https://brunch.co.kr/@pactum/8"
+          >
             <span>Advisor Story</span>
           </a>
         </div>
@@ -158,7 +197,12 @@ export const Credit: FC = () => {
               <div className={s.name}>김형석</div>
             </div>
           </div>
-          <a className={s.link} href="https://www.presenu.com/nonce/?idx=58">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            className={s.link}
+            href="https://www.presenu.com/nonce/?idx=58"
+          >
             <span>투자유치 이야기</span>
           </a>
         </div>
