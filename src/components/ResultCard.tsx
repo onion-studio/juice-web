@@ -40,7 +40,7 @@ const handleShare = () => {
   if (canShare) {
     nav.share({
       title: '공약쥬스',
-      url: 'https://www.juice.vote',
+      url: 'https://vo.la/mLtX',
     })
   }
 }
