@@ -10,29 +10,26 @@ import { PledgeSelectingPage } from './pages/PledgeSelectingPage'
 import { IntroPage } from './pages/IntroPage'
 import { ResultPage } from './pages/ResultPage'
 import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
+import { Toast } from './components/Toast'
+import { ToasterProvider } from './contexts/ToasterContext'
 
 const App: React.FC = () => {
   return (
-    <PersistencyProvider
-      storage={localStorage}
-      tokenOverride={() =>
-        new URLSearchParams(window.location.search).get('token')
-      }
-    >
-      <IssueSelectorProvider>
-        <div
-        // style={{
-        //   position: 'relative',
-        //   maxWidth: 600,
-        //   minHeight: 700,
-        //   margin: '0 auto',
-        //   backgroundColor: '#fff6da',
-        // }}
-        >
-          <Router />
-        </div>
-      </IssueSelectorProvider>
-    </PersistencyProvider>
+    <ToasterProvider>
+      <PersistencyProvider
+        storage={localStorage}
+        tokenOverride={() =>
+          new URLSearchParams(window.location.search).get('token')
+        }
+      >
+        <IssueSelectorProvider>
+          <>
+            <Router />
+            <Toast />
+          </>
+        </IssueSelectorProvider>
+      </PersistencyProvider>
+    </ToasterProvider>
   )
 }
 

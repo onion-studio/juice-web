@@ -5,6 +5,7 @@ import ky from 'ky'
 import { PageID, usePersistency } from './PersistencyContext'
 import { useIssueSelector } from './IssueSelectorContext'
 import { deterministicShuffle } from '../utils/sort'
+import { useToaster } from './ToasterContext'
 
 interface RequestResult<Data, Error> {
   loading: boolean
@@ -15,6 +16,7 @@ interface RequestResult<Data, Error> {
 export interface Deps {
   selectedIssues: Issue[]
   onComplete: (selectedPledgeIds: number[]) => void
+  onExcess: () => void
   token: string
   reset: () => void
 }
@@ -130,7 +132,11 @@ export class PledgeSelectorProviderUnbound extends React.Component<
         if (draft.selectedPledgeIds.has(id)) {
           draft.selectedPledgeIds.delete(id)
         } else {
-          draft.selectedPledgeIds.add(id)
+          if (draft.selectedPledgeIds.size >= 10) {
+            this.props.onExcess()
+          } else {
+            draft.selectedPledgeIds.add(id)
+          }
         }
       }),
     )
@@ -192,6 +198,7 @@ export class PledgeSelectorProviderUnbound extends React.Component<
 export const PledgeSelectorProvider: React.FC = ({ children }) => {
   const persistency = usePersistency()
   const issueSelector = useIssueSelector()
+  const toaster = useToaster()
 
   useEffect(() => {
     issueSelector.action.loadIssues()
@@ -219,6 +226,9 @@ export const PledgeSelectorProvider: React.FC = ({ children }) => {
         persistency.action.navigate({
           to: PageID.result,
         })
+      }
+      onExcess={() =>
+        toaster.action.pushMessage('앗, 공약은 최대 10개까지 선택 가능해요!')
       }
       reset={() => persistency.action.reset()}
     >
