@@ -125,7 +125,7 @@ export const ResultPage: React.FC = () => {
           />
         )
       })}
-      <AdditonalLanding />
+      <AdditonalLanding nickname={result.respondentLog.nickname} />
       <button
         className={s.resetButton}
         onClick={() => persistency.action.reset()}

@@ -7,7 +7,7 @@
 }
 
 .cardContainer {
-  margin: 34px 0;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
 }
@@ -66,10 +66,14 @@
 }
 
 .detailBox {
+  display: block;
+  text-decoration: none;
+  position: relative;
   width: 300px;
+  height: 156px;
   border: 1px solid $color-ink;
-  padding: 20px;
-  margin-bottom: 32px;
+  padding: 12px 58px 0 20px;
+  margin-bottom: 12px;
 }
 
 .detailTitle {
@@ -81,5 +85,9 @@
 }
 
 .foldButton {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  display: block;
   text-align: right;
 }
