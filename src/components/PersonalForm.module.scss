@@ -98,6 +98,7 @@
   @include form-field;
   @include tp-small-bold;
   display: block;
+  -webkit-appearance: none;
 }
 
 .button {
