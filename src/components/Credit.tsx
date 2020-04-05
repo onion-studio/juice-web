@@ -17,7 +17,9 @@ export const Credit: FC = () => {
           <div></div>
           <div className={s.col}>
             <div className={s.item}>
-              <div className={s.name}>댄</div>
+              <a href="https://github.com/seungha-kim" className={s.name}>
+                댄
+              </a>
               <div className={s.role}>Dev(client)</div>
             </div>
             <div className={s.item}>
@@ -39,11 +41,7 @@ export const Credit: FC = () => {
               <div className={s.role}>Contents</div>
             </div>
             <div className={s.item}>
-              <a
-                href="https://www.instagram.com/eun9ook/"
-                className={s.name}
-                style={{ textDecoration: 'underline' }}
-              >
+              <a href="https://www.instagram.com/eun9ook/" className={s.name}>
                 은국
               </a>
               <div className={s.role}>Design</div>
@@ -57,7 +55,9 @@ export const Credit: FC = () => {
               <div className={s.role}>Contents</div>
             </div>
             <div className={s.item}>
-              <div className={s.name}>퍼핀</div>
+              <a href="https://jeesoo.work" className={s.name}>
+                퍼핀
+              </a>
               <div className={s.role}>Dev(server)</div>
             </div>
           </div>
