@@ -369,7 +369,7 @@ export const IssueCardView: FC<Props> = ({
             <div>
               <IconXGray />
             </div>
-            <div>싫어요</div>
+            <div>아니오</div>
           </div>
           {detailVisible ? (
             <>

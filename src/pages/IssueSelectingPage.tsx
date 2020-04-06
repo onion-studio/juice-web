@@ -131,7 +131,7 @@ const IssueSelectorView: FC = () => {
             <IconXBlack />
           </div>
 
-          <div>싫어요</div>
+          <div>아니오</div>
         </div>
         <div
           className={s.selectButton}
