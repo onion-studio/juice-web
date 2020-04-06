@@ -10,6 +10,7 @@ import {
   partyNamesWithPro,
   progressiveParties,
 } from '../constants'
+import { useToaster } from '../contexts/ToasterContext'
 
 // https://github.com/e-/Josa.js/blob/master/josa.js
 function hasJong(s: string): boolean {
@@ -35,15 +36,9 @@ interface Props {
 }
 
 const nav = window.navigator as any
-const canShare = !!nav.share
-const handleShare = () => {
-  if (canShare) {
-    nav.share({
-      title: '공약쥬스',
-      url: 'https://vo.la/mLtX',
-    })
-  }
-}
+const shareApiAvailable = !!nav.share
+const clipboardAvailable = !!nav.clipboard && !!nav.clipboard.writeText
+const canShare = shareApiAvailable || clipboardAvailable
 
 export const ResultCard: FC<Props> = ({
   nickname,
@@ -54,6 +49,20 @@ export const ResultCard: FC<Props> = ({
   cScore,
 }) => {
   const descriptionSet = descriptionsPerJuiceId[juiceId]
+  const toaster = useToaster()
+  const handleShare = () => {
+    if (shareApiAvailable) {
+      nav.share({
+        title: '공약쥬스',
+        url: 'https://vo.la/mLtX',
+      })
+    } else if (clipboardAvailable) {
+      nav.clipboard.writeText('https://vo.la/mLtX').then(() => {
+        toaster.action.pushMessage('주소가 복사됐어요!')
+      })
+    }
+  }
+
   return (
     <>
       <div className={s.cardContainer}>
