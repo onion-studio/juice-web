@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from 'react'
+import React, { CSSProperties, FC, ReactNode } from 'react'
 import { useToggle } from 'react-use'
 import c from 'classnames'
 import s from './PledgeCard.module.scss'
@@ -15,6 +15,7 @@ export const PledgeCard: FC<{
   onToggleFolding?: () => void
   folded?: boolean
   style?: CSSProperties
+  tags?: string[]
 }> = ({
   onSelect,
   selected,
@@ -23,6 +24,7 @@ export const PledgeCard: FC<{
   onToggleFolding: onToggleFoldingExt,
   folded: foldedExt,
   style = {},
+  tags,
 }) => {
   const [foldedState, toggleFolded] = useToggle(true)
   const folded = foldedExt ?? foldedState
@@ -40,7 +42,18 @@ export const PledgeCard: FC<{
           <IconPickGray className={s.pickIcon} />
         )
       ) : null}
-      <div className={s.pledgeCard_title}>{title}</div>
+      <div className={s.pledgeCard_title}>
+        {title}
+        {tags && (
+          <div className={s.tagList}>
+            {tags.map(t => (
+              <span className={s.tag} key={t}>
+                #{t}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
       <div
         className={s.pledgeCard_foldButton}
         onClick={e => {

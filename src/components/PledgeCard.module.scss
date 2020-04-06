@@ -54,3 +54,14 @@
   top: -8px;
   left: -8px;
 }
+
+.tagList {
+  margin-top: -5px;
+}
+
+.tag {
+  @include tp-xsmall;
+  margin-right: 3px;
+  font-weight: bold;
+  color: $color-fruit;
+}

@@ -134,6 +134,7 @@ export const ResultPage: React.FC = () => {
             partyId={partyId as any}
             nickname={result.respondentLog.nickname}
             pledges={result.pledges.filter(item => item.party_id === partyId)}
+            issues={result.issues}
           />
         )
       })}

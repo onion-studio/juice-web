@@ -13,10 +13,23 @@ import {
 interface Props {
   nickname: string
   partyId: PartyID
-  pledges: { id: number; title: string; summary: string; count: number }[]
+  pledges: {
+    id: number
+    title: string
+    summary: string
+    party_id: PartyID
+    issue_id: number
+    count: number
+  }[]
+  issues: { id: number; name: string }[]
 }
 
-export const PartyInfo: FC<Props> = ({ nickname, partyId, pledges }) => {
+export const PartyInfo: FC<Props> = ({
+  nickname,
+  partyId,
+  pledges,
+  issues,
+}) => {
   const partyName = partyNames[partyId]
   return (
     <div className={s.wrap} style={{ backgroundColor: partyColor[partyId] }}>
@@ -55,6 +68,10 @@ export const PartyInfo: FC<Props> = ({ nickname, partyId, pledges }) => {
               title={item.title}
               summary={item.summary}
               style={{ borderColor: 'black' }}
+              tags={[
+                issues.find(i => i.id === item.issue_id)!.name,
+                `${item.count}명이 선택`,
+              ]}
             />
           )
         })}
