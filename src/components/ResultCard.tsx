@@ -175,6 +175,7 @@ const RecommendationForStrongJuice: FC<{
   const pledgesAreConservative = cScore - pScore > 33
   const partyIsProgressive = progressiveParties.includes(partyId)
   const partyIsConservative = !partyIsProgressive
+  const partyPosition = partyIsProgressive ? '진보' : '보수'
   const samePosition =
     (pledgesAreProgressive && partyIsProgressive) ||
     (pledgesAreConservative && partyIsConservative)
@@ -207,11 +208,11 @@ const RecommendationForStrongJuice: FC<{
       <>
         전반적으로 선택하신 공약 중에서 {positionByScore} 정당 공약이{' '}
         {largerScore}
-        %로 많은 편입니다. {partyNames[partyId]} 공약을 많이 선택하셨지만,
-        전반적으로는 {positionByScore}적인 공약을 많이 선택하셨습니다. 따라서{' '}
-        {name}님의 정치적인 성향은 <b>중도</b>에 가깝습니다. 혹시 충분한 시간이
-        있으시다면 {partyNames[partyId]}이 아닌 다른 정당의 공약과 후보에
-        대해서도 알아보시면 좋습니다.
+        %로 많은 편입니다. {partyPosition}정당으로 분류되는 {partyName} 공약을
+        많이 선택하셨지만, 전반적으로는 {positionByScore}적인 공약을 많이
+        선택하셨습니다. 따라서 {name}님의 정치적인 성향은 <b>중도</b>에
+        가깝습니다. 혹시 충분한 시간이 있으시다면 {partyName}이 아닌 다른 정당의
+        공약과 후보에 대해서도 알아보시면 좋습니다.
       </>
     )
   }
@@ -238,6 +239,7 @@ const RecommendationForWeakJuice: FC<{
   const pledgesAreConservative = cScore - pScore > 33
   const partyIsProgressive = progressiveParties.includes(partyId)
   const partyIsConservative = !partyIsProgressive
+  const partyPosition = partyIsProgressive ? '진보' : '보수'
   const samePosition =
     (pledgesAreProgressive && partyIsProgressive) ||
     (pledgesAreConservative && partyIsConservative)
@@ -268,11 +270,11 @@ const RecommendationForWeakJuice: FC<{
     return (
       <>
         전반적으로 선택하신 공약 중에서 {positionByScore} 정당 공약이{' '}
-        {largerScore}%로 많은 편입니다. {partyNames[partyId]} 공약을 많이
-        선택하셨지만, 전반적으로는 {positionByScore}적인 공약을 많이
-        선택하셨습니다. 따라서 {name}님의 정치적인 성향은 <b>중도</b>에
-        가깝습니다. 혹시 충분한 시간이 있으시다면 {partyNames[partyId]}이 아닌
-        다른 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+        {largerScore}%로 많은 편입니다. {partyPosition}정당으로 분류되는{' '}
+        {partyName} 공약을 많이 선택하셨지만, 전반적으로는 {positionByScore}적인
+        공약을 많이 선택하셨습니다. 따라서 {name}님의 정치적인 성향은{' '}
+        <b>중도</b>에 가깝습니다. 혹시 충분한 시간이 있으시다면 {partyName}이
+        아닌 다른 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
       </>
     )
   }
@@ -282,8 +284,8 @@ const RecommendationForWeakJuice: FC<{
     <>
       선택하신 공약 중에서 진보 정당 공약이 {pScore}%, 보수 정당 공약이 {cScore}
       %로 비슷합니다. 따라서 {name}님의 정치적인 성향은 <b>중도</b>에
-      가깝습니다. 혹시 충분한 시간이 있으시다면 {partyNames[partyId]}이 아닌
-      다른 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+      가깝습니다. 혹시 충분한 시간이 있으시다면 {partyName}이 아닌 다른 정당의
+      공약과 후보에 대해서도 알아보시면 좋습니다.
     </>
   )
 }
