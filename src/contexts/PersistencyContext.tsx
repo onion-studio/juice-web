@@ -99,7 +99,6 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
   }
 
   navigate = (command: NavigateCommand) => {
-    console.log('navigate', command)
     switch (command.to) {
       case PageID.issueSelector:
         this.setState(

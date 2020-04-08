@@ -7,6 +7,7 @@ import {
   conservativeParties,
   JuiceID,
   PartyID,
+  partyNames,
   partyNamesWithPro,
   progressiveParties,
 } from '../constants'
@@ -163,6 +164,130 @@ const Footer: FC<{ name: string }> = ({ name }) => {
   )
 }
 
+const RecommendationForStrongJuice: FC<{
+  pScore: number
+  cScore: number
+  name: string
+  partyId: PartyID
+}> = ({ pScore, cScore, name, partyId }) => {
+  const partyName = partyNames[partyId]
+  const pledgesAreProgressive = pScore - cScore > 33
+  const pledgesAreConservative = cScore - pScore > 33
+  const partyIsProgressive = progressiveParties.includes(partyId)
+  const partyIsConservative = !partyIsProgressive
+  const samePosition =
+    (pledgesAreProgressive && partyIsProgressive) ||
+    (pledgesAreConservative && partyIsConservative)
+  const oppositePosition =
+    (pledgesAreProgressive && partyIsConservative) ||
+    (pledgesAreConservative && partyIsProgressive)
+  const positionByScore = leftOrRight(pScore, cScore)
+  const largerScore = larger(pScore, cScore)
+
+  // 결과 정당과 공약 선택 결과의 성향이 같은 경우
+  if (samePosition) {
+    return (
+      <>
+        또 선택하신 공약 중에서 <b>{positionByScore}</b> 정당 공약이{' '}
+        {largerScore}
+        %로 많은 편입니다. 따라서 {name}님의 정치적인 성향은{' '}
+        <b>{positionByScore}</b>에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
+        <b>{positionByScore}</b> 성향 정당은 {partyName} 외에도{' '}
+        {similarParties(pScore, cScore, partyId!)} 등이 있습니다. 혹시 충분한
+        시간이 있으시다면 {partyName}
+        {과와(partyName)} 유사한 성향을 가진 정당의 공약과 후보에 대해서도
+        알아보시면 좋습니다.
+      </>
+    )
+  }
+
+  // 결과 정당과 공약 선택 결과의 성향이 반대인 경우
+  if (oppositePosition) {
+    return (
+      <>
+        전반적으로 선택하신 공약 중에서 {positionByScore} 정당 공약이{' '}
+        {largerScore}
+        %로 많은 편입니다. {partyNames[partyId]} 공약을 많이 선택하셨지만,
+        전반적으로는 {positionByScore}적인 공약을 많이 선택하셨습니다. 따라서{' '}
+        {name}님의 정치적인 성향은 <b>중도</b>에 가깝습니다. 혹시 충분한 시간이
+        있으시다면 {partyNames[partyId]}이 아닌 다른 정당의 공약과 후보에
+        대해서도 알아보시면 좋습니다.
+      </>
+    )
+  }
+
+  // 공약 선택 결과가 중도인 경우
+  return (
+    <>
+      선택하신 공약 중에서 진보 정당 공약이 {pScore}%, 보수 정당 공약이 {cScore}
+      %로 비슷합니다. 따라서 {name}님의 정치적인 성향은 <b>중도</b>에
+      가깝습니다. 혹시 충분한 시간이 있으시다면 {partyName}뿐만 아니라 다른
+      정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+    </>
+  )
+}
+
+const RecommendationForWeakJuice: FC<{
+  pScore: number
+  cScore: number
+  name: string
+  partyId: PartyID
+}> = ({ pScore, cScore, name, partyId }) => {
+  const partyName = partyNames[partyId]
+  const pledgesAreProgressive = pScore - cScore > 33
+  const pledgesAreConservative = cScore - pScore > 33
+  const partyIsProgressive = progressiveParties.includes(partyId)
+  const partyIsConservative = !partyIsProgressive
+  const samePosition =
+    (pledgesAreProgressive && partyIsProgressive) ||
+    (pledgesAreConservative && partyIsConservative)
+  const oppositePosition =
+    (pledgesAreProgressive && partyIsConservative) ||
+    (pledgesAreConservative && partyIsProgressive)
+  const positionByScore = leftOrRight(pScore, cScore)
+  const largerScore = larger(pScore, cScore)
+
+  // 결과 정당과 공약 선택 결과의 성향이 같은 경우
+  if (samePosition) {
+    return (
+      <>
+        또 선택하신 공약 중에서 <b>{positionByScore}</b> 정당 공약이{' '}
+        {largerScore}
+        %로 많은 편입니다. 따라서 {name}님의 정치적인 성향은{' '}
+        <b>{positionByScore}</b>에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
+        <b>{positionByScore}</b> 성향 정당은{' '}
+        {similarParties(pScore, cScore, partyId)} 등이 있습니다. 혹시 충분한
+        시간이 있으시다면 {partyName}뿐만 아니라 다른 정당의 공약과 후보에
+        대해서도 알아보시면 좋습니다.
+      </>
+    )
+  }
+
+  // 결과 정당과 공약 선택 결과의 성향이 반대인 경우
+  if (oppositePosition) {
+    return (
+      <>
+        전반적으로 선택하신 공약 중에서 {positionByScore} 정당 공약이{' '}
+        {largerScore}%로 많은 편입니다. {partyNames[partyId]} 공약을 많이
+        선택하셨지만, 전반적으로는 {positionByScore}적인 공약을 많이
+        선택하셨습니다. 따라서 {name}님의 정치적인 성향은 <b>중도</b>에
+        가깝습니다. 혹시 충분한 시간이 있으시다면 {partyNames[partyId]}이 아닌
+        다른 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+      </>
+    )
+  }
+
+  // 공약 선택 결과가 중도인 경우
+  return (
+    <>
+      선택하신 공약 중에서 진보 정당 공약이 {pScore}%, 보수 정당 공약이 {cScore}
+      %로 비슷합니다. 따라서 {name}님의 정치적인 성향은 <b>중도</b>에
+      가깝습니다. 혹시 충분한 시간이 있으시다면 {partyNames[partyId]}이 아닌
+      다른 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+    </>
+  )
+}
+
 const descriptionsPerJuiceId: {
   [K in JuiceID]: ResultSet
 } = {
@@ -200,12 +325,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 공정, 평화 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>진보</b> 정당 공약이 {pScore}
-          %로 많은 편입니다. 따라서 {name}님의 정치적인 성향은 <b>진보</b>에
-          가깝습니다. 이번 총선에서 투표할 수 있는 <b>진보</b> 성향 정당은
-          더불어민주당 외에도 정의당, 민중당. 녹색당 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 더불어민주당과 유사한 성향을 가진 정당의 공약과
-          후보에 대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={1}
+          />
         </p>
         <p>
           <b>
@@ -256,13 +381,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 안전, 포용과 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 1)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 더불어민주당뿐만 아니라 다른 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={1}
+          />
         </p>
         <p>
           <b>
@@ -314,13 +438,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 자유, 안보와 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>보수</b> 성향 정당 공약이{' '}
-          {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의 정치적인
-          성향은 <b>보수</b>에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
-          <b>보수</b> 성향 정당은 미래통합당 외에도 민생당, 국민의당.
-          우리공화당, 친박신당 등이 있습니다. 혹시 충분한 시간이 있으시다면
-          미래통합당과 유사한 성향을 가진 정당의 공약과 후보에 대해서도
-          알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={2}
+          />
         </p>
         <p>
           <b>
@@ -371,13 +494,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 시장과 법치 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 2)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 미래통합당뿐만 아니라 다른 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={2}
+          />
         </p>
         <p>
           <b>
@@ -421,12 +543,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 노동과 정의를 중요하게 생각하는 사람일 가능성이
             높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 전보 성향 정당 공약이 {larger(pScore, cScore)}
-          %로 많은 편입니다. 따라서 {name}님의 정치적인 성향은 <b>진보</b>{' '}
-          성향에 가깝습니다. 이번 총선에서 투표할 수 있는 진보 성향의 정당은
-          정의당 외에도 더불어민주당, 민중당, 녹색당 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 정의당과 유사한 성향을 가진 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={3}
+          />
         </p>
         <p>
           <b>
@@ -471,14 +593,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 평등과 연대를 중요하게 생각하는 사람일 가능성이
             높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}
-          님의 정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에
-          가깝습니다. 이번 총선에서 투표할 수 있는{' '}
-          <b>{leftOrRight(pScore, cScore)}</b> 성향 정당은{' '}
-          {similarParties(pScore, cScore, 3)} 등이 있습니다. 혹시 충분한 시간이
-          있으시다면 정의당뿐만 아니라 다른 정당의 공약과 후보에 대해서도
-          알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={3}
+          />
         </p>
         <p>
           <b>
@@ -522,13 +642,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 혁신과 합리와 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>보수</b> 성향 정당 공약이{' '}
-          {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의 정치적인
-          성향은 <b>보수</b> 성향에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
-          <b>보수</b>
-          성향의 정당은 국민의당 외에도 미래통합당, 민생당, 우리공화당, 친박신당
-          등이 있습니다. 혹시 충분한 시간이 있으시다면 국민의당과 유사한 성향을
-          가진 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={4}
+          />
         </p>
         <p>
           <b>
@@ -573,13 +692,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 실용과 행복 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 4)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 국민의당뿐만 아니라 다른 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={4}
+          />
         </p>
         <p>
           <b>
@@ -623,13 +741,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 민생, 통합과 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>보수</b> 성향 정당 공약이{' '}
-          {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의 정치적인
-          성향은 <b>보수</b> 성향에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
-          <b>보수</b>
-          성향의 정당은 민생당 외에도 미래통합당, 국민의당, 우리공화당, 친박신당
-          등이 있습니다. 혹시 충분한 시간이 있으시다면 민생당과 유사한 성향을
-          가진 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={5}
+          />
         </p>
         <p>
           <b>
@@ -674,13 +791,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 개혁과 실용 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 5)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 민생당뿐만 아니라 다른 정당의 공약과 후보에 대해서도
-          알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={5}
+          />
         </p>
         <p>
           <b>
@@ -724,13 +840,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 안보와 자유 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>보수</b> 성향 정당 공약이{' '}
-          {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의 정치적인
-          성향은 <b>보수</b> 성향에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
-          <b>보수</b>
-          성향의 정당은 우리공화당 외에도 미래통합당, 민생당, 국민의당, 친박신당
-          등이 있습니다. 혹시 충분한 시간이 있으시다면 우리공화당과 유사한
-          성향을 가진 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={6}
+          />
         </p>
         <p>
           <b>
@@ -775,13 +890,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 시장, 법치와 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 6)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 우리공화당뿐만 아니라 다른 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={6}
+          />
         </p>
         <p>
           <b>
@@ -825,12 +939,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 자주, 통일과 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 전보 성향 정당 공약이 {larger(pScore, cScore)}
-          %로 많은 편입니다. 따라서 {name}님의 정치적인 성향은 <b>진보</b>{' '}
-          성향에 가깝습니다. 이번 총선에서 투표할 수 있는 진보 성향의 정당은
-          민중당 외에도 더불어민주당, 정의당, 녹색당 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 민중당과 유사한 성향을 가진 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={7}
+          />
         </p>
         <p>
           <b>
@@ -875,13 +989,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 노동과 평등 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 7)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 민중당뿐만 아니라 다른 정당의 공약과 후보에 대해서도
-          알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={7}
+          />
         </p>
         <p>
           <b>
@@ -925,13 +1038,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 자유, 시장과 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>보수</b> 성향 정당 공약이{' '}
-          {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의 정치적인
-          성향은 <b>보수</b> 성향에 가깝습니다. 이번 총선에서 투표할 수 있는{' '}
-          <b>보수</b>
-          성향의 정당은 친박신당 외에도 미래통합당, 민생당, 국민의당, 우리공화당
-          등이 있습니다. 혹시 충분한 시간이 있으시다면 친박신당과 유사한 성향을
-          가진 정당의 공약과 후보에 대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={8}
+          />
         </p>
         <p>
           <b>
@@ -976,13 +1088,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 안보, 법치와 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 8)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 친박신당뿐만 아니라 다른 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={8}
+          />
         </p>
         <p>
           <b>
@@ -1026,12 +1137,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 생태와 정의 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 전보 성향 정당 공약이 {larger(pScore, cScore)}
-          %로 많은 편입니다. 따라서 {name}님의 정치적인 성향은 <b>진보</b>{' '}
-          성향에 가깝습니다. 이번 총선에서 투표할 수 있는 진보 성향의 정당은
-          녹색당 외에도 더불어민주당, 정의당, 민중당 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 녹색당과 유사한 성향을 가진 정당의 공약과 후보에
-          대해서도 알아보시면 좋습니다.
+          <RecommendationForStrongJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={9}
+          />
         </p>
         <p>
           <b>
@@ -1076,13 +1187,12 @@ const descriptionsPerJuiceId: {
             {name}님은 평소 협동과 평화 같은 가치를 중요하게 생각하는 사람일
             가능성이 높습니다.
           </b>{' '}
-          또 선택하신 공약 중에서 <b>{leftOrRight(pScore, cScore)}</b> 정당
-          공약이 {larger(pScore, cScore)}%로 많은 편입니다. 따라서 {name}님의
-          정치적인 성향은 <b>{leftOrRight(pScore, cScore)}</b>에 가깝습니다.
-          이번 총선에서 투표할 수 있는 <b>{leftOrRight(pScore, cScore)}</b> 성향
-          정당은 {similarParties(pScore, cScore, 9)} 등이 있습니다. 혹시 충분한
-          시간이 있으시다면 녹색당뿐만 아니라 다른 정당의 공약과 후보에 대해서도
-          알아보시면 좋습니다.
+          <RecommendationForWeakJuice
+            pScore={pScore}
+            cScore={cScore}
+            name={name}
+            partyId={9}
+          />
         </p>
         <p>
           <b>
