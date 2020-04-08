@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "HOST=0.0.0.0 react-scripts start",
-    "build": "PUBLIC_URL=https://www.juice.vote react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false PUBLIC_URL=https://www.juice.vote react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "yarn build && AWS_PROFILE=onion aws s3 sync ./build s3://www.juice.vote"
