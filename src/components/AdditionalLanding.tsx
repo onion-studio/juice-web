@@ -42,6 +42,21 @@ const AdditionalLanding: FC<{ nickname: string }> = ({ nickname }) => {
               <ArrowFold style={{ transform: 'rotate(90deg' }} />
             </div>
           </a>
+          <a
+            className={s.detailBox}
+            href="https://vt.tiktok.com/r1YXu5/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className={s.detailTitle}>
+              {nickname}님의 미래에 필요한 공약은?
+              <br />
+              1분 안에 보는 트렌드 '뉴즈' 영상 보기
+            </div>
+            <div className={s.foldButton}>
+              <ArrowFold style={{ transform: 'rotate(90deg' }} />
+            </div>
+          </a>
           {/* <a className={s.detailBox}>
             <div className={s.detailTitle}>
               우리 동네에 출마한
