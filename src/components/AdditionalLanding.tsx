@@ -11,22 +11,22 @@ const AdditionalLanding: FC<{ nickname: string }> = ({ nickname }) => {
       </div>
       <div className={s.cardContainer}>
         <div className={s.detailBox_wrap}>
-          {/*<a*/}
-          {/*  className={s.detailBox}*/}
-          {/*  href="https://forms.gle/CcTcpVyDfVEdbpsA7"*/}
-          {/*  target="_blank"*/}
-          {/*  rel="noopener noreferrer"*/}
-          {/*>*/}
-          {/*  <div className={s.detailTitle}>*/}
-          {/*    {nickname}님, 선택한 공약이 잘 지켜질지*/}
-          {/*    <br />*/}
-          {/*    궁금하지 않으세요?*/}
-          {/*    <br />*/}
-          {/*  </div>*/}
-          {/*  <div className={s.foldButton}>*/}
-          {/*    <ArrowFold style={{ transform: 'rotate(90deg' }} />*/}
-          {/*  </div>*/}
-          {/*</a>*/}
+          <a
+            className={s.detailBox}
+            href="https://hi378006.typeform.com/to/HhvYGa"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className={s.detailTitle}>
+              {nickname}님, 선택한 공약이 잘 지켜질지
+              <br />
+              궁금하지 않으세요?
+              <br />
+            </div>
+            <div className={s.foldButton}>
+              <ArrowFold style={{ transform: 'rotate(90deg' }} />
+            </div>
+          </a>
           <a
             className={s.detailBox}
             href="https://napp.newneek.co/2020election"
