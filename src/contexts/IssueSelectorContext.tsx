@@ -106,6 +106,7 @@ export const IssueSelectorProvider: React.FC = ({ children }) => {
   const persistency = usePersistency()
   return (
     <IssueSelectorProviderUnbound
+      key={persistency.token ?? ''}
       selectedIssueIds={persistency.selectedIssueIds ?? null}
       reset={() => persistency.action.reset()}
     >
