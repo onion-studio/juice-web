@@ -7,6 +7,7 @@ import { usePersistency } from '../contexts/PersistencyContext'
 import { JuiceID, PartyID, progressiveParties } from '../constants'
 import { Mixer } from '../components/Mixer'
 import AdditionalLanding from '../components/AdditionalLanding'
+import { SnsLinks } from '../components/SnsLinks'
 
 interface Result {
   respondentLog: {
@@ -145,6 +146,7 @@ export const ResultPage: React.FC = () => {
       >
         다시 주문하기
       </button>
+      <SnsLinks />
       <div className={s.credit}>
         <a href="/#/credit">공약쥬스를 만든 사람들</a>
       </div>
