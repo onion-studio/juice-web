@@ -147,11 +147,22 @@ export const ResultPage: React.FC = () => {
         다시 주문하기
       </button>
       <SnsLinks />
-      <div className={s.credit}>
+      <div className={s.miscLinks}>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.facebook.com/pactum.juice/posts/120718532903677"
+        >
+          자주 묻는 질문
+        </a>
         <a href="/#/credit">공약쥬스를 만든 사람들</a>
       </div>
       <div className={s.copyright}>
-        <a href="https://brunch.co.kr/@pactum" target="_blank">
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://brunch.co.kr/@pactum"
+        >
           공약쥬스 소개
         </a>{' '}
         | team pactum <br /> Copyrightⓒ2020 pactum All rights reserved.
