@@ -159,14 +159,7 @@ export const ResultPage: React.FC = () => {
         <a href="/#/credit">공약쥬스를 만든 사람들</a>
       </div>
       <div className={s.copyright}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://brunch.co.kr/@pactum"
-        >
-          공약쥬스 소개
-        </a>{' '}
-        | team pactum <br /> Copyrightⓒ2020 pactum All rights reserved.
+        Copyrightⓒ2020 pactum All rights reserved.
       </div>
       <EmailCta name={result.respondentLog.nickname} />
     </div>
