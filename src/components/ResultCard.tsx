@@ -103,6 +103,9 @@ export const ResultCard: FC<Props> = ({
           </div>
         </Card>
       </div>
+      <div className={s.shareGuide}>
+        ※ 친구에게 공유해도 {nickname}님의 쥬스와 정당은 공개되지 않아요!
+      </div>
       <div className={s.detailBox_wrap}>
         <div className={s.detailBox}>
           <div className={s.detailTitle}>

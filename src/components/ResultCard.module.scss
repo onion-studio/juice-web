@@ -7,7 +7,7 @@
 }
 
 .cardContainer {
-  margin: 34px 0;
+  margin: 34px 0 8px;
   display: flex;
   justify-content: center;
 }
@@ -77,4 +77,12 @@
 
 .detailDesc {
   @include tp-small;
+}
+
+.shareGuide {
+  @include tp-xsmall;
+  padding: 0 20px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 32px;
 }
