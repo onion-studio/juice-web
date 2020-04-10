@@ -1,0 +1,65 @@
+@import '../common';
+
+.wrap {
+  position: fixed;
+  right: 0;
+  bottom: -300px; // 숨겨야 할 박스의 높이가 140px 정도 됨.
+  left: 0;
+  display: flex;
+  justify-content: center;
+  transition: bottom 1s;
+}
+
+.wrap__visible {
+  bottom: 0;
+}
+
+.main {
+  position: relative;
+  display: block;
+  //height: $email-cta-height;
+  width: 300px;
+  background-color: $color-yellow;
+  box-shadow: 0 4px 8px 0 $color-selected-shadow;
+  border: solid 1px $color-ink;
+  border-bottom: none;
+  color: $color-ink;
+  text-decoration: none;
+}
+
+.close {
+  background-image: url('./svg/ico-x-black.svg');
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  width: 48px;
+  height: 50px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.title {
+  @include tp-big-bold;
+  text-align: center;
+  margin-top: 42px;
+}
+
+.subtitle {
+  @include tp-normal;
+  text-align: center;
+  padding: 0 20px;
+  margin-bottom: 42px;
+}
+
+.goTo {
+  background-image: url('./svg/arr-more.svg');
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  width: 48px;
+  height: 50px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

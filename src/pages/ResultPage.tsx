@@ -8,6 +8,7 @@ import { JuiceID, PartyID, progressiveParties } from '../constants'
 import { Mixer } from '../components/Mixer'
 import AdditionalLanding from '../components/AdditionalLanding'
 import { SnsLinks } from '../components/SnsLinks'
+import { EmailCta } from '../components/EmailCta'
 
 interface Result {
   respondentLog: {
@@ -167,6 +168,7 @@ export const ResultPage: React.FC = () => {
         </a>{' '}
         | team pactum <br /> Copyrightⓒ2020 pactum All rights reserved.
       </div>
+      <EmailCta name={result.respondentLog.nickname} />
     </div>
   )
 }
