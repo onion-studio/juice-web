@@ -39,6 +39,7 @@ export type NavigateCommand =
 interface PersistedState {
   currentPage: PageID
   token?: string
+  selectedIssueIdsWithoutDeduction?: number[]
   selectedIssueIds?: number[]
   selectedPledgeIds?: number[]
 }
@@ -113,6 +114,7 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
         this.setState(
           {
             currentPage: command.to,
+            selectedIssueIdsWithoutDeduction: command.selectedIssueIds,
             selectedIssueIds: command.selectedIssueIds,
           },
           this.persist,
@@ -142,6 +144,8 @@ export class PersistencyProvider extends React.Component<Deps, ContextValue> {
       currentPage: this.state.currentPage,
       token: this.state.token,
       selectedIssueIds: this.state.selectedIssueIds,
+      selectedIssueIdsWithoutDeduction: this.state
+        .selectedIssueIdsWithoutDeduction,
       selectedPledgeIds: this.state.selectedPledgeIds,
     }
     this.props.storage.setItem('state', JSON.stringify(state))

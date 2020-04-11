@@ -14,6 +14,7 @@ interface RequestResult<Data, Error> {
 }
 
 export interface Deps {
+  selectedIssueIdsWithoutDeduction?: number[]
   selectedIssues: Issue[]
   onComplete: (selectedPledgeIds: number[]) => void
   onExcess: () => void
@@ -172,6 +173,9 @@ export class PledgeSelectorProviderUnbound extends React.Component<
           selected_issue_ids: this.props.selectedIssues
             .map(item => item.id)
             .join(','),
+          issue_ids_without_deduction: this.props.selectedIssueIdsWithoutDeduction?.join(
+            ',',
+          ),
           selected_pledge_ids: Array.from(this.state.selectedPledgeIds).join(
             ',',
           ),
@@ -221,6 +225,9 @@ export const PledgeSelectorProvider: React.FC = ({ children }) => {
   return (
     <PledgeSelectorProviderUnbound
       token={persistency.token!}
+      selectedIssueIdsWithoutDeduction={
+        persistency.selectedIssueIdsWithoutDeduction
+      }
       selectedIssues={shuffledIssues}
       onComplete={selectedPledgeIds =>
         persistency.action.navigate({
