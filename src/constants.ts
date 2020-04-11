@@ -61,15 +61,15 @@ export const profileLinks: { [K in PartyID]: string } = {
 }
 
 export const pledgeLinks: { [K in PartyID]: string } = {
-  1: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  2: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  3: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  4: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  5: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  6: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  7: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  8: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
-  9: 'http://policy.nec.go.kr/plc/policy/initUPAPolicy.do?menuId=PARTY4#none',
+  1: "https://sites.google.com/view/pledge-minjoo/%ED%99%88",
+  2: "https://sites.google.com/view/unitedfutureparty/%ED%99%88",
+  3: "https://sites.google.com/view/juice-justice/%ED%99%88",
+  4: "https://sites.google.com/view/juice-peopleparty/%ED%99%88",
+  5: "https://sites.google.com/view/juice-minsaeng/%ED%99%88",
+  6: "https://sites.google.com/view/ourrepublicanparty/%ED%99%88",
+  7: "https://sites.google.com/view/juice-minjung/%ED%99%88",
+  8: "https://sites.google.com/view/pro-park-new-party/%ED%99%88",
+  9: "https://sites.google.com/view/greenpartykorea/%ED%99%88",
 }
 
 export const partyColor: { [K in PartyID]: string } = {
