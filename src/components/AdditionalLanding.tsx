@@ -66,8 +66,13 @@ const AdditionalLanding: FC<{ nickname: string }> = ({ nickname }) => {
             <div className={s.foldButton}>
               <ArrowFold style={{ transform: 'rotate(90deg' }} />
             </div>
-          </a>
-          <a className={s.detailBox}>
+          </a> */}
+          <a
+            className={s.detailBox}
+            href="https://www.tumblbug.com/juicevote"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <div className={s.detailTitle}>
               펀딩 참여해 <br />
               공약쥬스 밀어주고 싶다면?
@@ -75,7 +80,7 @@ const AdditionalLanding: FC<{ nickname: string }> = ({ nickname }) => {
             <div className={s.foldButton}>
               <ArrowFold style={{ transform: 'rotate(90deg' }} />
             </div>
-          </a> */}
+          </a>
         </div>
       </div>
     </>
