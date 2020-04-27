@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import { Card } from '../components/Card'
 import s from './SeeYouAgainPage.module.scss'
 import { Lace } from '../components/Lace'
@@ -6,30 +6,66 @@ import { SnsLinks } from '../components/SnsLinks'
 import { Footer } from '../components/Footer'
 import { ReactComponent as ArrowFold } from '../components/svg/arr-fold.svg'
 
+const easeOut = (t: number) => -Math.pow(t - 1, 2) + 1
+
 export const SeeYouAgainPage: FC = () => {
+  const animationIdRef = useRef(0)
+  const [mixerPos, setMixerPos] = useState(0)
+
   return (
     <div>
-      <Card
-        style={{ height: 340, margin: '34px auto 0' }}
-        topLabel={<span className={s.topLabel}>SEE YOU AGAIN</span>}
+      <div
+        style={{ userSelect: 'none' }}
+        onClick={() => {
+          animationIdRef.current += 1
+          const currentAnimationId = animationIdRef.current
+          const initialTime = Date.now()
+          const upwardDuration = 150
+          const downwardDuration = 150
+          const targetPos = 30
+          const tick = () => {
+            const elapsed = Date.now() - initialTime
+            if (currentAnimationId !== animationIdRef.current) return
+            if (elapsed < upwardDuration) {
+              const progress = elapsed / upwardDuration
+              setMixerPos(targetPos * easeOut(progress))
+              requestAnimationFrame(tick)
+            } else if (elapsed < upwardDuration + downwardDuration) {
+              const progress = (elapsed - upwardDuration) / downwardDuration
+              setMixerPos(targetPos * easeOut(1 - progress))
+              requestAnimationFrame(tick)
+            } else {
+              setMixerPos(0)
+            }
+          }
+          tick()
+        }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            height: 105,
-            bottom: 2,
-            left: 2,
-            right: 2,
-            backgroundColor: '#d6cdb4',
-          }}
+        <Card
+          style={{ height: 340, margin: '34px auto 0' }}
+          topLabel={<span className={s.topLabel}>SEE YOU AGAIN</span>}
         >
-          <Lace
-            style={{ position: 'absolute', top: -3, left: -1, right: -1 }}
+          <div
+            style={{
+              position: 'absolute',
+              height: 105,
+              bottom: 2,
+              left: 2,
+              right: 2,
+              backgroundColor: '#d6cdb4',
+            }}
+          >
+            <Lace
+              style={{ position: 'absolute', top: -3, left: -1, right: -1 }}
+            />
+          </div>
+          <div
+            style={{ transform: `translateY(${mixerPos * -1}px)` }}
+            className={s.mixer}
           />
-        </div>
-        <div className={s.mixer} />
-        <div className={s.cardLabel}>곧 다시 만나요!</div>
-      </Card>
+          <div className={s.cardLabel}>곧 다시 만나요!</div>
+        </Card>
+      </div>
       <div className={s.midCard}>
         <div className={s.midCard_boldPara}>
           1월부터 달려온 공약쥬스는
