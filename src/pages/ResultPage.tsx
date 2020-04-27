@@ -9,6 +9,7 @@ import { Mixer } from '../components/Mixer'
 import AdditionalLanding from '../components/AdditionalLanding'
 import { SnsLinks } from '../components/SnsLinks'
 import { EmailCta } from '../components/EmailCta'
+import { Footer } from '../components/Footer'
 
 interface Result {
   respondentLog: {
@@ -148,19 +149,7 @@ export const ResultPage: React.FC = () => {
         다시 주문하기
       </button>
       <SnsLinks />
-      <div className={s.miscLinks}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.facebook.com/pactum.juice/posts/120718532903677"
-        >
-          자주 묻는 질문
-        </a>
-        <a href="/#/credit">공약쥬스를 만든 사람들</a>
-      </div>
-      <div className={s.copyright}>
-        Copyrightⓒ2020 pactum All rights reserved.
-      </div>
+      <Footer />
       <EmailCta name={result.respondentLog.nickname} />
     </div>
   )

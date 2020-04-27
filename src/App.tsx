@@ -13,6 +13,7 @@ import { ConfirmIssuePage } from './pages/ConfirmIssuePage'
 import { Toast } from './components/Toast'
 import { ToasterProvider } from './contexts/ToasterContext'
 import { Credit } from './components/Credit'
+import { SeeYouAgainPage } from './pages/SeeYouAgainPage'
 
 const App: React.FC = () => {
   return (
@@ -44,20 +45,23 @@ function Router() {
   }, [])
   if (hash === '#/credit') {
     return <Credit />
-  }
-  switch (persistency.currentPage) {
-    case PageID.intro:
-      return <IntroPage />
-    case PageID.issueSelector:
-      return <IssueSelectingPage />
-    case PageID.issueConfirmation:
-      return <ConfirmIssuePage />
-    case PageID.pledgeSelector:
-      return <PledgeSelectingPage />
-    case PageID.result:
-      return <ResultPage />
-    default:
-      return <div>ERROR</div>
+  } else if (hash === '#/app') {
+    switch (persistency.currentPage) {
+      case PageID.intro:
+        return <IntroPage />
+      case PageID.issueSelector:
+        return <IssueSelectingPage />
+      case PageID.issueConfirmation:
+        return <ConfirmIssuePage />
+      case PageID.pledgeSelector:
+        return <PledgeSelectingPage />
+      case PageID.result:
+        return <ResultPage />
+      default:
+        return <div>ERROR</div>
+    }
+  } else {
+    return <SeeYouAgainPage />
   }
 }
 
