@@ -15,7 +15,7 @@
     "@types/react-transition-group": "^4.2.4",
     "classnames": "^2.2.6",
     "event-target-shim": "^5.0.1",
-    "immer": "^6.0.2",
+    "immer": "^9.0.6",
     "ky": "^0.19.0",
     "node-sass": "^4.13.1",
     "prettier": "^1.19.1",
